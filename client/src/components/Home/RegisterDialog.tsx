@@ -1,11 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Modal, Header, Grid, Input, InputOnChangeData, Button } from "semantic-ui-react";
-
-interface RegisterDialogProps {
-    open: boolean;
-    close: Function;
-}
+import { Grid, Input, InputOnChangeData, Button } from "semantic-ui-react";
 
 interface RegisterDialogState {
     username: string;
@@ -13,20 +8,11 @@ interface RegisterDialogState {
     confirmPassword: string;
 }
 
-export default class RegisterDialog extends React.Component<RegisterDialogProps, RegisterDialogState> {
+export default class RegisterDialog extends React.Component<{}, RegisterDialogState> {
     state: RegisterDialogState = {
         username: "",
         password: "",
         confirmPassword: ""
-    };
-
-    close = () => {
-        this.setState({
-            username: "",
-            password: "",
-            confirmPassword: ""
-        });
-        this.props.close();
     };
 
     changeUsername = (e: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {
@@ -56,23 +42,20 @@ export default class RegisterDialog extends React.Component<RegisterDialogProps,
     render(): React.ReactNode {
         // inputs have width 90% because fluid prop doesn't seem to work
         return (
-            <Modal size="mini" open={this.props.open} onClose={this.close}>
-                <Header>Register</Header>
-                <Grid columns={1} centered>
-                    <Grid.Row>
-                        <Input type="text" placeholder="Username (minimum 5 characters)" value={this.state.username} onChange={this.changeUsername} style={{width: "90%", marginTop: "0.5rem"}} />
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Input type="password" placeholder="Password (minimum 8 characters)" value={this.state.password} onChange={this.changePassword} style={{width: "90%"}} />
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Input type="password" placeholder="Confirm Password" value={this.state.confirmPassword} onChange={this.changeConfirmPassword} style={{width: "90%"}} />
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Button primary onClick={this.submit} style={{marginBottom: "0.5rem"}}>Register</Button>
-                    </Grid.Row>
-                </Grid>
-            </Modal>
+            <Grid columns={1} centered>
+                <Grid.Row>
+                    <Input type="text" placeholder="Username (minimum 5 characters)" value={this.state.username} onChange={this.changeUsername} style={{width: "90%", marginTop: "0.5rem"}} />
+                </Grid.Row>
+                <Grid.Row>
+                    <Input type="password" placeholder="Password (minimum 8 characters)" value={this.state.password} onChange={this.changePassword} style={{width: "90%"}} />
+                </Grid.Row>
+                <Grid.Row>
+                    <Input type="password" placeholder="Confirm Password" value={this.state.confirmPassword} onChange={this.changeConfirmPassword} style={{width: "90%"}} />
+                </Grid.Row>
+                <Grid.Row>
+                    <Button primary onClick={this.submit} style={{marginBottom: "0.5rem"}}>Register</Button>
+                </Grid.Row>
+            </Grid>
         );
     }
 }

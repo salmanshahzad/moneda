@@ -2,18 +2,32 @@ import React from "react";
 import { ReactWrapper, mount } from "enzyme";
 import "../config";
 import RegisterDialog from "../../src/components/Home/RegisterDialog";
-import { Modal } from "semantic-ui-react";
+import { Input, Button } from "semantic-ui-react";
 
 describe("RegisterDialog", () => {
     let wrapper: ReactWrapper<any, any>;
 
-    beforeEach(() => {
-        wrapper = mount(<RegisterDialog open={true} close={() => {}} />);
+    beforeAll(() => {
+        wrapper = mount(<RegisterDialog />);
     });
 
     it("renders", () => {
-        expect(wrapper.prop("open")).toBe(true);
-        expect(wrapper.find(Modal)).toHaveLength(1);
-        // cannot test nodes inside modal; see: https://github.com/Semantic-Org/Semantic-UI-React/issues/1518, https://github.com/airbnb/enzyme/issues/1596 (open issue as of jun 8)
+        expect(wrapper.find(Input)).toHaveLength(3);
+        expect(wrapper.find(Button)).toHaveLength(1);
+    });
+
+    it("has the correct initial state", () => {
+        expect(wrapper.state("username")).toBe("");
+        expect(wrapper.state("password")).toBe("");
+        expect(wrapper.state("confirmPassword")).toBe("");
+    });
+
+    it("changes the state when an input value changes", () => {
+        wrapper.find("input").at(0).simulate("change", {target: {value: "testUsername"}});
+        expect(wrapper.state("username")).toBe("testUsername");
+        wrapper.find("input").at(1).simulate("change", {target: {value: "testPassword"}});
+        expect(wrapper.state("password")).toBe("testPassword");
+        wrapper.find("input").at(2).simulate("change", {target: {value: "testConfirmPassword"}});
+        expect(wrapper.state("confirmPassword")).toBe("testConfirmPassword");
     });
 });
