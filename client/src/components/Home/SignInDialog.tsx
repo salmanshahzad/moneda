@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Grid, Input, InputOnChangeData, Button } from "semantic-ui-react";
+import { Form, Button } from "semantic-ui-react";
 
 interface SignInDialogState {
     username: string;
@@ -13,12 +13,12 @@ export default class SignInDialog extends React.Component<{}, SignInDialogState>
         password: ""
     };
 
-    changeUsername = (e: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {
-        this.setState({username: data.value});
+    changeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({username: e.target.value});
     };
 
-    changePassword = (e: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {
-        this.setState({password: data.value});
+    changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({password: e.target.value});
     };
 
     submit = () => {
@@ -33,19 +33,18 @@ export default class SignInDialog extends React.Component<{}, SignInDialogState>
     };
 
     render(): React.ReactNode {
-        // inputs have width 90% because fluid prop doesn't seem to work
         return (
-            <Grid columns={1} centered>
-                <Grid.Row>
-                    <Input type="text" placeholder="Username" value={this.state.username} onChange={this.changeUsername} style={{width: "90%", marginTop: "0.5rem"}} />
-                </Grid.Row>
-                <Grid.Row>
-                    <Input type="password" placeholder="Password" value={this.state.password} onChange={this.changePassword} style={{width: "90%"}} />
-                </Grid.Row>
-                <Grid.Row>
-                    <Button primary onClick={this.submit} style={{marginBottom: "0.5rem"}}>Sign In</Button>
-                </Grid.Row>
-            </Grid>
+            <Form onSubmit={this.submit} style={{padding: "1rem"}}>
+                <Form.Field>
+                    <label>Username</label>
+                    <input type="text" value={this.state.username} onChange={this.changeUsername} autoFocus />
+                </Form.Field>
+                <Form.Field>
+                    <label>Password</label>
+                    <input type="password" value={this.state.password} onChange={this.changePassword} />
+                </Form.Field>
+                <Button primary type="submit">Sign In</Button>
+            </Form>
         );
     }
 }

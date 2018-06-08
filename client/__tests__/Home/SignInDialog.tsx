@@ -2,7 +2,7 @@ import React from "react";
 import { ReactWrapper, mount } from "enzyme";
 import "../config";
 import SignInDialog from "../../src/components/Home/SignInDialog";
-import { Input, Button } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
 describe("SignInDialog", () => {
     let wrapper: ReactWrapper<any, any>;
@@ -12,7 +12,7 @@ describe("SignInDialog", () => {
     });
 
     it("renders", () => {
-        expect(wrapper.find(Input)).toHaveLength(2);
+        expect(wrapper.find("input")).toHaveLength(2);
         expect(wrapper.find(Button)).toHaveLength(1);
     });
 

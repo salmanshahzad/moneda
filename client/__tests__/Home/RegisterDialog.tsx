@@ -2,7 +2,7 @@ import React from "react";
 import { ReactWrapper, mount } from "enzyme";
 import "../config";
 import RegisterDialog from "../../src/components/Home/RegisterDialog";
-import { Input, Button } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
 describe("RegisterDialog", () => {
     let wrapper: ReactWrapper<any, any>;
@@ -12,7 +12,7 @@ describe("RegisterDialog", () => {
     });
 
     it("renders", () => {
-        expect(wrapper.find(Input)).toHaveLength(3);
+        expect(wrapper.find("input")).toHaveLength(3);
         expect(wrapper.find(Button)).toHaveLength(1);
     });
 
