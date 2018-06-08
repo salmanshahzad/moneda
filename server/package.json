@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "nodemon --watch src --ext ts --exec ts-node src/index.ts",
-    "test": "jest --detectOpenHandles"
+    "test": "jest"
   },
   "jest": {
     "transform": {
