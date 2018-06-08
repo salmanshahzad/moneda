@@ -14,5 +14,6 @@ describe("RegisterDialog", () => {
     it("renders", () => {
         expect(wrapper.prop("open")).toBe(true);
         expect(wrapper.find(Modal)).toHaveLength(1);
+        // cannot test nodes inside modal; see: https://github.com/Semantic-Org/Semantic-UI-React/issues/1518, https://github.com/airbnb/enzyme/issues/1596 (open issue as of jun 8)
     });
 });
