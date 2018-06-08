@@ -49,8 +49,8 @@ export default class Home extends React.Component<{}, HomeState> {
                         <h1>Moneda</h1>
                         <h2>Personal Finance Application</h2>
                         <div>
-                            <Button className="signIn" onClick={this.toggleSignInDialog}>Sign In</Button>
-                            <Button className="register" onClick={this.toggleRegisterDialog}>Register</Button>
+                            <Button onClick={this.toggleSignInDialog}>Sign In</Button>
+                            <Button onClick={this.toggleRegisterDialog}>Register</Button>
                         </div>
                     </div>
                 </Parallax>

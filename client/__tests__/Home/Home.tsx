@@ -3,6 +3,7 @@ import { ReactWrapper, mount } from "enzyme";
 import "../config";
 import Home from "../../src/components/Home/Home";
 import Feature from "../../src/components/Home/Feature";
+import { Button } from "semantic-ui-react";
 
 describe("Home", () => {
     let wrapper: ReactWrapper<any, any>;
@@ -17,13 +18,13 @@ describe("Home", () => {
 
     it("opens the sign in dialog when the sign in button is pressed", () => {
         expect(wrapper.state("signInDialogOpen")).toBe(false);
-        wrapper.find("button.signIn").simulate("click");
+        wrapper.find(Button).at(0).simulate("click");
         expect(wrapper.state("signInDialogOpen")).toBe(true);
     });
 
     it("opens the register dialog when the register button is pressed", () => {
         expect(wrapper.state("registerDialogOpen")).toBe(false);
-        wrapper.find("button.register").simulate("click");
+        wrapper.find(Button).at(1).simulate("click");
         expect(wrapper.state("registerDialogOpen")).toBe(true);
     });
 });
