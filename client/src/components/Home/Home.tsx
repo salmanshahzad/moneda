@@ -3,7 +3,7 @@ import backgroundImage from "../../assets/home/bg_cropped_compressed.jpg";
 import { Parallax } from "react-parallax";
 import { Button, Grid } from "semantic-ui-react";
 import Feature from "./Feature";
-import SignInDialog from "./SignInDialog";
+import SignInDialogModal from "./SignInDialogModal";
 import RegisterDialogModal from "./RegisterDialogModal";
 
 const features = [
@@ -66,7 +66,7 @@ export default class Home extends React.Component<{}, HomeState> {
                 <footer style={{backgroundColor: "gainsboro", padding: "1em"}}>
                     <p>&copy;2018 Salman</p>
                 </footer>
-                <SignInDialog open={this.state.signInDialogOpen} close={this.toggleSignInDialog} />
+                <SignInDialogModal open={this.state.signInDialogOpen} onClose={this.toggleSignInDialog} />
                 <RegisterDialogModal open={this.state.registerDialogOpen} onClose={this.toggleRegisterDialog} />
             </div>
         );
