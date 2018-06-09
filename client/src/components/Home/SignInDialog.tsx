@@ -1,16 +1,18 @@
 import React from "react";
 import axios from "axios";
-import { Form, Button } from "semantic-ui-react";
+import { Form, Message, Button } from "semantic-ui-react";
 
 interface SignInDialogState {
     username: string;
     password: string;
+    errors: string[];
 }
 
 export default class SignInDialog extends React.Component<{}, SignInDialogState> {
     state: SignInDialogState = {
         username: "",
-        password: ""
+        password: "",
+        errors: []
     };
 
     changeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,15 +28,25 @@ export default class SignInDialog extends React.Component<{}, SignInDialogState>
             username: this.state.username,
             password: this.state.password
         }).then(response => {
-            console.log(response);
+            this.setState({errors: []});
         }).catch(e => {
-            console.log(e.response);
+            this.setState({errors: e.response.data});
         })
     };
 
     render(): React.ReactNode {
         return (
-            <Form onSubmit={this.submit} style={{padding: "1rem"}}>
+            <Form onSubmit={this.submit} error={this.state.errors.length > 0} style={{padding: "1rem"}}>
+                <Message error>
+                    <Message.Header>Error</Message.Header>
+                    <Message.List>
+                        {
+                            this.state.errors.map((error, i) => (
+                                <Message.Item key={i}>{error}</Message.Item>
+                            ))
+                        }
+                    </Message.List>
+                </Message>
                 <Form.Field>
                     <label>Username</label>
                     <input type="text" value={this.state.username} onChange={this.changeUsername} autoFocus />

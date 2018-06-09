@@ -2,7 +2,7 @@ import React from "react";
 import { ReactWrapper, mount } from "enzyme";
 import "../config";
 import SignInDialog from "../../src/components/Home/SignInDialog";
-import { Button } from "semantic-ui-react";
+import { Button, Message } from "semantic-ui-react";
 
 describe("SignInDialog", () => {
     let wrapper: ReactWrapper<any, any>;
@@ -26,5 +26,15 @@ describe("SignInDialog", () => {
         expect(wrapper.state("username")).toBe("testUsername");
         wrapper.find("input").at(1).simulate("change", {target: {value: "testPassword"}});
         expect(wrapper.state("password")).toBe("testPassword");
+    });
+
+    it("displays errors", () => {
+        expect(wrapper.find(Message.Item)).toHaveLength(0);
+        wrapper.setState({errors: ["test error 1", "test error 2"]});
+        expect(wrapper.find(Message.Item)).toHaveLength(2);
+        expect(wrapper.find(Message.Item).at(0).text()).toBe("test error 1");
+        expect(wrapper.find(Message.Item).at(1).text()).toBe("test error 2");
+        wrapper.setState({errors: []});
+        expect(wrapper.find(Message.Item)).toHaveLength(0);
     });
 });
