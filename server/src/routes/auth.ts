@@ -4,6 +4,10 @@ import { createUser, User } from "../models/user";
 
 const router = express.Router();
 
+router.get("/signed_in", (req, res) => {
+    res.send(typeof req.session !== "undefined" && typeof req.session.username !== "undefined");
+});
+
 router.post("/register", async (req, res) => {
     // validate
     const errors = [];
@@ -24,6 +28,7 @@ router.post("/register", async (req, res) => {
     }
     // hash password and insert
     await new User(createUser(req.body.username, await bcrypt.hash(req.body.password, 10))).save();
+    req.session.username = req.body.username;
     res.sendStatus(200);
 });
 
@@ -39,7 +44,12 @@ router.post("/sign_in", async (req, res) => {
         return res.status(400).send(["Incorrect username/password."]);
     }
 
+    req.session.username = req.body.username;
     res.sendStatus(200);
+});
+
+router.post("/sign_out", (req, res) => {
+    req.session.destroy(() => res.sendStatus(200));
 });
 
 export default router;

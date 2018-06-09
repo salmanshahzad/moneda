@@ -1,5 +1,20 @@
 import * as request from "supertest";
+import * as session from "supertest-session";
 import server from "../src/index";
+
+describe("/api/signed_in", () => {
+    it("sends 200 with true or false depending on if signed in", done => {
+        const testSession = session(server);
+        testSession.get("/api/signed_in").expect(200, "false", () => {
+            testSession.post("/api/register").send({
+                username: "test1",
+                password: "test1234",
+                confirmPassword: "test1234"
+            }).end(() => {
+                testSession.get("/api/signed_in").expect(200, "true", done);
+            });
+    });
+});
 
 describe("/api/register", () => {
     it("sends 400 with no inputs", done => {
@@ -26,10 +41,6 @@ describe("/api/register", () => {
             confirmPassword: "test12345"
         }).expect(200, done);
     });
-
-    afterAll(() => {
-        server.close();
-    });
 });
 
 describe("/api/sign_in", () => {
@@ -54,8 +65,24 @@ describe("/api/sign_in", () => {
             password: "test12345"
         }).expect(200, done);
     });
+});
 
-    afterAll(() => {
-        server.close();
+describe("/api/sign_out", () => {
+    it("sends 200 when no user is signed in", done => {
+        request(server).post("/api/sign_out").expect(200, done);
+    });
+
+    it("sends 200 and signs out when a user is signed in", done => {
+        const testSession = session(server);
+        testSession.post("/api/sign_in").send({
+            username: "test12345",
+            password: "test12345"
+        }).end(() => {
+            testSession.get("/api/signed_in").expect(200, "true", () => {
+                testSession.post("/api/sign_out").expect(200, () => {
+                    testSession.get("/api/signed_in").expect(200, "false", done);
+                });
+            });
+        });
     });
 });
