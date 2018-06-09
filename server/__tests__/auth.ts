@@ -31,3 +31,31 @@ describe("/api/register", () => {
         server.close();
     });
 });
+
+describe("/api/sign_in", () => {
+    it("sends 400 with no inputs", done => {
+        request(server).post("/api/sign_in").expect(400, [
+            "Incorrect username/password."
+        ], done);
+    });
+
+    it("sends 400 with invalid inputs", done => {
+        request(server).post("/api/sign_in").send({
+            username: "",
+            password: ""
+        }).expect(400, [
+            "Incorrect username/password."
+        ], done);
+    });
+
+    it("sends 200 with valid inputs", done => {
+        request(server).post("/api/sign_in").send({
+            username: "test12345",
+            password: "test12345"
+        }).expect(200, done);
+    });
+
+    afterAll(() => {
+        server.close();
+    });
+});

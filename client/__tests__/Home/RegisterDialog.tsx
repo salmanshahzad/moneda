@@ -2,7 +2,7 @@ import React from "react";
 import { ReactWrapper, mount } from "enzyme";
 import "../config";
 import RegisterDialog from "../../src/components/Home/RegisterDialog";
-import { Button } from "semantic-ui-react";
+import { Button, Message } from "semantic-ui-react";
 
 describe("RegisterDialog", () => {
     let wrapper: ReactWrapper<any, any>;
@@ -29,5 +29,15 @@ describe("RegisterDialog", () => {
         expect(wrapper.state("password")).toBe("testPassword");
         wrapper.find("input").at(2).simulate("change", {target: {value: "testConfirmPassword"}});
         expect(wrapper.state("confirmPassword")).toBe("testConfirmPassword");
+    });
+
+    it("displays errors", () => {
+        expect(wrapper.find(Message.Item)).toHaveLength(0);
+        wrapper.setState({errors: ["test error 1", "test error 2"]});
+        expect(wrapper.find(Message.Item)).toHaveLength(2);
+        expect(wrapper.find(Message.Item).at(0).text()).toBe("test error 1");
+        expect(wrapper.find(Message.Item).at(1).text()).toBe("test error 2");
+        wrapper.setState({errors: []});
+        expect(wrapper.find(Message.Item)).toHaveLength(0);
     });
 });
