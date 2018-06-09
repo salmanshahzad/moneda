@@ -37,7 +37,7 @@ export default class RegisterDialog extends React.Component<{}, RegisterDialogSt
         }).then(response => {
             this.setState({errors: []});
         }).catch(e => {
-            this.setState({errors: Object.keys(e.response.data).map(key => e.response.data[key]).filter(e => e !== "")})
+            this.setState({errors: e.response.data})
         })
     };
 

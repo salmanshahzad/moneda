@@ -3,22 +3,20 @@ import server from "../src/index";
 
 describe("/api/register", () => {
     it("sends 400 with no inputs", done => {
-        request(server).post("/api/register").expect(400, {
-            usernameError: "Please enter a username with at least 5 characters.",
-            passwordError: "Please enter a password with at least 8 characters.",
-            confirmPasswordError: ""
-        }, done);
+        request(server).post("/api/register").expect(400, [
+            "Please enter a username with at least 5 characters.",
+            "Please enter a password with at least 8 characters."
+        ], done);
     });
 
     it("sends 400 with invalid inputs", done => {
         request(server).post("/api/register").send({
             username: "test",
             password: "test"
-        }).expect(400, {
-            usernameError: "Please enter a username with at least 5 characters.",
-            passwordError: "Please enter a password with at least 8 characters.",
-            confirmPasswordError: ""
-        }, done);
+        }).expect(400, [
+            "Please enter a username with at least 5 characters.",
+            "Please enter a password with at least 8 characters."
+        ], done);
     });
 
     it("sends 200 with valid inputs", done => {
