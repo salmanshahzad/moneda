@@ -1,6 +1,9 @@
 import React from "react";
-import axios from "axios";
 import { Form, Message, Button } from "semantic-ui-react";
+
+interface SignInDialogProps {
+    onSignIn: (username: string, password: string) => Promise<{}>;
+}
 
 interface SignInDialogState {
     username: string;
@@ -8,7 +11,7 @@ interface SignInDialogState {
     errors: string[];
 }
 
-export default class SignInDialog extends React.Component<{}, SignInDialogState> {
+export default class SignInDialog extends React.Component<SignInDialogProps, SignInDialogState> {
     state: SignInDialogState = {
         username: "",
         password: "",
@@ -24,14 +27,7 @@ export default class SignInDialog extends React.Component<{}, SignInDialogState>
     };
 
     submit = () => {
-        axios.post("/api/sign_in", {
-            username: this.state.username,
-            password: this.state.password
-        }).then(response => {
-            this.setState({errors: []});
-        }).catch(e => {
-            this.setState({errors: e.response.data});
-        })
+        this.props.onSignIn(this.state.username, this.state.password).catch(errors => this.setState({errors}));
     };
 
     render(): React.ReactNode {

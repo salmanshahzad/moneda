@@ -2,13 +2,13 @@ import React from "react";
 import { ReactWrapper, mount } from "enzyme";
 import "../config";
 import SignInDialog from "../../src/components/Home/SignInDialog";
-import { Button, Message } from "semantic-ui-react";
+import { Button, Message, Form } from "semantic-ui-react";
 
 describe("SignInDialog", () => {
     let wrapper: ReactWrapper<any, any>;
 
     beforeAll(() => {
-        wrapper = mount(<SignInDialog />);
+        wrapper = mount(<SignInDialog onSignIn={jest.fn(() => new Promise<{}>((resolve, reject) => {}))} />);
     });
 
     it("renders", () => {
@@ -36,5 +36,11 @@ describe("SignInDialog", () => {
         expect(wrapper.find(Message.Item).at(1).text()).toBe("test error 2");
         wrapper.setState({errors: []});
         expect(wrapper.find(Message.Item)).toHaveLength(0);
+    });
+
+    it("calls onSignIn when the form is submitted", () => {
+        wrapper.setState({username: "test12345", password: "test12345"});
+        wrapper.find(Form).simulate("submit");
+        expect(wrapper.prop("onSignIn")).toHaveBeenCalledWith("test12345", "test12345");
     });
 });

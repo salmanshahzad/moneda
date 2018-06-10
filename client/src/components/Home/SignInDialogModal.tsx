@@ -4,7 +4,8 @@ import SignInDialog from "./SignInDialog";
 
 interface SignInDialogModalProps {
     open: boolean;
-    onClose: Function;
+    onClose: () => void;
+    onSignIn: (username: string, password: string) => Promise<{}>;
 }
 
 export default class SignInDialogModal extends React.Component<SignInDialogModalProps, {}> {
@@ -17,7 +18,7 @@ export default class SignInDialogModal extends React.Component<SignInDialogModal
         return (
             <Modal size="mini" open={this.props.open} onClose={this.close}>
                 <Header>Sign In</Header>
-                <SignInDialog />
+                <SignInDialog onSignIn={this.props.onSignIn} />
             </Modal>
         );
     }

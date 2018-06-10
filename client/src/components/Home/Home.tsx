@@ -56,6 +56,17 @@ export default class Home extends React.Component<{}, HomeState> {
         });
     };
 
+    onSignIn = (username: string, password: string) => {
+        return new Promise((resolve, reject) => {
+            axios.post("/api/sign_in", {username, password}).then(() => {
+                auth.signIn(username, password).then(signedIn => this.setState({signedIn}));
+                resolve();
+            }).catch(e => {
+                reject(e.response.data);
+            });
+        });
+    };
+
     render(): React.ReactNode {
         if (this.state.signedIn) {
             return <Redirect to="/dashboard" />;
@@ -85,7 +96,7 @@ export default class Home extends React.Component<{}, HomeState> {
                 <footer style={{backgroundColor: "gainsboro", padding: "1em"}}>
                     <p>&copy;2018 Salman</p>
                 </footer>
-                <SignInDialogModal open={this.state.signInDialogOpen} onClose={this.toggleSignInDialog} />
+                <SignInDialogModal open={this.state.signInDialogOpen} onClose={this.toggleSignInDialog} onSignIn={this.onSignIn} />
                 <RegisterDialogModal open={this.state.registerDialogOpen} onClose={this.toggleRegisterDialog} onRegister={this.onRegister} />
             </div>
         );
