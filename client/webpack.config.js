@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = env => ({
     devtool: "source-map", // enable source maps for debugging
     devServer: {
+        historyApiFallback: true,
         proxy: {
             "/api": "http://localhost:3000"
         }

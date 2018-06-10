@@ -8,7 +8,7 @@ describe("RegisterDialog", () => {
     let wrapper: ReactWrapper<any, any>;
 
     beforeAll(() => {
-        wrapper = mount(<RegisterDialog />);
+        wrapper = mount(<RegisterDialog onRegister={() => {}} />);
     });
 
     it("renders", () => {

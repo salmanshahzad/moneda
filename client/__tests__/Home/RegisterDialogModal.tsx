@@ -6,7 +6,8 @@ import { Modal } from "semantic-ui-react";
 
 describe("RegisterDialogModal", () => {
     it("renders", () => {
-        const wrapper = mount(<RegisterDialogModal open={true} onClose={() => {}} />);
+        const emptyFunction = () => {};
+        const wrapper = mount(<RegisterDialogModal open={true} onClose={emptyFunction} onRegister={emptyFunction} />);
         expect(wrapper.find(Modal)).toHaveLength(1);
     });
 });

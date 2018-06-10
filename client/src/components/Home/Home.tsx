@@ -1,4 +1,6 @@
 import React from "react";
+import auth from "../../auth";
+import { Redirect } from "react-router-dom";
 import backgroundImage from "../../assets/home/bg_cropped_compressed.jpg";
 import { Parallax } from "react-parallax";
 import { Button, Grid } from "semantic-ui-react";
@@ -22,12 +24,14 @@ const features = [
 ];
 
 interface HomeState {
+    signedIn: boolean;
     signInDialogOpen: boolean;
     registerDialogOpen: boolean;
 }
 
 export default class Home extends React.Component<{}, HomeState> {
     state: HomeState = {
+        signedIn: false,
         signInDialogOpen: false,
         registerDialogOpen: false
     };
@@ -40,7 +44,14 @@ export default class Home extends React.Component<{}, HomeState> {
         this.setState({registerDialogOpen: !this.state.registerDialogOpen});
     };
 
+    redirect = (username: string, password: string) => {
+        auth.signIn(username, password).then(signedIn => this.setState({signedIn}));
+    };
+
     render(): React.ReactNode {
+        if (this.state.signedIn) {
+            return <Redirect to="/dashboard" />;
+        }
         return (
             // flex, flexColumn, minHeight needed for sticky footer
             <div style={{display: "flex", flexDirection: "column", minHeight: "100%", overflowX: "hidden"}}>
@@ -67,7 +78,7 @@ export default class Home extends React.Component<{}, HomeState> {
                     <p>&copy;2018 Salman</p>
                 </footer>
                 <SignInDialogModal open={this.state.signInDialogOpen} onClose={this.toggleSignInDialog} />
-                <RegisterDialogModal open={this.state.registerDialogOpen} onClose={this.toggleRegisterDialog} />
+                <RegisterDialogModal open={this.state.registerDialogOpen} onClose={this.toggleRegisterDialog} onRegister={this.redirect} />
             </div>
         );
     }

@@ -5,6 +5,7 @@ import RegisterDialog from "./RegisterDialog";
 interface RegisterDialogModalProps {
     open: boolean;
     onClose: Function;
+    onRegister: Function;
 }
 
 export default class RegisterDialogModal extends React.Component<RegisterDialogModalProps, {}> {
@@ -17,7 +18,7 @@ export default class RegisterDialogModal extends React.Component<RegisterDialogM
         return (
             <Modal size="mini" open={this.props.open} onClose={this.close}>
                 <Header>Register</Header>
-                <RegisterDialog />
+                <RegisterDialog onRegister={this.props.onRegister} />
             </Modal>
         );
     }

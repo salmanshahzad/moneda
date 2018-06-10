@@ -2,6 +2,10 @@ import React from "react";
 import axios from "axios";
 import { Form, Message, Button } from "semantic-ui-react";
 
+interface RegisterDialogProps {
+    onRegister: Function;
+}
+
 interface RegisterDialogState {
     username: string;
     password: string;
@@ -9,7 +13,7 @@ interface RegisterDialogState {
     errors: string[];
 }
 
-export default class RegisterDialog extends React.Component<{}, RegisterDialogState> {
+export default class RegisterDialog extends React.Component<RegisterDialogProps, RegisterDialogState> {
     state: RegisterDialogState = {
         username: "",
         password: "",
@@ -36,6 +40,7 @@ export default class RegisterDialog extends React.Component<{}, RegisterDialogSt
             confirmPassword: this.state.confirmPassword
         }).then(response => {
             this.setState({errors: []});
+            this.props.onRegister(this.state.username, this.state.password);
         }).catch(e => {
             this.setState({errors: e.response.data})
         })
