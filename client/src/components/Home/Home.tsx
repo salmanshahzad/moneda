@@ -62,7 +62,7 @@ export default class Home extends React.Component<{}, HomeState> {
         }
         return (
             // flex, flexColumn, minHeight needed for sticky footer
-            <div style={{display: "flex", flexDirection: "column", minHeight: "100%", overflowX: "hidden"}}>
+            <div style={{display: "flex", flexDirection: "column", minHeight: "100%"}}>
                 <Parallax bgImage={backgroundImage} bgImageAlt="Moneda" strength={500} blur={3}>
                     <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
                         <h1>Moneda</h1>
