@@ -2,13 +2,13 @@ import React from "react";
 import { ReactWrapper, mount } from "enzyme";
 import "../config";
 import RegisterDialog from "../../src/components/Home/RegisterDialog";
-import { Button, Message } from "semantic-ui-react";
+import { Button, Message, Form } from "semantic-ui-react";
 
 describe("RegisterDialog", () => {
     let wrapper: ReactWrapper<any, any>;
 
     beforeAll(() => {
-        wrapper = mount(<RegisterDialog onRegister={() => {}} />);
+        wrapper = mount(<RegisterDialog onRegister={jest.fn(() => new Promise<{}>((resolve, reject) => {}))} />);
     });
 
     it("renders", () => {
@@ -39,5 +39,11 @@ describe("RegisterDialog", () => {
         expect(wrapper.find(Message.Item).at(1).text()).toBe("test error 2");
         wrapper.setState({errors: []});
         expect(wrapper.find(Message.Item)).toHaveLength(0);
+    });
+
+    it("calls onRegister when the form is submitted", () => {
+        wrapper.setState({username: "test12345", password: "test12345", confirmPassword: "test12345"});
+        wrapper.find(Form).simulate("submit");
+        expect(wrapper.prop("onRegister")).toHaveBeenCalledWith("test12345", "test12345", "test12345");
     });
 });

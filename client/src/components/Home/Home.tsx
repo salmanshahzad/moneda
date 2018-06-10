@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import auth from "../../auth";
 import { Redirect } from "react-router-dom";
 import backgroundImage from "../../assets/home/bg_cropped_compressed.jpg";
@@ -44,8 +45,15 @@ export default class Home extends React.Component<{}, HomeState> {
         this.setState({registerDialogOpen: !this.state.registerDialogOpen});
     };
 
-    redirect = (username: string, password: string) => {
-        auth.signIn(username, password).then(signedIn => this.setState({signedIn}));
+    onRegister = (username: string, password: string, confirmPassword: string) => {
+        return new Promise((resolve, reject) => {
+            axios.post("/api/register", {username, password, confirmPassword}).then(() => {
+                auth.signIn(username, password).then(signedIn => this.setState({signedIn}));
+                resolve();
+            }).catch(e => {
+                reject(e.response.data);
+            });
+        });
     };
 
     render(): React.ReactNode {
@@ -78,7 +86,7 @@ export default class Home extends React.Component<{}, HomeState> {
                     <p>&copy;2018 Salman</p>
                 </footer>
                 <SignInDialogModal open={this.state.signInDialogOpen} onClose={this.toggleSignInDialog} />
-                <RegisterDialogModal open={this.state.registerDialogOpen} onClose={this.toggleRegisterDialog} onRegister={this.redirect} />
+                <RegisterDialogModal open={this.state.registerDialogOpen} onClose={this.toggleRegisterDialog} onRegister={this.onRegister} />
             </div>
         );
     }

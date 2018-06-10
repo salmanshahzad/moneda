@@ -4,8 +4,8 @@ import RegisterDialog from "./RegisterDialog";
 
 interface RegisterDialogModalProps {
     open: boolean;
-    onClose: Function;
-    onRegister: Function;
+    onClose: () => void;
+    onRegister: (username: string, password: string, confirmPassword: string) => Promise<{}>;
 }
 
 export default class RegisterDialogModal extends React.Component<RegisterDialogModalProps, {}> {

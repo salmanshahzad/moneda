@@ -6,7 +6,7 @@ import { Modal } from "semantic-ui-react";
 
 describe("RegisterDialogModal", () => {
     it("renders", () => {
-        const emptyFunction = () => {};
+        const emptyFunction = jest.fn();
         const wrapper = mount(<RegisterDialogModal open={true} onClose={emptyFunction} onRegister={emptyFunction} />);
         expect(wrapper.find(Modal)).toHaveLength(1);
     });
