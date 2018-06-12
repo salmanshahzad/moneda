@@ -61,7 +61,7 @@ export default class AddExpenseTransaction extends React.Component<AddExpenseTra
 
     render(): React.ReactNode {
         return (
-            <Form onSubmit={this.submit} error={this.state.errors.length > 0} style={{padding: "1rem"}}>
+            <Form onSubmit={this.submit} error={this.state.errors.length > 0} style={{paddingTop: "1rem"}}>
                 <Message error>
                     <Message.Header>Error</Message.Header>
                     <Message.List>
