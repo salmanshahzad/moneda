@@ -1,12 +1,7 @@
 import React from "react";
+import { Transaction } from "../../../../user";
 import { Table } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-
-interface Transaction {
-    amount: number;
-    to: string;
-    date: number;
-}
 
 interface RecentTransactionsProps {
     transactions: Transaction[];
@@ -37,7 +32,7 @@ export default (props: RecentTransactionsProps) => {
                 {
                     getTransactionsToShow().map((transaction, i) => (
                         <Table.Row key={i}>
-                            <Table.Cell><Link to={"/expense/" + transaction.to}>{transaction.to}</Link></Table.Cell>
+                            <Table.Cell><Link to={"/expense/" + transaction.account}>{transaction.account}</Link></Table.Cell>
                             <Table.Cell>${transaction.amount.toFixed(2)}</Table.Cell>
                             <Table.Cell>{new Date(transaction.date).toLocaleString()}</Table.Cell>
                         </Table.Row>

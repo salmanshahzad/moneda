@@ -8,18 +8,21 @@ import { Table } from "semantic-ui-react";
 describe("RecentTransactions", () => {
     const transactions = [
         {
-            to: "test1",
             amount: 0,
+            account: "test1",
+            note: "",
             date: 0
         },
         {
-            to: "test2",
             amount: 0,
+            account: "test2",
+            note: "",
             date: 0
         },
         {
-            to: "test3",
-            amount: 0,
+            amount: 5,
+            account: "test3",
+            note: "",
             date: 0
         }
     ];
