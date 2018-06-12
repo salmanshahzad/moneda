@@ -1,11 +1,6 @@
 import React from "react";
+import { Expense } from "../../../../user";
 import { Pie } from "react-chartjs-2";
-
-interface Expense {
-    name: string;
-    amount: number;
-    colour: string;
-}
 
 interface ExpenseChartProps {
     expenses: Expense[];
@@ -18,7 +13,7 @@ export default class ExpenseChart extends React.Component<ExpenseChartProps, {}>
             labels: this.props.expenses.map(expense => expense.name),
             datasets: [
                 {
-                    data: this.props.expenses.map(expense => expense.amount),
+                    data: this.props.expenses.map(expense => expense.spent),
                     backgroundColor: this.props.expenses.map(expense => expense.colour)
                 }
             ]
