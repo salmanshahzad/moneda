@@ -15,6 +15,7 @@ describe("AddIncomeTransaction", () => {
         expect(wrapper.state("name")).toBe("Primary Income");
         expect(wrapper.state("amount")).toBe("0.00");
         expect(wrapper.state("note")).toBe("");
+        expect(wrapper.state("errors")).toEqual([]);
     });
 
     it("changes the state when an input value changes", () => {

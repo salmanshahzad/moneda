@@ -20,6 +20,7 @@ describe("RegisterDialog", () => {
         expect(wrapper.state("username")).toBe("");
         expect(wrapper.state("password")).toBe("");
         expect(wrapper.state("confirmPassword")).toBe("");
+        expect(wrapper.state("errors")).toEqual([]);
     });
 
     it("changes the state when an input value changes", () => {
