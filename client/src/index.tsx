@@ -4,6 +4,7 @@ import { render } from "react-dom";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Home from "./components/Home/Home";
 import Layout from "./components/General/Layout";
+import SignOut from "./components/General/SignOut";
 import "semantic-ui-css/semantic.min.css";
 
 const PrivateRoute = ({component: Component, ...rest}) => (
@@ -15,6 +16,7 @@ render(
         <Switch>
             <Route path="/" render={props => auth.isAuthenticated() ? <Redirect to="/dashboard" /> : <Home {...props} />} exact />
             <PrivateRoute path="/dashboard" component={Layout} exact />
+            <Route path="/sign_out" component={SignOut} exact />
         </Switch>
     </BrowserRouter>
 , document.getElementById("app"));
