@@ -10,19 +10,16 @@ interface AddTransactionProps {
     onAddExpenseTransaction: (name: string, amount: number, note: string) => Promise<{}>;
 }
 
-export default class AddTransaction extends React.Component<AddTransactionProps, {}> {
-    panes = [
+export default (props: AddTransactionProps) => {
+    const panes = [
         {
             menuItem: "Income",
-            render: () => <AddIncomeTransaction incomeNames={this.props.incomeNames} onAddIncomeTransaction={this.props.onAddIncomeTransaction} />
+            render: () => <AddIncomeTransaction incomeNames={props.incomeNames} onAddIncomeTransaction={props.onAddIncomeTransaction} />
         },
         {
             menuItem: "Expense",
-            render: () => <AddExpenseTransaction expenseNames={this.props.expenseNames} onAddExpenseTransaction={this.props.onAddExpenseTransaction} />
+            render: () => <AddExpenseTransaction expenseNames={props.expenseNames} onAddExpenseTransaction={props.onAddExpenseTransaction} />
         }
     ];
-
-    render(): React.ReactNode {
-        return <Tab panes={this.panes} />;
-    }
+    return <Tab panes={panes} />;
 }
