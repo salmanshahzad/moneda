@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { Transaction, User } from "../../../../user";
 import { Header, Grid, Segment } from "semantic-ui-react";
 import ExpenseChart from "../Budget/ExpenseChart";
@@ -11,8 +12,22 @@ interface DashboardProps {
 }
 
 export default class Dashboard extends React.Component<DashboardProps, {}> {
-    fake = () => {
-        return new Promise<{}>((resolve, reject) => {});
+    onAddIncomeTransaction = (name: string, amount: number, note: string): Promise<{}> => {
+        return new Promise<{}>((resolve, reject) => {
+            axios.post("/api/add_transaction", {account: name, amount, note, type: "income"}).then(() => {
+                resolve();
+                this.props.onUpdate();
+            }).catch(e => reject(e.response.data));
+        });
+    };
+
+    onAddExpenseTransaction = (name: string, amount: number, note: string): Promise<{}> => {
+        return new Promise<{}>((resolve, reject) => {
+            axios.post("/api/add_transaction", {account: name, amount, note, type: "expenses"}).then(() => {
+                resolve();
+                this.props.onUpdate();
+            }).catch(e => reject(e.response.data));
+        });
     };
 
     getAccountNames = (type: "income" | "expenses"): string[] => {
@@ -56,7 +71,7 @@ export default class Dashboard extends React.Component<DashboardProps, {}> {
                 <Grid.Column mobile={16} tablet={8} computer={8}>
                     <Segment>
                         <Header>Add Transaction</Header>
-                        <AddTransaction incomeNames={this.getAccountNames("income")} onAddIncomeTransaction={this.fake} expenseNames={this.getAccountNames("expenses")} onAddExpenseTransaction={this.fake} />
+                        <AddTransaction incomeNames={this.getAccountNames("income")} onAddIncomeTransaction={this.onAddIncomeTransaction} expenseNames={this.getAccountNames("expenses")} onAddExpenseTransaction={this.onAddExpenseTransaction} />
                     </Segment>
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={8} computer={8}>
