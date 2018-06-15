@@ -1,6 +1,5 @@
 import React from "react";
 import { mount } from "enzyme";
-import "../config";
 import SignInDialogModal from "../../src/components/Home/SignInDialogModal";
 import { Modal } from "semantic-ui-react";
 

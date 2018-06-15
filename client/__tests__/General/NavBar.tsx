@@ -1,6 +1,5 @@
 import React from "react";
 import { mount } from "enzyme";
-import "../config";
 import { MemoryRouter } from "react-router-dom";
 import NavBar from "../../src/components/general/NavBar";
 import { Menu } from "semantic-ui-react";

@@ -1,6 +1,5 @@
 import React from "react";
 import { mount } from "enzyme";
-import "../config";
 import AddIncomeTransaction from "../../src/components/Dashboard/AddIncomeTransaction";
 import { Form, Message } from "semantic-ui-react";
 

@@ -1,6 +1,5 @@
 import React from "react";
 import { mount } from "enzyme";
-import "../config";
 import { MemoryRouter } from "react-router-dom";
 import RecentTransactions from "../../src/components/Dashboard/RecentTransactions";
 import { Table } from "semantic-ui-react";

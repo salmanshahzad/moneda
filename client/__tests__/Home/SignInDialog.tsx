@@ -1,6 +1,5 @@
 import React from "react";
 import { ReactWrapper, mount } from "enzyme";
-import "../config";
 import SignInDialog from "../../src/components/Home/SignInDialog";
 import { Button, Message, Form } from "semantic-ui-react";
 

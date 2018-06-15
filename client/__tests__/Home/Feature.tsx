@@ -1,6 +1,5 @@
 import React from "react";
 import { mount } from "enzyme";
-import "../config";
 import Feature from "../../src/components/Home/Feature";
 import { Item } from "semantic-ui-react";
 

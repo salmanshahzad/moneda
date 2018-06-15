@@ -1,6 +1,5 @@
 import React from "react";
 import { mount } from "enzyme";
-import "../config";
 import AddTransaction from "../../src/components/Dashboard/AddTransaction";
 import { Tab } from "semantic-ui-react";
 

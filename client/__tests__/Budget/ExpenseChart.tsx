@@ -1,6 +1,5 @@
 import React from "react";
 import { mount } from "enzyme";
-import "../config";
 import ExpenseChart from "../../src/components/Budget/ExpenseChart";
 import { Pie } from "react-chartjs-2";
 
