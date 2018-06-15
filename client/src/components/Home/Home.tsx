@@ -46,24 +46,28 @@ export default class Home extends React.Component<{}, HomeState> {
     };
 
     onRegister = (username: string, password: string, confirmPassword: string) => {
-        return new Promise((resolve, reject) => {
-            axios.post("/api/register", {username, password, confirmPassword}).then(() => {
-                auth.signIn(username, password).then(signedIn => this.setState({signedIn}));
+        return new Promise<{}>(async (resolve, reject) => {
+            try {
+                await axios.post("/api/register", {username, password, confirmPassword});
+                await auth.signIn(username, password);
                 resolve();
-            }).catch(e => {
+                this.setState({signedIn: true});
+            } catch (e) {
                 reject(e.response.data);
-            });
+            }
         });
     };
 
     onSignIn = (username: string, password: string) => {
-        return new Promise((resolve, reject) => {
-            axios.post("/api/sign_in", {username, password}).then(() => {
-                auth.signIn(username, password).then(signedIn => this.setState({signedIn}));
+        return new Promise<{}>(async (resolve, reject) => {
+            try {
+                await axios.post("/api/sign_in", {username, password});
+                await auth.signIn(username, password);
                 resolve();
-            }).catch(e => {
+                this.setState({signedIn: true});
+            } catch (e) {
                 reject(e.response.data);
-            });
+            }
         });
     };
 

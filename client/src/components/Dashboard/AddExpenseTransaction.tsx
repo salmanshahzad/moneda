@@ -48,15 +48,18 @@ export default class AddExpenseTransaction extends React.Component<AddExpenseTra
         this.setState({note: data.value});
     };
 
-    submit = () => {
-        this.props.onAddExpenseTransaction(this.state.name, parseFloat(this.state.amount), this.state.note).then(() => {
+    submit = async () => {
+        try {
+            await this.props.onAddExpenseTransaction(this.state.name, parseFloat(this.state.amount), this.state.note);
             this.setState({
                 name: this.props.expenseNames[0],
                 amount: "0.00",
                 note: "",
                 errors: []
             });
-        }).catch(errors => this.setState({errors}));
+        } catch (errors) {
+            this.setState({errors});
+        }
     };
 
     render(): React.ReactNode {

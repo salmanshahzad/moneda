@@ -35,13 +35,13 @@ export default class Layout extends React.Component<LayoutProps, LayoutState> {
         this.setState({sidebarOpen: false});
     };
 
-    updateUser = () => {
-        axios.get("/api/user").then(response => {
-            this.setState({
-                auth: "yes",
-                user: response.data
-            });
-        }).catch(() => this.setState({auth: "no"}));
+    updateUser = async () => {
+        try {
+            const response = await axios.get("/api/user");
+            this.setState({auth: "yes", user: response.data});
+        } catch {
+            this.setState({auth: "no"});
+        }
     };
 
     render(): React.ReactNode {

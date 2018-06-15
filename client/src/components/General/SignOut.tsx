@@ -11,8 +11,9 @@ export default class SignOut extends React.Component<{}, SignOutState> {
         done: false
     };
 
-    componentDidMount() {
-        auth.signOut().then(() => this.setState({done: true}));
+    async componentDidMount() {
+        await auth.signOut();
+        this.setState({done: true});
     }
 
     render(): React.ReactNode {

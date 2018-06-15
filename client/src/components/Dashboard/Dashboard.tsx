@@ -13,20 +13,26 @@ interface DashboardProps {
 
 export default class Dashboard extends React.Component<DashboardProps, {}> {
     onAddIncomeTransaction = (name: string, amount: number, note: string): Promise<{}> => {
-        return new Promise<{}>((resolve, reject) => {
-            axios.post("/api/add_transaction", {account: name, amount, note, type: "income"}).then(() => {
+        return new Promise<{}>(async (resolve, reject) => {
+            try {
+                await axios.post("/api/add_transaction", {account: name, amount, note, type: "income"});
                 resolve();
                 this.props.onUpdate();
-            }).catch(e => reject(e.response.data));
+            } catch (e) {
+                reject(e.response.data)
+            }
         });
     };
 
     onAddExpenseTransaction = (name: string, amount: number, note: string): Promise<{}> => {
-        return new Promise<{}>((resolve, reject) => {
-            axios.post("/api/add_transaction", {account: name, amount, note, type: "expenses"}).then(() => {
+        return new Promise<{}>(async (resolve, reject) => {
+            try {
+                await axios.post("/api/add_transaction", {account: name, amount, note, type: "expenses"});
                 resolve();
                 this.props.onUpdate();
-            }).catch(e => reject(e.response.data));
+            } catch (e) {
+                reject(e.response.data)
+            }
         });
     };
 

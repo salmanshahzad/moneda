@@ -1,17 +1,15 @@
 import * as mongoose from "mongoose";
 import { User } from "../src/models/user";
 import * as request from "supertest";
-import * as session from "supertest-session";
 import app from "../src/app";
 
 beforeAll(() => {
     mongoose.connect("mongodb://localhost:27017/moneda");
 });
 
-afterAll(done => {
-    User.findOneAndRemove({username: "testuser"}).then(() => {
-        mongoose.disconnect(done);
-    });
+afterAll(async done => {
+    await User.findOneAndRemove({username: "testuser"});
+    mongoose.disconnect(done);
 });
 
 describe("/api/register", () => {
@@ -70,17 +68,14 @@ describe("/api/sign_out", () => {
         request(app).post("/api/sign_out").expect(200, done);
     });
 
-    it("sends 200 and signs out when a user is signed in", done => {
-        const testSession = session(app);
-        testSession.post("/api/sign_in").send({
+    it("sends 200 and signs out when a user is signed in", async done => {
+        const server = request.agent(app);
+        await server.post("/api/sign_in").send({
             username: "testuser",
             password: "testuser"
-        }).then(() => {
-            testSession.get("/api/signed_in").expect(200, "true").then(() => {
-                testSession.post("/api/sign_out").expect(200).then(() => {
-                    testSession.get("/api/signed_in").expect(200, "false", done);
-                });
-            });
         });
+        await server.get("/api/user").expect(200);
+        await server.post("/api/sign_out").expect(200);
+        server.get("/api/user").expect(401, done);
     });
 });

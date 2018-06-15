@@ -32,8 +32,12 @@ export default class RegisterDialog extends React.Component<RegisterDialogProps,
         this.setState({confirmPassword: e.target.value});
     };
 
-    submit = () => {
-        this.props.onRegister(this.state.username, this.state.password, this.state.confirmPassword).catch(errors => this.setState({errors}));
+    submit = async () => {
+        try {
+            await this.props.onRegister(this.state.username, this.state.password, this.state.confirmPassword);
+        } catch (errors) {
+            this.setState({errors});
+        }
     };
 
     render(): React.ReactNode {

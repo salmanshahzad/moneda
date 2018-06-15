@@ -26,8 +26,12 @@ export default class SignInDialog extends React.Component<SignInDialogProps, Sig
         this.setState({password: e.target.value});
     };
 
-    submit = () => {
-        this.props.onSignIn(this.state.username, this.state.password).catch(errors => this.setState({errors}));
+    submit = async () => {
+        try {
+            await this.props.onSignIn(this.state.username, this.state.password);
+        } catch (errors) {
+            this.setState({errors});
+        }
     };
 
     render(): React.ReactNode {

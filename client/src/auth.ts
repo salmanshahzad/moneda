@@ -3,19 +3,25 @@ import axios from "axios";
 export default {
     isAuthenticated: () => window.localStorage.getItem("auth") === "true",
     signIn: (username: string, password: string) => {
-        return new Promise<boolean>((resolve, reject) => {
-            axios.post("/api/sign_in", {username, password}).then(() => {
+        return new Promise<{}>(async (resolve, reject) => {
+            try {
+                await axios.post("/api/sign_in", {username, password});
                 window.localStorage.setItem("auth", "true");
-                resolve(true);
-            }).catch(e => reject(e));
+                resolve();
+            } catch (e) {
+                reject(e);
+            }
         });
     },
     signOut: () => {
-        return new Promise<boolean>((resolve, reject) => {
-            axios.post("/api/sign_out").then(() => {
+        return new Promise<{}>(async (resolve, reject) => {
+            try {
+                await axios.post("/api/sign_out");
                 window.localStorage.removeItem("auth");
-                resolve(true);
-            }).catch(e => reject(e));
+                resolve();
+            } catch (e) {
+                reject(e);
+            }
         });
     }
 }

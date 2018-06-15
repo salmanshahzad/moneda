@@ -3,15 +3,15 @@ import { User } from "../models/user";
 
 const router = express.Router();
 
-router.get("/user", (req, res) => {
+router.get("/user", async (req, res) => {
     // ensure user is signed in
     if (typeof req.session === "undefined" || typeof req.session.username === "undefined") {
         return res.sendStatus(401);
     }
-    User.findOne({username: req.session.username}).then(doc => res.send(doc));
+    res.send(await User.findOne({username: req.session.username}));
 });
 
-router.post("/add_transaction", (req, res) => {
+router.post("/add_transaction", async (req, res) => {
     // ensure user is signed in
     if (typeof req.session === "undefined" || typeof req.session.username === "undefined") {
         return res.sendStatus(401);
@@ -35,34 +35,34 @@ router.post("/add_transaction", (req, res) => {
         return res.status(400).send(errors);
     }
 
-    User.findOne({username: req.session.username}).then(doc => {
-        // check that the account exists
-        const accounts = doc.get(req.body.type);
-        let index = -1;
-        accounts.forEach((account, i) => {
-            if (account.name === req.body.account) {
-                index = i;
-            } 
-        });
-        if (index === -1) {
-            return res.status(400).send(["Account does not exist."]);
-        }
-
-        // add the transaction
-        accounts[index].transactions.push({
-            account: req.body.account,
-            amount: req.body.amount,
-            note: req.body.note,
-            date: new Date().getTime()
-        });
-        if (req.body.type === "income") {
-            accounts[index].income += req.body.amount;
-            User.updateOne({username: req.session.username}, {income: accounts}).then(() => res.sendStatus(200));
-        } else {
-            accounts[index].spent += req.body.amount;
-            User.updateOne({username: req.session.username}, {expenses: accounts}).then(() => res.sendStatus(200));
-        }
+    const doc = await User.findOne({username: req.session.username});
+    // check that the account exists
+    const accounts = doc.get(req.body.type);
+    let index = -1;
+    accounts.forEach((account, i) => {
+        if (account.name === req.body.account) {
+            index = i;
+        } 
     });
+    if (index === -1) {
+        return res.status(400).send(["Account does not exist."]);
+    }
+
+    // add the transaction
+    accounts[index].transactions.push({
+        account: req.body.account,
+        amount: req.body.amount,
+        note: req.body.note,
+        date: new Date().getTime()
+    });
+    if (req.body.type === "income") {
+        accounts[index].income += req.body.amount;
+        await User.updateOne({username: req.session.username}, {income: accounts});
+    } else {
+        accounts[index].spent += req.body.amount;
+        await User.updateOne({username: req.session.username}, {expenses: accounts});
+    }
+    res.sendStatus(200);
 });
 
 export default router;

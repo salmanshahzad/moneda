@@ -48,15 +48,18 @@ export default class AddIncomeTransaction extends React.Component<AddIncomeTrans
         this.setState({note: data.value});
     };
 
-    submit = () => {
-        this.props.onAddIncomeTransaction(this.state.name, parseFloat(this.state.amount), this.state.note).then(() => {
+    submit = async () => {
+        try {
+            await this.props.onAddIncomeTransaction(this.state.name, parseFloat(this.state.amount), this.state.note);
             this.setState({
                 name: this.props.incomeNames[0],
                 amount: "0.00",
                 note: "",
                 errors: []
             });
-        }).catch(errors => this.setState({errors}));
+        } catch (errors) {
+            this.setState({errors});
+        }
     };
 
     render(): React.ReactNode {
