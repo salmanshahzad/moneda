@@ -1,25 +1,33 @@
+import * as mongoose from "mongoose";
+import { User } from "../src/models/user";
 import * as request from "supertest";
 import * as session from "supertest-session";
-import server from "../src/index";
+import app from "../src/app";
+
+beforeAll(() => {
+    mongoose.connect("mongodb://localhost:27017/moneda");
+});
+
+afterAll(done => {
+    User.findOneAndRemove({username: "testuser"}).then(() => {
+        mongoose.disconnect(done);
+    });
+});
 
 describe("/api/user", () => {
-    let testSession;
+    it("sends 401 when not signed in", done => {
+        request(app).get("/api/user").expect(401, done);
+    });
 
-    beforeAll(done => {
-        testSession = session(server);
+    it("sends 200 when signed in", done => {
+        const testSession = session(app);
         testSession.post("/api/register").send({
             username: "testuser",
             password: "testuser",
             confirmPassword: "testuser"
-        }).end(done);
-    });
-
-    it("sends 401 when not signed in", done => {
-        request(server).get("/api/user").expect(401, done);
-    });
-
-    it("sends 200 when signed in", done => {
-        testSession.get("/api/user").expect(200, done);
+        }).then(() => {
+            testSession.get("/api/user").expect(200, done);
+        });
     });
 });
 
@@ -27,15 +35,15 @@ describe("/api/add_transaction", () => {
     let testSession;
 
     beforeAll(done => {
-        testSession = session(server);
+        testSession = session(app);
         testSession.post("/api/sign_in").send({
             username: "testuser",
             password: "testuser"
-        }).end(done);
+        }).then(() => done());
     });
 
     it("sends 401 when not signed in", done => {
-        request(server).post("/api/add_transaction").expect(401, done);
+        request(app).post("/api/add_transaction").expect(401, done);
     });
 
     it("sends 400 with no inputs", done => {
