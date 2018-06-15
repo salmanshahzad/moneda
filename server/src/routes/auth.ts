@@ -4,10 +4,6 @@ import { createUser, User } from "../models/user";
 
 const router = express.Router();
 
-router.get("/signed_in", (req, res) => {
-    res.send(typeof req.session !== "undefined" && typeof req.session.username !== "undefined");
-});
-
 router.post("/register", async (req, res) => {
     // validate
     const errors = [];
