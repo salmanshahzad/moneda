@@ -1,4 +1,4 @@
-import * as mongoose from "mongoose";
+import mongoose from "mongoose";
 import { Expense, User as UserModel } from "../../../user";
 
 const generateRandomColour = (): string => {

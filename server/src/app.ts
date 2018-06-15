@@ -1,10 +1,10 @@
-import * as express from "express";
-import * as bodyParser from "body-parser";
-import * as compression from "compression";
-import * as dotenv from "dotenv";
-import * as path from "path";
-import * as session from "express-session";
-import routes from "./routes";
+import express from "express";
+import bodyParser from "body-parser";
+import compression from "compression";
+import dotenv from "dotenv";
+import path from "path";
+import session from "express-session";
+import routes from "./routes/index";
 
 dotenv.config();
 

@@ -1,5 +1,5 @@
-import * as express from "express";
-import * as bcrypt from "bcrypt";
+import express from "express";
+import bcrypt from "bcrypt";
 import { createUser, User } from "../models/user";
 
 const router = express.Router();

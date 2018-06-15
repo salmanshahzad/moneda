@@ -1,6 +1,6 @@
-import * as mongoose from "mongoose";
+import mongoose from "mongoose";
 import { User } from "../src/models/user";
-import * as request from "supertest";
+import request from "supertest";
 import app from "../src/app";
 
 beforeAll(() => {
