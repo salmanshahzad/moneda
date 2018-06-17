@@ -16,6 +16,7 @@ render(
         <Switch>
             <Route path="/" render={props => auth.isAuthenticated() ? <Redirect to="/dashboard" /> : <Home {...props} />} exact />
             <PrivateRoute path="/dashboard" component={Layout} exact />
+            <PrivateRoute path="/budget" component={Layout} exact />
             <Route path="/sign_out" component={SignOut} exact />
         </Switch>
     </BrowserRouter>
