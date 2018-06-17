@@ -1,13 +1,19 @@
 import React from "react";
 import { mount } from "enzyme";
-import { MemoryRouter } from "react-router-dom";
+import routerContext from "../routerContext";
 import Layout from "../../src/components/general/Layout";
 
 describe("Layout", () => {
+    const wrapper = mount(<Layout />, routerContext);
+
     it("renders", () => {
-        // need MemoryRouter because NavBar contains Link which cannot be rendered outside a Router
-        const wrapper = mount(<MemoryRouter><Layout /></MemoryRouter>);
         expect(wrapper.find("br")).toHaveLength(1);
-        // cannot test anything else because Layout is not the root component so enzyme cannot set its state
+    });
+
+    it("has the correct initial state", () => {
+        expect(wrapper.state("sidebarOpen")).toBe(false);
+        // auth should be loading at start but becomes no since componentDidMount calls the server
+        // expect(wrapper.state("auth")).toBe("loading");
+        expect(wrapper.state("user")).toBe(null);
     });
 });

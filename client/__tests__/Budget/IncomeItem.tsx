@@ -1,10 +1,11 @@
 import React from "react";
 import { mount } from "enzyme";
-import { MemoryRouter, Link } from "react-router-dom";
+import routerContext from "../routerContext";
+import { Link } from "react-router-dom";
 import IncomeItem from "../../src/components/Budget/IncomeItem";
 
 describe("IncomeItem", () => {
-    const wrapper = mount(<MemoryRouter><IncomeItem name="Test" amount={1} percentage={50} /></MemoryRouter>);
+    const wrapper = mount(<IncomeItem name="Test" amount={1} percentage={50} />, routerContext);
 
     it("renders", () => {
         expect(wrapper.find(Link)).toHaveLength(1);

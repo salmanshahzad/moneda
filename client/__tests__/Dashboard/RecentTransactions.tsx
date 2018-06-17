@@ -1,6 +1,6 @@
 import React from "react";
 import { mount } from "enzyme";
-import { MemoryRouter } from "react-router-dom";
+import routerContext from "../routerContext";
 import RecentTransactions from "../../src/components/Dashboard/RecentTransactions";
 import { Table } from "semantic-ui-react";
 
@@ -25,7 +25,7 @@ describe("RecentTransactions", () => {
             date: 0
         }
     ];
-    const wrapper = mount(<MemoryRouter><RecentTransactions transactions={transactions} show={1} /></MemoryRouter>);
+    const wrapper = mount(<RecentTransactions transactions={transactions} show={1} />, routerContext);
 
     it("renders", () => {
         expect(wrapper.find(Table)).toHaveLength(1);

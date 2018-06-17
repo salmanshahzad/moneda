@@ -1,11 +1,12 @@
 import React from "react";
 import { mount } from "enzyme";
-import { MemoryRouter, Link } from "react-router-dom";
+import routerContext from "../routerContext";
+import { Link } from "react-router-dom";
 import ExpenseItem from "../../src/components/Budget/ExpenseItem";
 import { Progress } from "semantic-ui-react";
 
 describe("ExpenseItem", () => {
-    let wrapper = mount(<MemoryRouter><ExpenseItem name="Test" spent={1} budget={2} /></MemoryRouter>);
+    const wrapper = mount(<ExpenseItem name="Test" spent={1} budget={2} />, routerContext);
 
     it("renders", () => {
         expect(wrapper.find(Link)).toHaveLength(1);
@@ -22,13 +23,13 @@ describe("ExpenseItem", () => {
 
     it("has the correct colour for the Progress component", () => {
         expect(wrapper.find(Progress).prop("color")).toBe("green");
-        wrapper = mount(<MemoryRouter><ExpenseItem name="Test" spent={1.5} budget={2} /></MemoryRouter>);
+        wrapper.setProps({spent: 1.5});
         expect(wrapper.find(Progress).prop("color")).toBe("yellow");
-        wrapper = mount(<MemoryRouter><ExpenseItem name="Test" spent={2} budget={2} /></MemoryRouter>);
+        wrapper.setProps({spent: 2});
         expect(wrapper.find(Progress).prop("color")).toBe("red");
-        wrapper = mount(<MemoryRouter><ExpenseItem name="Test" spent={0} budget={0} /></MemoryRouter>);
+        wrapper.setProps({spent: 0, budget: 0});
         expect(wrapper.find(Progress).prop("color")).toBe("green");
-        wrapper = mount(<MemoryRouter><ExpenseItem name="Test" spent={1} budget={0} /></MemoryRouter>);
+        wrapper.setProps({spent: 1});
         expect(wrapper.find(Progress).prop("color")).toBe("red");
     });
 });

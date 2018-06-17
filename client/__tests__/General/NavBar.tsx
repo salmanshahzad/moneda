@@ -1,13 +1,12 @@
 import React from "react";
 import { mount } from "enzyme";
-import { MemoryRouter } from "react-router-dom";
+import routerContext from "../routerContext";
 import NavBar from "../../src/components/general/NavBar";
 import { Menu } from "semantic-ui-react";
 
 describe("NavBar", () => {
     it("renders", () => {
-        // need MemoryRouter because NavBar contains Link which cannot be rendered outside a Router
-        const wrapper = mount(<MemoryRouter><NavBar activePage="" sidebarOpen={false} onOpenSidebar={jest.fn()} /></MemoryRouter>);
+        const wrapper = mount(<NavBar activePage="" sidebarOpen={false} onOpenSidebar={jest.fn()} />, routerContext);
         expect(wrapper.find(Menu)).toHaveLength(1);
     });
 });
