@@ -1,14 +1,10 @@
 import React from "react";
-import { ReactWrapper, mount } from "enzyme";
+import { mount } from "enzyme";
 import SignInDialog from "../../src/components/Home/SignInDialog";
 import { Button, Message, Form } from "semantic-ui-react";
 
 describe("SignInDialog", () => {
-    let wrapper: ReactWrapper<any, any>;
-
-    beforeAll(() => {
-        wrapper = mount(<SignInDialog onSignIn={jest.fn(() => new Promise<{}>((resolve, reject) => {}))} />);
-    });
+    const wrapper = mount(<SignInDialog onSignIn={jest.fn(() => new Promise<{}>((resolve, reject) => {}))} />);
 
     it("renders", () => {
         expect(wrapper.find("input")).toHaveLength(2);

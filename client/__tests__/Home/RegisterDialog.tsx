@@ -1,14 +1,10 @@
 import React from "react";
-import { ReactWrapper, mount } from "enzyme";
+import { mount } from "enzyme";
 import RegisterDialog from "../../src/components/Home/RegisterDialog";
 import { Button, Message, Form } from "semantic-ui-react";
 
 describe("RegisterDialog", () => {
-    let wrapper: ReactWrapper<any, any>;
-
-    beforeAll(() => {
-        wrapper = mount(<RegisterDialog onRegister={jest.fn(() => new Promise<{}>((resolve, reject) => {}))} />);
-    });
+    const wrapper = mount(<RegisterDialog onRegister={jest.fn(() => new Promise<{}>((resolve, reject) => {}))} />);
 
     it("renders", () => {
         expect(wrapper.find("input")).toHaveLength(3);

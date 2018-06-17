@@ -1,15 +1,11 @@
 import React from "react";
-import { ReactWrapper, mount } from "enzyme";
+import { mount } from "enzyme";
 import Home from "../../src/components/Home/Home";
 import Feature from "../../src/components/Home/Feature";
 import { Button } from "semantic-ui-react";
 
 describe("Home", () => {
-    let wrapper: ReactWrapper<any, any>;
-
-    beforeEach(() => {
-        wrapper = mount(<Home />);
-    });
+    const wrapper = mount(<Home />);
 
     it("renders", () => {
         expect(wrapper.find(Feature)).toHaveLength(3);
