@@ -1,11 +1,12 @@
 import React from "react";
-import { User } from "../../../../user";
+import { Income, Expense, User } from "../../../../user";
 import axios from "axios";
 import { Redirect, Route } from "react-router-dom";
 import { Sidebar } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import Dashboard from "../Dashboard/Dashboard";
 import Budget from "../Budget/Budget";
+import AccountDetail from "../Budget/AccountDetail";
 
 interface LayoutProps {
     location?: any; // given by React Router
@@ -45,6 +46,14 @@ export default class Layout extends React.Component<LayoutProps, LayoutState> {
         }
     };
 
+    getAccountWithName = (name: string, type: "income" | "expense"): Income | Expense => {
+        if (type === "income") {
+            return this.state.user.income.filter(income => income.name === name)[0];
+        } else {
+            return this.state.user.expenses.filter(expense => expense.name === name)[0];
+        }
+    };
+
     render(): React.ReactNode {
         if (this.state.auth === "loading") {
             return <br />;
@@ -57,6 +66,8 @@ export default class Layout extends React.Component<LayoutProps, LayoutState> {
                 <Sidebar.Pusher onClick={this.closeSidebar}>
                     <Route path="/dashboard" render={props => <Dashboard user={this.state.user} onUpdate={this.updateUser} {...props} />} />
                     <Route path="/budget" render={props => <Budget user={this.state.user} onUpdate={this.updateUser} {...props} />} />
+                    <Route path="/income/:account" render={props => <AccountDetail account={this.getAccountWithName(props.match.params.account, "income")} />} />
+                    <Route path="/expense/:account" render={props => <AccountDetail account={this.getAccountWithName(props.match.params.account, "expense")} />} />
                 </Sidebar.Pusher>
             </Sidebar.Pushable>
         );
