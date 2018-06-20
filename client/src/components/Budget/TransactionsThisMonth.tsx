@@ -24,7 +24,7 @@ export default (props: TransactionsThisMonthProps) => {
         const length = transactionsThisMonth.length;
         const toShow = Math.min(length, props.show);
         const transactions = [];
-        for (let i = length - 1; i >= length - toShow; i--) {
+        for (let i = 0; i < toShow; i++) {
             transactions.push(transactionsThisMonth[i]);
         }
         return transactions;

@@ -46,12 +46,17 @@ export default class Layout extends React.Component<LayoutProps, LayoutState> {
         }
     };
 
-    getAccountWithName = (name: string, type: "income" | "expense"): Income | Expense => {
+    getAccountDetails = (name: string, type: "income" | "expense") => {
+        let account;
         if (type === "income") {
-            return this.state.user.income.filter(income => income.name === name)[0];
+            account = this.state.user.income.filter(income => income.name === name)[0];
         } else {
-            return this.state.user.expenses.filter(expense => expense.name === name)[0];
+            account = this.state.user.expenses.filter(expense => expense.name === name)[0];
         }
+        return {
+            account,
+            transactions: this.state.user.transactions.filter(t => t.account_id === account.id)
+        };
     };
 
     render(): React.ReactNode {
@@ -66,8 +71,8 @@ export default class Layout extends React.Component<LayoutProps, LayoutState> {
                 <Sidebar.Pusher onClick={this.closeSidebar}>
                     <Route path="/dashboard" render={props => <Dashboard user={this.state.user} onUpdate={this.updateUser} {...props} />} />
                     <Route path="/budget" render={props => <Budget user={this.state.user} onUpdate={this.updateUser} {...props} />} />
-                    <Route path="/income/:account" render={props => <AccountDetail account={this.getAccountWithName(props.match.params.account, "income")} />} />
-                    <Route path="/expense/:account" render={props => <AccountDetail account={this.getAccountWithName(props.match.params.account, "expense")} />} />
+                    <Route path="/income/:account" render={props => <AccountDetail account={this.getAccountDetails(props.match.params.account, "income")} />} />
+                    <Route path="/expense/:account" render={props => <AccountDetail account={this.getAccountDetails(props.match.params.account, "expense")} />} />
                 </Sidebar.Pusher>
             </Sidebar.Pushable>
         );

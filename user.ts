@@ -1,28 +1,28 @@
 export interface User {
     username: string;
-    password: string;
     income: Income[];
     expenses: Expense[];
-}
-
-export interface Income {
-    name: string;
-    colour: string;
-    income: number;
     transactions: Transaction[];
 }
 
+export interface Income {
+    id: string;
+    name: string;
+    colour: string;
+    income: number;
+}
+
 export interface Expense {
+    id: string;
     name: string;
     colour: string;
     spent: number;
     budget: number;
-    transactions: Transaction[];
 }
 
 export interface Transaction {
+    account_id: string;
     amount: number;
-    account: string;
-    note: string;
     date: number;
+    note: string;
 }

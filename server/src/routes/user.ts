@@ -1,5 +1,5 @@
 import express from "express";
-import { User } from "../models/user";
+import db from "../../db";
 
 const router = express.Router();
 
@@ -8,7 +8,15 @@ router.get("/user", async (req, res) => {
     if (typeof req.session === "undefined" || typeof req.session.username === "undefined") {
         return res.sendStatus(401);
     }
-    res.send(await User.findOne({username: req.session.username}));
+
+    const userId = (await db("users").select("id").where({username: req.session.username}))[0].id;
+    const user = {
+        username: req.session.username,
+        income: await db("income").select().where({user_id: userId}).orderBy("name"),
+        expenses: await db("expenses").select().where({user_id: userId}).orderBy("name"),
+        transactions: await db("transactions").select().where({user_id: userId}).orderBy("date", "desc")
+    };
+    res.send(user);
 });
 
 router.post("/add_transaction", async (req, res) => {
@@ -35,32 +43,29 @@ router.post("/add_transaction", async (req, res) => {
         return res.status(400).send(errors);
     }
 
-    const doc = await User.findOne({username: req.session.username});
     // check that the account exists
-    const accounts = doc.get(req.body.type);
-    let index = -1;
-    accounts.forEach((account, i) => {
-        if (account.name === req.body.account) {
-            index = i;
-        } 
-    });
-    if (index === -1) {
+    const userId = (await db("users").select("id").where({username: req.session.username}))[0].id;
+    const rows = await db(req.body.type).select().where({user_id: userId, name: req.body.account});
+    if (rows.length === 0) {
         return res.status(400).send(["Account does not exist."]);
     }
 
     // add the transaction
-    accounts[index].transactions.push({
-        account: req.body.account,
+    await db("transactions").insert({
+        user_id: userId,
+        account_id: (await db(req.body.type).select("id").where({user_id: userId, name: req.body.account}))[0].id,
         amount: req.body.amount,
-        note: req.body.note,
-        date: new Date().getTime()
+        date: new Date().getTime(),
+        note: req.body.note || ""
     });
+
+    // update income or expenses amounts
     if (req.body.type === "income") {
-        accounts[index].income += req.body.amount;
-        await User.updateOne({username: req.session.username}, {income: accounts});
+        const income = (await db("income").select("income").where({user_id: userId, name: req.body.account}))[0].income;
+        await db("income").update({income: income + req.body.amount}).where({user_id: userId, name: req.body.account});
     } else {
-        accounts[index].spent += req.body.amount;
-        await User.updateOne({username: req.session.username}, {expenses: accounts});
+        const spent = (await db("expenses").select("spent").where({user_id: userId, name: req.body.account}))[0].spent;
+        await db("expenses").update({spent: spent + req.body.amount}).where({user_id: userId, name: req.body.account});
     }
     res.sendStatus(200);
 });

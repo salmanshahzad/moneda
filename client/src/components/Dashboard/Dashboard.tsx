@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Transaction, User } from "../../../../user";
+import { User } from "../../../../user";
 import { Header, Grid, Segment } from "semantic-ui-react";
 import ExpenseChart from "../Budget/ExpenseChart";
 import AddTransaction from "./AddTransaction";
@@ -44,22 +44,15 @@ export default class Dashboard extends React.Component<DashboardProps, {}> {
         }
     };
 
-    getTransactions = (): Transaction[] => {
-        const allTransactions: Transaction[] = [];
-        this.props.user.income.forEach(income => {
-            allTransactions.push(...income.transactions);
-        });
-        this.props.user.expenses.forEach(expense => {
-            allTransactions.push(...expense.transactions);
-        });
-        allTransactions.sort((a, b) => {
-            if (a.date > b.date) {
-                return 1;
-            } else {
-                return -1;
-            }
-        });
-        return allTransactions;
+    accountIdToName = (id: string): string => {
+        const income = this.props.user.income.filter(income => income.id === id);
+        if (income.length > 0) {
+            return income[0].name;
+        }
+        const expenses = this.props.user.expenses.filter(expense => expense.id === id);
+        if (expenses.length > 0) {
+            return expenses[0].name;
+        }
     };
 
     render(): React.ReactNode {
@@ -83,7 +76,7 @@ export default class Dashboard extends React.Component<DashboardProps, {}> {
                 <Grid.Column mobile={16} tablet={8} computer={8}>
                     <Segment>
                         <Header>Recent Transactions</Header>
-                        <RecentTransactions transactions={this.getTransactions()} show={5} />
+                        <RecentTransactions transactions={this.props.user.transactions} accountIdToName={this.accountIdToName} show={5} />
                     </Segment>
                 </Grid.Column>
             </Grid>

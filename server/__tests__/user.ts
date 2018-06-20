@@ -1,15 +1,14 @@
-import mongoose from "mongoose";
-import { User } from "../src/models/user";
+import db from "../db";
 import request from "supertest";
 import app from "../src/app";
 
-beforeAll(() => {
-    mongoose.connect("mongodb://localhost:27017/moneda");
-});
-
 afterAll(async done => {
-    await User.findOneAndRemove({username: "testuser"});
-    mongoose.disconnect(done);
+    const userId = (await db("users").select("id").where({username: "testuser2"}))[0].id;
+    await db("users").delete().where({id: userId});
+    await db("income").delete().where({user_id: userId});
+    await db("expenses").delete().where({user_id: userId});
+    await db("transactions").delete().where({user_id: userId});
+    db.destroy(done);
 });
 
 describe("/api/user", () => {
@@ -20,9 +19,9 @@ describe("/api/user", () => {
     it("sends 200 when signed in", async done => {
         const server = request.agent(app);
         await server.post("/api/register").send({
-            username: "testuser",
-            password: "testuser",
-            confirmPassword: "testuser"
+            username: "testuser2",
+            password: "testuser2",
+            confirmPassword: "testuser2"
         });
         server.get("/api/user").expect(200, done);
     });
@@ -34,8 +33,8 @@ describe("/api/add_transaction", () => {
     beforeAll(async done => {
         server = request.agent(app);
         await server.post("/api/sign_in").send({
-            username: "testuser",
-            password: "testuser"
+            username: "testuser2",
+            password: "testuser2"
         });
         done();
     });

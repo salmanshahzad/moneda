@@ -8,7 +8,11 @@ import TransactionsThisMonth from "../../src/components/Budget/TransactionsThisM
 import ProgressBar from "../../src/components/Budget/ProgressBar";
 
 describe("AccountDetail", () => {
-    const wrapper = mount(<AccountDetail account={testUser.income[0]}  />);
+    const account = {
+        account: testUser.income[0],
+        transactions: []
+    };
+    const wrapper = mount(<AccountDetail account={account}  />);
 
     it("renders", () => {
         expect(wrapper.find(Header).at(0).text()).toBe("Test Income 1");
@@ -16,7 +20,10 @@ describe("AccountDetail", () => {
         expect(wrapper.find(ProgressBar)).toHaveLength(0);
         expect(wrapper.find(Line)).toHaveLength(1);
         expect(wrapper.find(TransactionsThisMonth)).toHaveLength(1);
-        wrapper.setProps({account: testUser.expenses[0]});
+        wrapper.setProps({account: {
+            account: testUser.expenses[0],
+            transactions: []
+        }});
         expect(wrapper.find(Header).at(0).text()).toBe("Test Expense 1");
         expect(wrapper.find(Header).at(1).text()).toBe("$0.00 of $0.00");
         expect(wrapper.find(ProgressBar)).toHaveLength(1);
