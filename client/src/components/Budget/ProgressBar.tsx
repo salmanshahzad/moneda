@@ -7,6 +7,11 @@ interface ProgressBarProps {
 }
 
 export default (props: ProgressBarProps) => {
+    const getPercent = (): number => {
+        // need this function to round to 1 decimal place otherwise Progress component may show e.g. 7.00000001%
+        return parseFloat((props.value / props.total * 100).toFixed(1));
+    };
+
     const getColour = (): SemanticCOLORS => {
         if (props.total === 0) {
             if (props.value === 0) {
@@ -24,5 +29,5 @@ export default (props: ProgressBarProps) => {
             return "yellow";
         }
     };
-    return <Progress value={props.value} total={props.total} progress="percent" color={getColour()} style={{margin: "0.8em 0"}} />;
+    return <Progress percent={getPercent()} progress color={getColour()} style={{margin: "0.8em 0"}} />;
 }
