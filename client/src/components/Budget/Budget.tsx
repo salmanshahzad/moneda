@@ -19,7 +19,8 @@ export default class Budget extends React.Component<BudgetProps, {}> {
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={8} computer={8}>
                     <Segment>
-                        <Header>Expense Chart</Header>
+                        {/* need marginTop because for some reason Header has an extra margin when it is placed before a chart */}
+                        <Header style={{marginTop: "-.14285714em"}}>Expenses Chart</Header>
                         <ExpenseChart expenses={this.props.user.expenses} />
                     </Segment>
                 </Grid.Column>

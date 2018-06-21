@@ -41,7 +41,8 @@ export default (props: AccountDetailProps) => {
             }
             <Grid.Column mobile={16} tablet={8} computer={8}>
                 <Segment>
-                    <Header>Past History</Header>
+                    {/* need marginTop because for some reason Header has an extra margin when it is placed before a chart */}
+                    <Header style={{marginTop: "-.14285714em"}}>Past History</Header>
                     <Line data={{}} />
                 </Segment>
             </Grid.Column>
