@@ -7,6 +7,12 @@ interface ExpenseChartProps {
 }
 
 export default class ExpenseChart extends React.Component<ExpenseChartProps, {}> {
+    getExpensesSum = (): number => {
+        let sum = 0;
+        this.props.expenses.forEach(expense => sum += expense.spent);
+        return sum;
+    }
+
     getData = () => {
         // return the data in the format needed for the Pie component
         return {
@@ -27,7 +33,7 @@ export default class ExpenseChart extends React.Component<ExpenseChartProps, {}>
                     const index = tooltipItem.index;
                     const expense = data.labels[index];
                     const amount = data.datasets[tooltipItem.datasetIndex].data[index];
-                    return `${expense}: $${amount.toFixed(2)}`;
+                    return `${expense}: $${amount.toFixed(2)} (${(amount / this.getExpensesSum() * 100).toFixed(2)}%)`;
                 }
             }
         }
