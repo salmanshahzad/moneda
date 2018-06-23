@@ -1,5 +1,5 @@
 import React from "react";
-import { Income, Expense, User } from "../../../../user";
+import { User } from "../../../../user";
 import axios from "axios";
 import { Redirect, Route } from "react-router-dom";
 import { Sidebar } from "semantic-ui-react";
@@ -7,6 +7,7 @@ import NavBar from "./NavBar";
 import Dashboard from "../Dashboard/Dashboard";
 import Budget from "../Budget/Budget";
 import AccountDetail from "../Budget/AccountDetail";
+import Settings from "../Settings/Settings";
 
 interface LayoutProps {
     location?: any; // given by React Router
@@ -73,6 +74,7 @@ export default class Layout extends React.Component<LayoutProps, LayoutState> {
                     <Route path="/budget" render={props => <Budget user={this.state.user} onUpdate={this.updateUser} {...props} />} />
                     <Route path="/income/:account" render={props => <AccountDetail account={this.getAccountDetails(props.match.params.account, "income")} />} />
                     <Route path="/expense/:account" render={props => <AccountDetail account={this.getAccountDetails(props.match.params.account, "expense")} />} />
+                    <Route path="/settings" render={props => <Settings user={this.state.user} onUpdate={this.updateUser} />} />
                 </Sidebar.Pusher>
             </Sidebar.Pushable>
         );

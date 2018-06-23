@@ -19,6 +19,7 @@ render(
             <PrivateRoute path="/budget" component={Layout} exact />
             <PrivateRoute path="/income/:account" component={Layout} exact />
             <PrivateRoute path="/expense/:account" component={Layout} exact />
+            <PrivateRoute path="/settings" component={Layout} exact />
             <Route path="/sign_out" component={SignOut} exact />
         </Switch>
     </BrowserRouter>
