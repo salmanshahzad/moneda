@@ -9,17 +9,13 @@ import Budget from "../Budget/Budget";
 import AccountDetail from "../Budget/AccountDetail";
 import Settings from "../Settings/Settings";
 
-interface LayoutProps {
-    location?: any; // given by React Router
-}
-
 interface LayoutState {
     sidebarOpen: boolean;
     auth: "loading" | "no" | "yes";
     user: User;
 }
 
-export default class Layout extends React.Component<LayoutProps, LayoutState> {
+export default class Layout extends React.Component<{}, LayoutState> {
     state: LayoutState = {
         sidebarOpen: false,
         auth: "loading",
@@ -68,7 +64,7 @@ export default class Layout extends React.Component<LayoutProps, LayoutState> {
         }
         return (
             <Sidebar.Pushable>
-                <NavBar activePage={this.props.location.pathname} sidebarOpen={this.state.sidebarOpen} onOpenSidebar={this.openSidebar} />
+                <NavBar sidebarOpen={this.state.sidebarOpen} onOpenSidebar={this.openSidebar} />
                 <Sidebar.Pusher onClick={this.closeSidebar}>
                     <Route path="/dashboard" render={props => <Dashboard user={this.state.user} onUpdate={this.updateUser} {...props} />} />
                     <Route path="/budget" render={props => <Budget user={this.state.user} onUpdate={this.updateUser} {...props} />} />
