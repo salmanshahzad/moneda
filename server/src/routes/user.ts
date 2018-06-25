@@ -1,15 +1,11 @@
 import express from "express";
+import checkSignedIn from "../checkSignedInMiddleware";
 import db from "../../db";
 import bcrypt from "bcrypt";
 
 const router = express.Router();
 
-router.get("/user", async (req, res) => {
-    // ensure user is signed in
-    if (typeof req.session === "undefined" || typeof req.session.userId === "undefined") {
-        return res.sendStatus(401);
-    }
-
+router.get("/user", checkSignedIn, async (req, res) => {
     const username = (await db("users").select("username").where({id: req.session.userId}))[0].username;
     const user = {
         username,
@@ -20,12 +16,7 @@ router.get("/user", async (req, res) => {
     res.send(user);
 });
 
-router.post("/add_transaction", async (req, res) => {
-    // ensure user is signed in
-    if (typeof req.session === "undefined" || typeof req.session.userId === "undefined") {
-        return res.sendStatus(401);
-    }
-
+router.post("/add_transaction", checkSignedIn ,async (req, res) => {
     // validate
     const errors = [];
     if (typeof req.body.account === "undefined") {
@@ -70,12 +61,7 @@ router.post("/add_transaction", async (req, res) => {
     res.sendStatus(200);
 });
 
-router.post("/update_user", async (req, res) => {
-    // ensure user is signed in
-    if (typeof req.session === "undefined" || typeof req.session.userId === "undefined") {
-        return res.sendStatus(401);
-    }
-
+router.post("/update_user", checkSignedIn, async (req, res) => {
     // validate
     if (typeof req.body.username === "undefined" || typeof req.body.password === "undefined" || typeof req.body.confirmPassword === "undefined" || typeof req.body.currentPassword === "undefined") {
         return res.status(400).send(["Please enter a username, password, confirm password, and current password."]);
