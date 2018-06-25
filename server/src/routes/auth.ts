@@ -82,7 +82,7 @@ router.post("/register", async (req, res) => {
     for (let i = 0; i < expenses.length; i++) {
         await db("expenses").insert(createExpense(userId, expenses[i]));
     }
-    req.session.username = req.body.username;
+    req.session.userId = userId;
     res.sendStatus(200);
 });
 
@@ -93,7 +93,7 @@ router.post("/sign_in", async (req, res) => {
     }
 
     // check if username exists and password compares to hash
-    const rows = await db("users").select("password").where({username: req.body.username});
+    const rows = await db("users").select("id", "password").where({username: req.body.username});
     if (rows.length === 0) {
         return res.status(400).send(["Incorrect username/password."]);
     }
@@ -101,7 +101,7 @@ router.post("/sign_in", async (req, res) => {
     if (!compareSuccess) {
         return res.status(400).send(["Incorrect username/password."]);
     }
-    req.session.username = req.body.username;
+    req.session.userId = rows[0].id;
     res.sendStatus(200);
 });
 
