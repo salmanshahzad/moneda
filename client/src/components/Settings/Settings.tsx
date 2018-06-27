@@ -3,7 +3,7 @@ import { User } from "../../../../user";
 import axios from "axios";
 import { Grid, Segment, Header } from "semantic-ui-react";
 import UserInformation from "./UserInformation";
-import IncomeAccounts from "./IncomeAccounts";
+import Account from "./Account";
 
 interface SettingsProps {
     user: User;
@@ -16,22 +16,37 @@ export default (props: SettingsProps) => {
             try {
                 await axios.post("/api/update_user", {username, password, confirmPassword, currentPassword});
                 resolve();
+                props.onUpdate();
             } catch (e) {
                 reject(e.response.data);
             }
         });
     };
 
-    const onUpdateIncomeAccount = (id: string, name: string, colour: string): Promise<{}> => {
+    const onUpdateAccount = (type: "income" | "expenses", id: string, name: string, colour: string, budget?: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/update_income_account", {id, name, colour});
+                await axios.post("/api/update_account", {type, id, name, colour, budget});
                 resolve();
+                props.onUpdate();
             } catch (e) {
                 reject(e.response.data);
             }
         });
     };
+
+    const onDeleteAccount = (type: "income" | "expenses", id: string): Promise<{}> => {
+        return new Promise<{}>(async (resolve, reject) => {
+            try {
+                await axios.post("/api/delete_account", {type, id});
+                resolve();
+                props.onUpdate();
+            } catch (e) {
+                reject(e.response.data);
+            }
+        });
+    };
+
     return (
         <Grid columns={16} style={{padding: "1rem"}}>
             <Grid.Column mobile={16} tablet={16} computer={16}>
@@ -46,7 +61,21 @@ export default (props: SettingsProps) => {
             <Grid.Column mobile={16} tablet={16} computer={16}>
                 <Segment>
                     <Header>Income Accounts</Header>
-                    <IncomeAccounts accounts={props.user.income} onUpdateIncomeAccount={onUpdateIncomeAccount} />
+                    {
+                        props.user.income.map((income, i) => (
+                            <Account type="income" account={income} onUpdateAccount={onUpdateAccount} onDeleteAccount={onDeleteAccount} key={i} />
+                        ))
+                    }
+                </Segment>
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={16} computer={16}>
+                <Segment>
+                    <Header>Expense Accounts</Header>
+                    {
+                        props.user.expenses.map((expense, i) => (
+                            <Account type="expenses" account={expense} onUpdateAccount={onUpdateAccount} onDeleteAccount={onDeleteAccount} key={i} />
+                        ))
+                    }
                 </Segment>
             </Grid.Column>
         </Grid>

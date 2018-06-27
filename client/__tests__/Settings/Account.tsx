@@ -1,12 +1,13 @@
 import React from "react";
 import { mount } from "enzyme";
-import IncomeAccountItem from "../../src/components/Settings/IncomeAccountItem";
+import Account from "../../src/components/Settings/Account";
 import testUser from "../testUser";
 import { Grid, Button, Input, Message } from "semantic-ui-react";
 import { SketchPicker } from "react-color";
 
-describe("IncomeAccountItem", () => {
-    const wrapper = mount(<IncomeAccountItem account={testUser.income[0]} onUpdateIncomeAccount={jest.fn(() => new Promise<{}>((resolve, reject) => {}))} />);
+describe("Account", () => {
+    const emptyPromise = jest.fn(() => new Promise<{}>((resolve, reject) => {}));
+    const wrapper = mount(<Account type="income" account={testUser.income[0]} onUpdateAccount={emptyPromise} onDeleteAccount={emptyPromise} />);
 
     it("renders", () => {
         expect(wrapper.find(Grid)).toHaveLength(1);
@@ -15,12 +16,13 @@ describe("IncomeAccountItem", () => {
     it("has the correct intial state", () => {
         expect(wrapper.state("colour")).toBe("#FF0000");
         expect(wrapper.state("name")).toBe("Test Income 1");
+        expect(wrapper.state("budget")).toBe("0");
         expect(wrapper.state("editing")).toBe(false);
         expect(wrapper.state("error")).toBe("");
     });
 
     it("toggles the editing state when the edit or save button is clicked", () => {
-        wrapper.find(Button).simulate("click");
+        wrapper.find(Button).at(0).simulate("click");
         expect(wrapper.state("editing")).toBe(true);
         expect(wrapper.find(SketchPicker)).toHaveLength(1);
         expect(wrapper.find(Input)).toHaveLength(1);
@@ -37,9 +39,15 @@ describe("IncomeAccountItem", () => {
         expect(wrapper.find(Message).text()).toBe("Error");
     });
 
-    it("calls onUpdateIncomeAccount when the form is submitted", () => {
+    it("calls onUpdateAccount when the save button is clicked", () => {
         wrapper.setState({editing: true, name: "Test", colour: "#00FF00"});
-        wrapper.find(Button).simulate("click");
-        expect(wrapper.prop("onUpdateIncomeAccount")).toHaveBeenCalledWith("1", "Test", "#00FF00");
+        wrapper.find(Button).at(0).simulate("click");
+        expect(wrapper.prop("onUpdateAccount")).toHaveBeenCalledWith("income", "1", "Test", "#00FF00", 0);
+    });
+
+    it("calls onDelete when the delete button is clicked", () => {
+        wrapper.setState({editing: false});
+        wrapper.find(Button).at(1).simulate("click");
+        expect(wrapper.prop("onDeleteAccount")).toHaveBeenCalledWith("income", "1");
     });
 });
