@@ -62,8 +62,8 @@ export default (props: SettingsProps) => {
                 <Segment>
                     <Header>Income Accounts</Header>
                     {
-                        props.user.income.map((income, i) => (
-                            <Account type="income" account={income} onUpdateAccount={onUpdateAccount} onDeleteAccount={onDeleteAccount} key={i} />
+                        props.user.income.map(income => (
+                            <Account type="income" account={income} onUpdateAccount={onUpdateAccount} onDeleteAccount={onDeleteAccount} key={income.name} />
                         ))
                     }
                 </Segment>
@@ -72,8 +72,8 @@ export default (props: SettingsProps) => {
                 <Segment>
                     <Header>Expense Accounts</Header>
                     {
-                        props.user.expenses.map((expense, i) => (
-                            <Account type="expenses" account={expense} onUpdateAccount={onUpdateAccount} onDeleteAccount={onDeleteAccount} key={i} />
+                        props.user.expenses.map(expense => (
+                            <Account type="expenses" account={expense} onUpdateAccount={onUpdateAccount} onDeleteAccount={onDeleteAccount} key={expense.name} />
                         ))
                     }
                 </Segment>
