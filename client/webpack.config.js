@@ -1,10 +1,12 @@
 const path = require("path");
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = env => ({
     devtool: "source-map", // enable source maps for debugging
     devServer: {
         historyApiFallback: true,
+        hot: true,
         proxy: {
             "/api": "http://localhost:3000"
         }
@@ -36,6 +38,7 @@ module.exports = env => ({
         ]
     },
     plugins: [
+        new webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
             template: "./src/index.html",
             favicon: "./src/assets/favicon/favicon_compressed.png"
