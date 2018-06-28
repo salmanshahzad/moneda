@@ -4,6 +4,7 @@ import { ColorResult, SketchPicker } from "react-color";
 import { InputOnChangeData, Grid, Input, Button, Icon, Message, Modal } from "semantic-ui-react";
 
 interface AccountProps {
+    editing?: boolean;
     type: "income" | "expenses";
     account: Income | Expense;
     onUpdateAccount: (type: "income" | "expenses", id: string, name: string, colour: string, budget?: number) => Promise<{}>;
@@ -24,7 +25,7 @@ export default class Account extends React.Component<AccountProps, AccountState>
         colour: this.props.account.colour,
         name: this.props.account.name,
         budget: this.props.type === "expenses" ? (this.props.account as Expense).budget.toFixed(2) : "0",
-        editing: false,
+        editing: Boolean(this.props.editing),
         error: "",
         deleteDialogOpen: false
     };

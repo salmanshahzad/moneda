@@ -12,4 +12,9 @@ describe("Settings", () => {
         expect(wrapper.find(UserInformation)).toHaveLength(1);
         expect(wrapper.find(Account)).toHaveLength(3);
     });
+
+    it("has the correct initial state", () => {
+        expect(wrapper.state("addIncome")).toBe(false);
+        expect(wrapper.state("addExpense")).toBe(false);
+    });
 });

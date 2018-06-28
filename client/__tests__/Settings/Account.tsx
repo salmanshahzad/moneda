@@ -19,6 +19,7 @@ describe("Account", () => {
         expect(wrapper.state("budget")).toBe("0");
         expect(wrapper.state("editing")).toBe(false);
         expect(wrapper.state("error")).toBe("");
+        expect(wrapper.state("deleteDialogOpen")).toBe(false);
     });
 
     it("toggles the editing state when the edit or save button is clicked", () => {
@@ -26,6 +27,12 @@ describe("Account", () => {
         expect(wrapper.state("editing")).toBe(true);
         expect(wrapper.find(SketchPicker)).toHaveLength(1);
         expect(wrapper.find(Input)).toHaveLength(1);
+    });
+
+    it("opens the delete dialog when the delete button is clicked", () => {
+        wrapper.setState({editing: false});
+        wrapper.find(Button).at(1).simulate("click");
+        expect(wrapper.state("deleteDialogOpen")).toBe(true);
     });
 
     it("changes the state when an input value changes", () => {
@@ -43,11 +50,5 @@ describe("Account", () => {
         wrapper.setState({editing: true, name: "Test", colour: "#00FF00"});
         wrapper.find(Button).at(0).simulate("click");
         expect(wrapper.prop("onUpdateAccount")).toHaveBeenCalledWith("income", "1", "Test", "#00FF00", 0);
-    });
-
-    it("calls onDelete when the delete button is clicked", () => {
-        wrapper.setState({editing: false});
-        wrapper.find(Button).at(1).simulate("click");
-        expect(wrapper.prop("onDeleteAccount")).toHaveBeenCalledWith("income", "1");
     });
 });
