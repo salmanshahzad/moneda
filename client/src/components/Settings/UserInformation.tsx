@@ -15,7 +15,7 @@ interface UserInformationState {
     errors: string[];
 }
 
-export default class Settings extends React.Component<UserInformationProps, UserInformationState> {
+export default class UserInformation extends React.Component<UserInformationProps, UserInformationState> {
     state: UserInformationState = {
         username: this.props.user.username,
         password: "",
