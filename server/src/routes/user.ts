@@ -164,6 +164,47 @@ router.post("/update_account", checkSignedIn, async (req, res) => {
     res.sendStatus(200);
 });
 
+router.post("/add_account", checkSignedIn, async (req, res) => {
+    // validate
+    const errors = [];
+    if (typeof req.body.type === "undefined" || (req.body.type !== "income" && req.body.type !== "expenses")) {
+        errors.push("Please enter income or expenses as the type.");
+    }
+    
+    if (typeof req.body.name === "undefined" || (typeof req.body.name === "string" && req.body.name.length === 0)) {
+        errors.push("Please enter the new account name.");
+    }
+
+    if (typeof req.body.colour === "undefined" || (typeof req.body.colour === "string" && req.body.colour.indexOf("#") !== 0)) {
+        errors.push("Please enter the new account colour as a hex string.");
+    }
+
+    // budget must be given if type is expenses
+    if (req.body.type === "expenses" && (typeof req.body.budget !== "number" || req.body.budget < 0)) {
+        errors.push("Please enter a non-negative budget.");
+    }
+
+    if (errors.length > 0) {
+        return res.status(400).send(errors);
+    }
+
+    const rows = await db(req.body.type).select("name").where({user_id: req.session.userId, name: req.body.name});
+    if (rows.length > 0 && rows[0].name === req.body.name) {
+        errors.push("An account with that name already exists.");
+    }
+
+    if (errors.length > 0) {
+        return res.status(400).send(errors);
+    }
+
+    if (req.body.type === "income") {
+        await db("income").insert({user_id: req.session.userId, name: req.body.name, colour: req.body.colour.toUpperCase(), income: 0});
+    } else {
+        await db("expenses").insert({user_id: req.session.userId, name: req.body.name, colour: req.body.colour.toUpperCase(), spent: 0, budget: req.body.budget});
+    }
+    res.sendStatus(200);
+});
+
 router.post("/delete_account", checkSignedIn, async (req, res) => {
     // validate
     const errors = [];

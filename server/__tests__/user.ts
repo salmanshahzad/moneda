@@ -210,6 +210,70 @@ describe("/api/update_account", () => {
     });
 });
 
+describe("/api/add_account", () => {
+    let server: request.SuperTest<request.Test>;
+
+    beforeAll(async done => {
+        server = request.agent(app);
+        await server.post("/api/sign_in").send({
+            username: "testuser2",
+            password: "testuser2"
+        });
+        done();
+    });
+
+    it("sends 401 when not signed in", done => {
+        request(app).post("/api/add_account").expect(401, done);
+    });
+
+    it("sends 400 with no inputs", done => {
+        server.post("/api/add_account").expect(400, [
+            "Please enter income or expenses as the type.",
+            "Please enter the new account name.",
+            "Please enter the new account colour as a hex string."
+        ], done);
+    });
+
+    it("sends 400 with invalid inputs", done => {
+        server.post("/api/add_account").send({
+            type: "test",
+            name: "test",
+            colour: "test"
+        }).expect(400, [
+            "Please enter income or expenses as the type.",
+            "Please enter the new account colour as a hex string."
+        ], done);
+    });
+
+    it("sends 400 if the account name already exists", done => {
+        server.post("/api/add_account").send({
+            type: "income",
+            name: "Primary Income",
+            colour: "#FF0000"
+        }).expect(400, [
+            "An account with that name already exists."
+        ], done);
+    });
+
+    it("sends 400 if the type is expense and budget is not given", done => {
+        server.post("/api/add_account").send({
+            type: "expenses",
+            name: "Test",
+            colour: "#FF0000"
+        }).expect(400, [
+            "Please enter a non-negative budget."
+        ], done);
+    });
+
+    it("sends 200 with valid inputs", async done => {
+        server.post("/api/add_account").send({
+            type: "income",
+            name: "Test",
+            colour: "#FF0000"
+        }).expect(200, done);
+    });
+});
+
 describe("/api/delete_account", () => {
     let server: request.SuperTest<request.Test>;
 
