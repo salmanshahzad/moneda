@@ -1,6 +1,5 @@
+.env
 client/dist
 client/node_modules
 server/node_modules
-server/.env
 server/db.ts
-server/src/public

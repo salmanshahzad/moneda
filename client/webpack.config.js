@@ -1,8 +1,11 @@
+const dotenv = require("dotenv");
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = env => ({
+dotenv.config({path: path.join(__dirname, "..", ".env")});
+
+module.exports = {
     devtool: "source-map", // enable source maps for debugging
     devServer: {
         historyApiFallback: true,
@@ -18,7 +21,7 @@ module.exports = env => ({
     output: {
         filename: "bundle.js",
         path: path.join(__dirname, "dist"),
-        publicPath: "/"
+        publicPath: process.env.BASE
     },
     module: {
         rules: [
@@ -39,9 +42,12 @@ module.exports = env => ({
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
+        new webpack.EnvironmentPlugin({
+            BASE: process.env.BASE
+        }),
         new HtmlWebpackPlugin({
             template: "./src/index.html",
             favicon: "./src/assets/favicon/favicon_compressed.png"
         })
     ]
-})
+}
