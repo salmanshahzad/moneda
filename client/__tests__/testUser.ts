@@ -1,5 +1,8 @@
 import { User } from "../../user";
 
+const currentYear = new Date().getFullYear();
+const currentMonth = new Date().getMonth();
+
 const user: User = {
     username: "test",
     income: [
@@ -31,19 +34,19 @@ const user: User = {
             account_id: "1",
             amount: 1,
             note: "Test 1",
-            date: new Date(2018, 0, 1).getTime()
+            date: new Date(currentYear, 0, 1).getTime()
         },
         {
             account_id: "2",
             amount: 2,
             note: "Test 2",
-            date: new Date(2018, 5, 1).getTime()
+            date: new Date(currentYear, currentMonth, 1).getTime()
         },
         {
             account_id: "3",
             amount: 3,
             note: "Test 3",
-            date: new Date(2018, 5, 2).getTime()
+            date: new Date(currentYear, currentMonth, 2).getTime()
         }
     ]
 };
