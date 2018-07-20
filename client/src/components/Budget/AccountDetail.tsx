@@ -2,7 +2,7 @@ import React from "react";
 import { Income, Expense, Transaction } from "../../../../user";
 import { Grid, Header, Segment } from "semantic-ui-react";
 import ProgressBar from "./ProgressBar";
-import { Line } from "react-chartjs-2";
+import TransactionHistoryChart from "./TransactionHistoryChart";
 import TransactionsThisMonth from "../Budget/TransactionsThisMonth";
 
 interface AccountDetail {
@@ -43,7 +43,7 @@ export default (props: AccountDetailProps) => {
                 <Segment>
                     {/* need marginTop because for some reason Header has an extra margin when it is placed before a chart */}
                     <Header style={{marginTop: "-.14285714em"}}>Past History</Header>
-                    <Line data={{}} />
+                    <TransactionHistoryChart account={props.account.account} transactions={props.account.transactions} monthsToShow={6} />
                 </Segment>
             </Grid.Column>
             <Grid.Column mobile={16} tablet={8} computer={8}>
