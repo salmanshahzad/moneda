@@ -1,9 +1,10 @@
 import React from "react";
 import { User } from "../../../../user";
 import axios from "axios";
-import { Grid, Segment, Header, Button, Modal } from "semantic-ui-react";
+import { Grid, Segment, Header, Button } from "semantic-ui-react";
 import UserInformation from "./UserInformation";
 import Account from "./Account";
+import DeleteUser from "./DeleteUser";
 
 interface SettingsProps {
     user: User;
@@ -83,6 +84,14 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
         });
     };
 
+    onDeleteUser = (): Promise<{}> => {
+        return new Promise<{}>(async resolve => {
+            await axios.post("/api/delete_user");
+            resolve();
+            this.props.onUpdate();
+        });
+    };
+
     render(): React.ReactNode {
         return (
             <Grid columns={16} style={{padding: "1rem"}}>
@@ -136,6 +145,11 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
                                 budget: 0
                             }} onUpdateAccount={this.onAddAccount} onDeleteAccount={null} editing />
                         }
+                    </Segment>
+                </Grid.Column>
+                <Grid.Column mobile={16} tablet={16} computer={16}>
+                    <Segment>
+                        <DeleteUser onDeleteUser={this.onDeleteUser} />
                     </Segment>
                 </Grid.Column>
             </Grid>
