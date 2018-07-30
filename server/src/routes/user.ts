@@ -113,6 +113,14 @@ router.post("/update_user", checkSignedIn, async (req, res) => {
     res.sendStatus(200);
 });
 
+router.post("/delete_user", checkSignedIn, async (req, res) => {
+    await db("users").delete().where({id: req.session.userId});
+    await db("income").delete().where({user_id: req.session.userId});
+    await db("expenses").delete().where({user_id: req.session.userId});
+    await db("transactions").delete().where({user_id: req.session.userId});
+    req.session.destroy(() => res.sendStatus(200));
+});
+
 router.post("/update_account", checkSignedIn, async (req, res) => {
     // validate
     const errors = [];

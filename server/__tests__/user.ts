@@ -137,6 +137,22 @@ describe("/api/update_user", () => {
     });
 });
 
+describe("/api/delete_user", () => {
+    it("sends 401 when not signed in", done => {
+        request(app).post("/api/delete_user").expect(401, done);
+    });
+
+    it("sends 200 when signed in", async done => {
+        const server = request.agent(app);
+        await server.post("/api/register").send({
+            username: "testuser3",
+            password: "testuser3",
+            confirmPassword: "testuser3"
+        });
+        server.post("/api/delete_user").expect(200, done);
+    });
+});
+
 describe("/api/update_account", () => {
     let server: request.SuperTest<request.Test>;
 
