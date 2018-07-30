@@ -13,7 +13,7 @@ describe("Account", () => {
         expect(wrapper.find(Grid)).toHaveLength(1);
     });
 
-    it("has the correct intial state", () => {
+    it("has the correct initial state", () => {
         expect(wrapper.state("colour")).toBe("#FF0000");
         expect(wrapper.state("name")).toBe("Test Income 1");
         expect(wrapper.state("budget")).toBe("0");
