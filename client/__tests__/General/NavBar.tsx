@@ -1,7 +1,7 @@
 import React from "react";
 import { mount } from "enzyme";
 import routerContext from "../routerContext";
-import NavBar from "../../src/components/general/NavBar";
+import NavBar from "../../src/components/General/NavBar";
 import { Menu } from "semantic-ui-react";
 
 describe("NavBar", () => {

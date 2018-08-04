@@ -1,7 +1,7 @@
 import React from "react";
 import { mount } from "enzyme";
 import routerContext from "../routerContext";
-import Layout from "../../src/components/general/Layout";
+import Layout from "../../src/components/General/Layout";
 
 describe("Layout", () => {
     const wrapper = mount(<Layout />, routerContext);
