@@ -19,7 +19,6 @@ describe("Account", () => {
         expect(wrapper.state("budget")).toBe("0");
         expect(wrapper.state("editing")).toBe(false);
         expect(wrapper.state("error")).toBe("");
-        expect(wrapper.state("deleteDialogOpen")).toBe(false);
     });
 
     it("toggles the editing state when the edit or save button is clicked", () => {
@@ -27,12 +26,6 @@ describe("Account", () => {
         expect(wrapper.state("editing")).toBe(true);
         expect(wrapper.find(SketchPicker)).toHaveLength(1);
         expect(wrapper.find(Input)).toHaveLength(1);
-    });
-
-    it("opens the delete dialog when the delete button is clicked", () => {
-        wrapper.setState({editing: false});
-        wrapper.find(Button).at(1).simulate("click");
-        expect(wrapper.state("deleteDialogOpen")).toBe(true);
     });
 
     it("changes the state when an input value changes", () => {

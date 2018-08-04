@@ -4,7 +4,7 @@ import axios from "axios";
 import { Grid, Segment, Header, Button } from "semantic-ui-react";
 import UserInformation from "./UserInformation";
 import Account from "./Account";
-import DeleteUser from "./DeleteUser";
+import ConfirmButton from "../General/ConfirmButton";
 
 interface SettingsProps {
     user: User;
@@ -149,7 +149,7 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={16} computer={16}>
                     <Segment>
-                        <DeleteUser onDeleteUser={this.onDeleteUser} />
+                    <ConfirmButton text="Delete Your Account" negative header="Delete User Account" content="Are you sure you want to delete your user account? This action cannot be reversed and everything will be erased." confirm="Delete" onConfirm={this.onDeleteUser} />
                     </Segment>
                 </Grid.Column>
             </Grid>

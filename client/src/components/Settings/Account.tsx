@@ -2,6 +2,7 @@ import React from "react";
 import { Income, Expense } from "../../../../user";
 import { ColorResult, SketchPicker } from "react-color";
 import { InputOnChangeData, Grid, Input, Button, Icon, Message, Modal } from "semantic-ui-react";
+import ConfirmButton from "../General/ConfirmButton";
 
 interface AccountProps {
     editing?: boolean;
@@ -17,7 +18,6 @@ interface AccountState {
     budget: string;
     editing: boolean;
     error: string;
-    deleteDialogOpen: boolean;
 }
 
 export default class Account extends React.Component<AccountProps, AccountState> {
@@ -26,8 +26,7 @@ export default class Account extends React.Component<AccountProps, AccountState>
         name: this.props.account.name,
         budget: this.props.type === "expenses" ? (this.props.account as Expense).budget.toFixed(2) : "0",
         editing: Boolean(this.props.editing),
-        error: "",
-        deleteDialogOpen: false
+        error: ""
     };
 
     changeColour = (colour: ColorResult) => {
@@ -59,12 +58,7 @@ export default class Account extends React.Component<AccountProps, AccountState>
         this.setState({editing: true});
     };
 
-    toggleDeleteDialog = () => {
-        this.setState({deleteDialogOpen: !this.state.deleteDialogOpen});
-    };
-
     delete = () => {
-        this.setState({deleteDialogOpen: false});
         this.props.onDeleteAccount(this.props.type, this.props.account.id);
     };
 
@@ -99,7 +93,7 @@ export default class Account extends React.Component<AccountProps, AccountState>
                         <Button primary icon="pencil" onClick={this.edit} />
                     </Grid.Column>
                     <Grid.Column mobile={1} tablet={1} computer={1}>
-                        <Button negative icon="delete" onClick={this.toggleDeleteDialog} />
+                        <ConfirmButton icon="delete" negative header="Delete Account" content="Are you sure you want to delete this account? This action cannot be reversed and all transaction history related to this account will be lost." confirm="Delete" onConfirm={this.delete} />
                     </Grid.Column>
                     <Grid.Column mobile={1} tablet={1} computer={1}>
                         <Icon name="circle" circular style={{backgroundColor: this.state.colour, color: this.state.colour}} />
@@ -113,16 +107,6 @@ export default class Account extends React.Component<AccountProps, AccountState>
                             <span>Budget: ${this.state.budget}</span>
                         </Grid.Column>
                     }
-                    <Modal size="mini" open={this.state.deleteDialogOpen} onClose={this.toggleDeleteDialog}>
-                        <Modal.Header>Delete Account</Modal.Header>
-                        <Modal.Content>
-                            Are you sure you want to delete this account? This action cannot be reversed and all transaction history related to this account will be lost.
-                        </Modal.Content>
-                        <Modal.Actions>
-                            <Button positive content="No" onClick={this.toggleDeleteDialog} />
-                            <Button negative content="Yes" onClick={this.delete} />
-                        </Modal.Actions>
-                    </Modal>
                 </Grid>
             );
         }
