@@ -21,6 +21,7 @@ export interface Expense {
 }
 
 export interface Transaction {
+    id: string;
     account_id: string;
     amount: number;
     date: number;
