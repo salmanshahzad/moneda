@@ -44,14 +44,20 @@ export default class Dashboard extends React.Component<DashboardProps, {}> {
         }
     };
 
-    accountIdToName = (id: string): string => {
+    accountInfo = (id: string): {type: string, name: string} => {
         const income = this.props.user.income.filter(income => income.id === id);
         if (income.length > 0) {
-            return income[0].name;
+            return {
+                type: "income",
+                name: income[0].name
+            };
         }
         const expenses = this.props.user.expenses.filter(expense => expense.id === id);
         if (expenses.length > 0) {
-            return expenses[0].name;
+            return {
+                type: "expense",
+                name: expenses[0].name
+            };
         }
     };
 
@@ -77,7 +83,7 @@ export default class Dashboard extends React.Component<DashboardProps, {}> {
                 <Grid.Column mobile={16} tablet={8} computer={8}>
                     <Segment>
                         <Header>Recent Transactions</Header>
-                        <RecentTransactions transactions={this.props.user.transactions} accountIdToName={this.accountIdToName} show={5} />
+                        <RecentTransactions transactions={this.props.user.transactions} accountInfo={this.accountInfo} show={5} />
                     </Segment>
                 </Grid.Column>
             </Grid>

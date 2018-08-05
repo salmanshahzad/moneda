@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 interface RecentTransactionsProps {
     transactions: Transaction[];
-    accountIdToName: (id: string) => string;
+    accountInfo: (id: string) => {type: string, name: string};
     show: number;
 }
 
@@ -32,10 +32,10 @@ export default (props: RecentTransactionsProps) => {
             <Table.Body>
                 {
                     getTransactionsToShow().map((transaction, i) => {
-                        const name = props.accountIdToName(transaction.account_id);
+                        const account = props.accountInfo(transaction.account_id);
                         return (
                             <Table.Row key={i}>
-                                <Table.Cell><Link to={"/expense/" + name}>{name}</Link></Table.Cell>
+                                <Table.Cell><Link to={`${account.type}/${account.name}`}>{account.name}</Link></Table.Cell>
                                 <Table.Cell>${transaction.amount.toFixed(2)}</Table.Cell>
                                 <Table.Cell>{new Date(transaction.date).toLocaleString()}</Table.Cell>
                             </Table.Row>
