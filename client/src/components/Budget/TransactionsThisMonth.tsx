@@ -1,10 +1,12 @@
 import React from "react";
 import { Transaction } from "../../../../user";
 import { Table } from "semantic-ui-react";
+import ConfirmButton from "../General/ConfirmButton";
 
 interface TransactionsThisMonthProps {
     transactions: Transaction[];
     show: number;
+    onDeleteTransaction: (id: string) => void;
 }
 
 export default (props: TransactionsThisMonthProps) => {
@@ -36,17 +38,26 @@ export default (props: TransactionsThisMonthProps) => {
                     <Table.HeaderCell>Date</Table.HeaderCell>
                     <Table.HeaderCell>Amount</Table.HeaderCell>
                     <Table.HeaderCell>Note</Table.HeaderCell>
+                    <Table.HeaderCell></Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
                 {
-                    getTransactionsToShow().map((transaction, i) => (
-                        <Table.Row key={i}>
-                            <Table.Cell>{new Date(transaction.date).toLocaleString()}</Table.Cell>
-                            <Table.Cell>${transaction.amount.toFixed(2)}</Table.Cell>
-                            <Table.Cell>{transaction.note}</Table.Cell>
-                        </Table.Row>
-                    ))
+                    getTransactionsToShow().map((transaction, i) => {
+                        const deleteFunction = () => {
+                            props.onDeleteTransaction(transaction.id);
+                        };
+                        return (
+                            <Table.Row key={i}>
+                                <Table.Cell>{new Date(transaction.date).toLocaleString()}</Table.Cell>
+                                <Table.Cell>${transaction.amount.toFixed(2)}</Table.Cell>
+                                <Table.Cell>{transaction.note}</Table.Cell>
+                                <Table.Cell>
+                                    <ConfirmButton negative icon="delete" header="Delete Transaction" content="Are you sure you want to delete this transaction?" confirm="Delete" onConfirm={deleteFunction} />
+                                </Table.Cell>
+                            </Table.Row>
+                        );
+                    })
                 }
             </Table.Body>
         </Table>

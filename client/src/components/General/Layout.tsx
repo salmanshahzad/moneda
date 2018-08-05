@@ -68,8 +68,8 @@ export default class Layout extends React.Component<{}, LayoutState> {
                 <Sidebar.Pusher onClick={this.closeSidebar}>
                     <Route path="/dashboard" render={props => <Dashboard user={this.state.user} onUpdate={this.updateUser} {...props} />} />
                     <Route path="/budget" render={props => <Budget user={this.state.user} onUpdate={this.updateUser} {...props} />} />
-                    <Route path="/income/:account" render={props => <AccountDetail account={this.getAccountDetails(props.match.params.account, "income")} />} />
-                    <Route path="/expense/:account" render={props => <AccountDetail account={this.getAccountDetails(props.match.params.account, "expense")} />} />
+                    <Route path="/income/:account" render={props => <AccountDetail account={this.getAccountDetails(props.match.params.account, "income")} onUpdate={this.updateUser} />} />
+                    <Route path="/expense/:account" render={props => <AccountDetail account={this.getAccountDetails(props.match.params.account, "expense")} onUpdate={this.updateUser} />} />
                     <Route path="/settings" render={props => <Settings user={this.state.user} onUpdate={this.updateUser} />} />
                 </Sidebar.Pusher>
             </Sidebar.Pushable>

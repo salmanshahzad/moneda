@@ -1,5 +1,6 @@
 import React from "react";
 import { Income, Expense, Transaction } from "../../../../user";
+import axios from "axios";
 import { Grid, Header, Segment } from "semantic-ui-react";
 import ProgressBar from "./ProgressBar";
 import TransactionHistoryChart from "./TransactionHistoryChart";
@@ -12,10 +13,16 @@ interface AccountDetail {
 
 interface AccountDetailProps {
     account: AccountDetail;
+    onUpdate: () => void;
 }
 
 export default (props: AccountDetailProps) => {
     const isExpense = Object.keys(props.account.account).indexOf("spent") > -1;
+    const onDeleteTransaction = async (id: string) => {
+        await axios.post("/api/delete_transaction", {id});
+        props.onUpdate();
+    };
+
     return (
         <Grid columns={16} style={{padding: "1rem"}}>
             <Grid.Column mobile={16} tablet={8} computer={8}>
@@ -49,7 +56,7 @@ export default (props: AccountDetailProps) => {
             <Grid.Column mobile={16} tablet={8} computer={8}>
                 <Segment>
                     <Header>Transactions This Month</Header>
-                    <TransactionsThisMonth transactions={props.account.transactions} show={10} />
+                    <TransactionsThisMonth transactions={props.account.transactions} show={10} onDeleteTransaction={onDeleteTransaction} />
                 </Segment>
             </Grid.Column>
         </Grid>
