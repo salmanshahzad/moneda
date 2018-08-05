@@ -5,7 +5,7 @@ import testUser from "../testUser";
 import { Table } from "semantic-ui-react";
 
 describe("TransactionsThisMonth", () => {
-    const wrapper = mount(<TransactionsThisMonth transactions={testUser.transactions} show={3} />);
+    const wrapper = mount(<TransactionsThisMonth transactions={testUser.transactions} show={3} onDeleteTransaction={jest.fn()} />);
 
     it("renders", () => {
         expect(wrapper.find(Table)).toHaveLength(1);

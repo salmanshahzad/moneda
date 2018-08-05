@@ -12,7 +12,7 @@ describe("AccountDetail", () => {
         account: testUser.income[0],
         transactions: []
     };
-    const wrapper = mount(<AccountDetail account={account}  />);
+    const wrapper = mount(<AccountDetail account={account} onUpdate={jest.fn()}  />);
 
     it("renders", () => {
         expect(wrapper.find(Header).at(0).text()).toBe("Test Income 1");

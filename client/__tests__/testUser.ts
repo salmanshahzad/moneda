@@ -31,18 +31,21 @@ const user: User = {
     ],
     transactions: [
         {
+            id: "1",
             account_id: "1",
             amount: 1,
             note: "Test 1",
             date: new Date(currentYear, 0, 1).getTime()
         },
         {
+            id: "2",
             account_id: "2",
             amount: 2,
             note: "Test 2",
             date: new Date(currentYear, currentMonth, 1).getTime()
         },
         {
+            id: "3",
             account_id: "3",
             amount: 3,
             note: "Test 3",
