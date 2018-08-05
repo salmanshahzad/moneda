@@ -61,6 +61,47 @@ router.post("/add_transaction", checkSignedIn ,async (req, res) => {
     res.sendStatus(200);
 });
 
+router.post("/delete_transaction", checkSignedIn, async (req, res) => {
+    // validate
+    if (typeof req.body.id === "undefined" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
+        return res.status(400).send(["Please enter a valid transaction id."]);
+    }
+
+    const rows = await db("transactions").select("account_id", "amount", "date").where({user_id: req.session.userId, id: req.body.id});
+    if (rows.length > 0) {
+        const accountId = rows[0].account_id;
+        const amount = rows[0].amount;
+        const date = rows[0].date;
+        await db("transactions").delete().where({user_id: req.session.userId, id: req.body.id});
+
+        const transactionDate = new Date(date);
+        const today = new Date();
+
+        if (transactionDate.getMonth() === today.getMonth() && transactionDate.getFullYear() === today.getFullYear()) {
+            // check whether the account is an expense or income
+            let account, type;
+            let exp = await db("expenses").select("spent").where({user_id: req.session.userId, id: accountId});
+            if (exp.length > 0) {
+                account = exp[0];
+                type = "expenses";
+            }
+            let inc = await db("income").select("income").where({user_id: req.session.userId, id: accountId});
+            if (inc.length > 0) {
+                account = inc[0];
+                type = "income";
+            }
+
+            // adjust amount
+            if (type === "income") {
+                await db("income").update({income: account.income - amount}).where({user_id: req.session.userId, id: accountId});
+            } else if (type === "expenses") {
+                await db("expenses").update({spent: account.spent - amount}).where({user_id: req.session.userId, id: accountId});
+            }
+        }
+    }
+    res.sendStatus(200);
+});
+
 router.post("/update_user", checkSignedIn, async (req, res) => {
     // validate
     if (typeof req.body.username === "undefined" || typeof req.body.password === "undefined" || typeof req.body.confirmPassword === "undefined" || typeof req.body.currentPassword === "undefined") {
