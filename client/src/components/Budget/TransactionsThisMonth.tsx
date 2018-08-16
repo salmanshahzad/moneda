@@ -1,6 +1,7 @@
 import React from "react";
 import { Transaction } from "../../../../user";
 import { Table } from "semantic-ui-react";
+import moment from "moment";
 import ConfirmButton from "../General/ConfirmButton";
 
 interface TransactionsThisMonthProps {
@@ -11,20 +12,15 @@ interface TransactionsThisMonthProps {
 
 export default (props: TransactionsThisMonthProps) => {
     const getTransactionsThisMonth = (): Transaction[] => {
-        return props.transactions.filter(transaction => {
-            const date = new Date(transaction.date);
-            const today = new Date();
-            if (date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth()) {
-                return transaction;
-            }
-        });
+        const monthStart = moment().startOf("month");
+        const monthEnd = moment().endOf("month");
+        return props.transactions.filter(transaction => moment(transaction.date).isBetween(monthStart, monthEnd, null, "[]"));
     }
 
     const getTransactionsToShow = (): Transaction[] => {
         // return an array of transactions of length min(props.show, props.transactions.length)
         const transactionsThisMonth = getTransactionsThisMonth();
-        const length = transactionsThisMonth.length;
-        const toShow = Math.min(length, props.show);
+        const toShow = Math.min(transactionsThisMonth.length, props.show);
         const transactions = [];
         for (let i = 0; i < toShow; i++) {
             transactions.push(transactionsThisMonth[i]);
@@ -49,7 +45,7 @@ export default (props: TransactionsThisMonthProps) => {
                         };
                         return (
                             <Table.Row key={i}>
-                                <Table.Cell>{new Date(transaction.date).toLocaleString()}</Table.Cell>
+                                <Table.Cell>{moment(transaction.date).format("MMMM D")}</Table.Cell>
                                 <Table.Cell>${transaction.amount.toFixed(2)}</Table.Cell>
                                 <Table.Cell>{transaction.note}</Table.Cell>
                                 <Table.Cell>

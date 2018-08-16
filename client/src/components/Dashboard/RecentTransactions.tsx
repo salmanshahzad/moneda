@@ -2,6 +2,7 @@ import React from "react";
 import { Transaction } from "../../../../user";
 import { Table } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 interface RecentTransactionsProps {
     transactions: Transaction[];
@@ -37,7 +38,7 @@ export default (props: RecentTransactionsProps) => {
                             <Table.Row key={i}>
                                 <Table.Cell><Link to={`${account.type}/${account.name}`}>{account.name}</Link></Table.Cell>
                                 <Table.Cell>${transaction.amount.toFixed(2)}</Table.Cell>
-                                <Table.Cell>{new Date(transaction.date).toLocaleString()}</Table.Cell>
+                                <Table.Cell>{moment(transaction.date).format("MMMM D")}</Table.Cell>
                             </Table.Row>
                         );
                     })
