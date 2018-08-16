@@ -24,10 +24,10 @@ export default class Dashboard extends React.Component<DashboardProps, {}> {
         });
     };
 
-    onAddExpenseTransaction = (name: string, amount: number, note: string): Promise<{}> => {
+    onAddExpenseTransaction = (name: string, amount: number, note: string, date: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/add_transaction", {account: name, amount, note, type: "expenses"});
+                await axios.post("/api/add_transaction", {account: name, amount, note, date, type: "expenses"});
                 resolve();
                 this.props.onUpdate();
             } catch (e) {

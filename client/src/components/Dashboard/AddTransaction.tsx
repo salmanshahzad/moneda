@@ -7,7 +7,7 @@ interface AddTransactionProps {
     incomeNames: string[];
     onAddIncomeTransaction: (name: string, amount: number, note: string) => Promise<{}>;
     expenseNames: string[];
-    onAddExpenseTransaction: (name: string, amount: number, note: string) => Promise<{}>;
+    onAddExpenseTransaction: (name: string, amount: number, note: string, date: number) => Promise<{}>;
 }
 
 export default (props: AddTransactionProps) => {

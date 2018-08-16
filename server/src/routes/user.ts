@@ -46,8 +46,9 @@ router.post("/add_transaction", checkSignedIn ,async (req, res) => {
         user_id: req.session.userId,
         account_id: (await db(req.body.type).select("id").where({user_id: req.session.userId, name: req.body.account}))[0].id,
         amount: req.body.amount,
-        date: new Date().getTime(),
-        note: req.body.note || ""
+        date: req.body.date || Date.now(),
+        note: req.body.note || "",
+        upcoming: (req.body.date || Date.now()) > Date.now()
     });
 
     // update income or expenses amounts
