@@ -6,12 +6,30 @@ import bcrypt from "bcrypt";
 const router = express.Router();
 
 router.get("/user", checkSignedIn, async (req, res) => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const monthStart = new Date(year, month, 1).getTime();
+    const monthEnd = new Date(year, (month + 1) % 12, 0).getTime();
+
     const username = (await db("users").select("username").where({id: req.session.userId}))[0].username;
+
+    const income = await db("income").select().where({user_id: req.session.userId}).orderBy("name");
+    for (let i = 0; i < income.length; i++) {
+        income[i].income = (await db("transactions").sum("amount").where({user_id: req.session.userId, account_id: income[i].id, upcoming: false}).andWhereBetween("date", [monthStart, monthEnd]))[0].sum || 0;
+    }
+
+    const expenses = await db("expenses").select().where({user_id: req.session.userId}).orderBy("name");
+    for (let i = 0; i < expenses.length; i++) {
+        expenses[i].spent = (await db("transactions").sum("amount").where({user_id: req.session.userId, account_id: expenses[i].id, upcoming: false}).andWhereBetween("date", [monthStart, monthEnd]))[0].sum || 0;
+    }
+
     const user = {
         username,
-        income: await db("income").select().where({user_id: req.session.userId}).orderBy("name"),
-        expenses: await db("expenses").select().where({user_id: req.session.userId}).orderBy("name"),
-        transactions: await db("transactions").select().where({user_id: req.session.userId}).orderBy("date", "desc")
+        income,
+        expenses,
+        transactions: await db("transactions").select().where({user_id: req.session.userId, upcoming: false}).orderBy("date", "desc"),
+        upcomingTransactions: await db("transactions").select().where({user_id: req.session.userId, upcoming: true}).orderBy("date", "asc")
     };
     res.send(user);
 });
@@ -50,15 +68,6 @@ router.post("/add_transaction", checkSignedIn ,async (req, res) => {
         note: req.body.note || "",
         upcoming: (req.body.date || Date.now()) > Date.now()
     });
-
-    // update income or expenses amounts
-    if (req.body.type === "income") {
-        const income = (await db("income").select("income").where({user_id: req.session.userId, name: req.body.account}))[0].income;
-        await db("income").update({income: income + req.body.amount}).where({user_id: req.session.userId, name: req.body.account});
-    } else {
-        const spent = (await db("expenses").select("spent").where({user_id: req.session.userId, name: req.body.account}))[0].spent;
-        await db("expenses").update({spent: spent + req.body.amount}).where({user_id: req.session.userId, name: req.body.account});
-    }
     res.sendStatus(200);
 });
 
@@ -68,38 +77,7 @@ router.post("/delete_transaction", checkSignedIn, async (req, res) => {
         return res.status(400).send(["Please enter a valid transaction id."]);
     }
 
-    const rows = await db("transactions").select("account_id", "amount", "date").where({user_id: req.session.userId, id: req.body.id});
-    if (rows.length > 0) {
-        const accountId = rows[0].account_id;
-        const amount = rows[0].amount;
-        const date = rows[0].date;
-        await db("transactions").delete().where({user_id: req.session.userId, id: req.body.id});
-
-        const transactionDate = new Date(date);
-        const today = new Date();
-
-        if (transactionDate.getMonth() === today.getMonth() && transactionDate.getFullYear() === today.getFullYear()) {
-            // check whether the account is an expense or income
-            let account, type;
-            let exp = await db("expenses").select("spent").where({user_id: req.session.userId, id: accountId});
-            if (exp.length > 0) {
-                account = exp[0];
-                type = "expenses";
-            }
-            let inc = await db("income").select("income").where({user_id: req.session.userId, id: accountId});
-            if (inc.length > 0) {
-                account = inc[0];
-                type = "income";
-            }
-
-            // adjust amount
-            if (type === "income") {
-                await db("income").update({income: account.income - amount}).where({user_id: req.session.userId, id: accountId});
-            } else if (type === "expenses") {
-                await db("expenses").update({spent: account.spent - amount}).where({user_id: req.session.userId, id: accountId});
-            }
-        }
-    }
+    await db("transactions").delete().where({user_id: req.session.userId, id: req.body.id});
     res.sendStatus(200);
 });
 
@@ -248,9 +226,9 @@ router.post("/add_account", checkSignedIn, async (req, res) => {
     }
 
     if (req.body.type === "income") {
-        await db("income").insert({user_id: req.session.userId, name: req.body.name, colour: req.body.colour.toUpperCase(), income: 0});
+        await db("income").insert({user_id: req.session.userId, name: req.body.name, colour: req.body.colour.toUpperCase()});
     } else {
-        await db("expenses").insert({user_id: req.session.userId, name: req.body.name, colour: req.body.colour.toUpperCase(), spent: 0, budget: req.body.budget});
+        await db("expenses").insert({user_id: req.session.userId, name: req.body.name, colour: req.body.colour.toUpperCase(), budget: req.body.budget});
     }
     res.sendStatus(200);
 });

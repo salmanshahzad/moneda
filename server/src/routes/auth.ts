@@ -18,7 +18,6 @@ const createExpense = (userId: string, name: string) => {
         user_id: userId,
         name,
         colour: generateRandomColour(),
-        spent: 0,
         budget: 0
     };
 };
@@ -76,8 +75,7 @@ router.post("/register", async (req, res) => {
     await db("income").insert({
         user_id: userId,
         name: "Primary Income",
-        colour: generateRandomColour(),
-        income: 0
+        colour: generateRandomColour()
     });
     for (let i = 0; i < expenses.length; i++) {
         await db("expenses").insert(createExpense(userId, expenses[i]));
