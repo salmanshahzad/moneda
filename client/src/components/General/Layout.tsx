@@ -52,7 +52,8 @@ export default class Layout extends React.Component<{}, LayoutState> {
         }
         return {
             account,
-            transactions: this.state.user.transactions.filter(t => t.account_id === account.id)
+            transactions: this.state.user.transactions.filter(t => t.account_id === account.id),
+            upcomingTransactions: this.state.user.upcomingTransactions.filter(t => t.account_id === account.id)
         };
     };
 

@@ -1,7 +1,5 @@
 import { User } from "../../user";
-
-const currentYear = new Date().getFullYear();
-const currentMonth = new Date().getMonth();
+import moment from "moment";
 
 const user: User = {
     username: "test",
@@ -35,21 +33,30 @@ const user: User = {
             account_id: "1",
             amount: 1,
             note: "Test 1",
-            date: new Date(currentYear, 0, 1).getTime()
+            date: moment().startOf("month").subtract(1, "months").valueOf()
         },
         {
             id: "2",
             account_id: "2",
             amount: 2,
             note: "Test 2",
-            date: new Date(currentYear, currentMonth, 1).getTime()
+            date: moment().startOf("month").valueOf()
         },
         {
             id: "3",
             account_id: "3",
             amount: 3,
             note: "Test 3",
-            date: new Date(currentYear, currentMonth, 2).getTime()
+            date: moment().startOf("day").valueOf()
+        }
+    ],
+    upcomingTransactions: [
+        {
+            id: "4",
+            account_id: "2",
+            amount: 4,
+            note: "Test 4",
+            date: moment().startOf("day").add(1, "day").valueOf()
         }
     ]
 };

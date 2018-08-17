@@ -5,6 +5,7 @@ import { Header, Grid, Segment } from "semantic-ui-react";
 import ExpenseChart from "../Budget/ExpenseChart";
 import AddTransaction from "./AddTransaction";
 import RecentTransactions from "./RecentTransactions";
+import UpcomingTransactions from "../Budget/UpcomingTransactions";
 
 interface DashboardProps {
     user: User;
@@ -19,7 +20,7 @@ export default class Dashboard extends React.Component<DashboardProps, {}> {
                 resolve();
                 this.props.onUpdate();
             } catch (e) {
-                reject(e.response.data)
+                reject(e.response.data);
             }
         });
     };
@@ -31,7 +32,7 @@ export default class Dashboard extends React.Component<DashboardProps, {}> {
                 resolve();
                 this.props.onUpdate();
             } catch (e) {
-                reject(e.response.data)
+                reject(e.response.data);
             }
         });
     };
@@ -61,6 +62,16 @@ export default class Dashboard extends React.Component<DashboardProps, {}> {
         }
     };
 
+    onPaidTransaction = async (id: string) => {
+        await axios.post("/api/pay_upcoming_transaction", {id});
+        this.props.onUpdate();
+    };
+
+    onDeleteTransaction = async (id: string) => {
+        await axios.post("/api/delete_transaction", {id});
+        this.props.onUpdate();
+    };
+
     render(): React.ReactNode {
         return (
             <Grid columns={16} style={{padding: "1rem"}}>
@@ -84,6 +95,12 @@ export default class Dashboard extends React.Component<DashboardProps, {}> {
                     <Segment>
                         <Header>Recent Transactions</Header>
                         <RecentTransactions transactions={this.props.user.transactions} accountInfo={this.accountInfo} show={5} />
+                    </Segment>
+                </Grid.Column>
+                <Grid.Column mobile={16} tablet={8} computer={8}>
+                    <Segment>
+                        <Header>Upcoming Transactions</Header>
+                        <UpcomingTransactions transactions={this.props.user.upcomingTransactions} accountInfo={this.accountInfo} onPaidTransaction={this.onPaidTransaction} onDeleteTransaction={this.onDeleteTransaction} detail={false} />
                     </Segment>
                 </Grid.Column>
             </Grid>

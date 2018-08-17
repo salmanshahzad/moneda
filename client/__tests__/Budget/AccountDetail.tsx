@@ -10,7 +10,8 @@ import ProgressBar from "../../src/components/Budget/ProgressBar";
 describe("AccountDetail", () => {
     const account = {
         account: testUser.income[0],
-        transactions: []
+        transactions: [],
+        upcomingTransactions: []
     };
     const wrapper = mount(<AccountDetail account={account} onUpdate={jest.fn()}  />);
 
@@ -22,7 +23,8 @@ describe("AccountDetail", () => {
         expect(wrapper.find(TransactionsThisMonth)).toHaveLength(1);
         wrapper.setProps({account: {
             account: testUser.expenses[0],
-            transactions: []
+            transactions: [],
+            upcomingTransactions: []
         }});
         expect(wrapper.find(Header).at(0).text()).toBe("Test Expense 1");
         expect(wrapper.find(Header).at(1).text()).toBe("$0.00 of $0.00");
