@@ -15,7 +15,7 @@ export default (props: TransactionsThisMonthProps) => {
         const monthStart = moment().startOf("month");
         const monthEnd = moment().endOf("month");
         return props.transactions.filter(transaction => moment(transaction.date).isBetween(monthStart, monthEnd, null, "[]"));
-    }
+    };
 
     const getTransactionsToShow = (): Transaction[] => {
         // return an array of transactions of length min(props.show, props.transactions.length)
@@ -27,8 +27,9 @@ export default (props: TransactionsThisMonthProps) => {
         }
         return transactions;
     };
+    
     return (
-        <Table>
+        <Table celled striped>
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell>Date</Table.HeaderCell>
@@ -40,15 +41,13 @@ export default (props: TransactionsThisMonthProps) => {
             <Table.Body>
                 {
                     getTransactionsToShow().map((transaction, i) => {
-                        const deleteFunction = () => {
-                            props.onDeleteTransaction(transaction.id);
-                        };
+                        const deleteFunction = () => props.onDeleteTransaction(transaction.id);
                         return (
                             <Table.Row key={i}>
-                                <Table.Cell>{moment(transaction.date).format("MMMM D")}</Table.Cell>
-                                <Table.Cell>${transaction.amount.toFixed(2)}</Table.Cell>
+                                <Table.Cell collapsing>{moment(transaction.date).format("MMMM D")}</Table.Cell>
+                                <Table.Cell collapsing>${transaction.amount.toFixed(2)}</Table.Cell>
                                 <Table.Cell>{transaction.note}</Table.Cell>
-                                <Table.Cell>
+                                <Table.Cell collapsing>
                                     <ConfirmButton negative icon="delete" header="Delete Transaction" content="Are you sure you want to delete this transaction?" confirm="Delete" onConfirm={deleteFunction} />
                                 </Table.Cell>
                             </Table.Row>

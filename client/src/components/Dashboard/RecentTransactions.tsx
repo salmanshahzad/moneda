@@ -21,8 +21,9 @@ export default (props: RecentTransactionsProps) => {
         }
         return transactions;
     };
+    
     return (
-        <Table>
+        <Table celled striped>
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell>To</Table.HeaderCell>
