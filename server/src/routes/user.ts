@@ -1,16 +1,14 @@
 import express from "express";
 import checkSignedIn from "../checkSignedInMiddleware";
 import db from "../../db";
+import moment from "moment";
 import bcrypt from "bcrypt";
 
 const router = express.Router();
 
 router.get("/user", checkSignedIn, async (req, res) => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth();
-    const monthStart = new Date(year, month, 1).getTime();
-    const monthEnd = new Date(year, (month + 1) % 12, 0).getTime();
+    const monthStart = moment().startOf("month").valueOf();
+    const monthEnd = moment().endOf("month").valueOf();
 
     const username = (await db("users").select("username").where({id: req.session.userId}))[0].username;
 
@@ -78,6 +76,16 @@ router.post("/delete_transaction", checkSignedIn, async (req, res) => {
     }
 
     await db("transactions").delete().where({user_id: req.session.userId, id: req.body.id});
+    res.sendStatus(200);
+});
+
+router.post("/pay_upcoming_transaction", checkSignedIn, async (req, res) => {
+    // validate
+    if (typeof req.body.id === "undefined" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
+        return res.status(400).send(["Please enter a valid transaction id."]);
+    }
+
+    await db("transactions").update({date: moment().startOf("day").valueOf(), upcoming: false}).where({id: req.body.id});
     res.sendStatus(200);
 });
 

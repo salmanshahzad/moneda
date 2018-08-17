@@ -110,6 +110,35 @@ describe("/api/delete_transaction", () => {
     });
 });
 
+describe("/api/pay_upcoming_transaction", () => {
+    let server: request.SuperTest<request.Test>;
+
+    beforeAll(async done => {
+        server = request.agent(app);
+        await server.post("/api/sign_in").send({
+            username: "testuser2",
+            password: "testuser2"
+        });
+        done();
+    });
+
+    it("sends 401 when not signed in", done => {
+        request(app).post("/api/pay_upcoming_transaction").expect(401, done);
+    });
+
+    it("sends 400 with invalid inputs", done => {
+        server.post("/api/pay_upcoming_transaction").expect(400, [
+            "Please enter a valid transaction id."
+        ], done);
+    });
+
+    it("sends 200 with valid inputs", done => {
+        server.post("/api/pay_upcoming_transaction").send({
+            id: "d3aa88e2-c754-41e0-8ba6-4198a34aa0a2"
+        }).expect(200, done);
+    });
+});
+
 describe("/api/update_user", () => {
     let server: request.SuperTest<request.Test>;
 
