@@ -12,48 +12,48 @@ interface DashboardProps {
     onUpdate: () => void;
 }
 
-export default class Dashboard extends React.Component<DashboardProps, {}> {
-    onAddIncomeTransaction = (name: string, amount: number, note: string): Promise<{}> => {
+export default (props: DashboardProps) => {
+    const onAddIncomeTransaction = (name: string, amount: number, note: string): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
                 await axios.post("/api/add_transaction", {account: name, amount, note, type: "income"});
                 resolve();
-                this.props.onUpdate();
+                props.onUpdate();
             } catch (e) {
                 reject(e.response.data);
             }
         });
     };
 
-    onAddExpenseTransaction = (name: string, amount: number, note: string, date: number): Promise<{}> => {
+    const onAddExpenseTransaction = (name: string, amount: number, note: string, date: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
                 await axios.post("/api/add_transaction", {account: name, amount, note, date, type: "expenses"});
                 resolve();
-                this.props.onUpdate();
+                props.onUpdate();
             } catch (e) {
                 reject(e.response.data);
             }
         });
     };
 
-    getAccountNames = (type: "income" | "expenses"): string[] => {
+    const getAccountNames = (type: "income" | "expenses"): string[] => {
         if (type === "income") {
-            return this.props.user.income.map(income => income.name);
+            return props.user.income.map(income => income.name);
         } else if (type === "expenses") {
-            return this.props.user.expenses.map(expense => expense.name);
+            return props.user.expenses.map(expense => expense.name);
         }
     };
 
-    accountInfo = (id: string): {type: string, name: string} => {
-        const income = this.props.user.income.filter(income => income.id === id);
+    const accountInfo = (id: string): {type: string, name: string} => {
+        const income = props.user.income.filter(income => income.id === id);
         if (income.length > 0) {
             return {
                 type: "income",
                 name: income[0].name
             };
         }
-        const expenses = this.props.user.expenses.filter(expense => expense.id === id);
+        const expenses = props.user.expenses.filter(expense => expense.id === id);
         if (expenses.length > 0) {
             return {
                 type: "expense",
@@ -62,48 +62,46 @@ export default class Dashboard extends React.Component<DashboardProps, {}> {
         }
     };
 
-    onPaidTransaction = async (id: string) => {
+    const onPaidTransaction = async (id: string) => {
         await axios.post("/api/pay_upcoming_transaction", {id});
-        this.props.onUpdate();
+        props.onUpdate();
     };
 
-    onDeleteTransaction = async (id: string) => {
+    const onDeleteTransaction = async (id: string) => {
         await axios.post("/api/delete_transaction", {id});
-        this.props.onUpdate();
+        props.onUpdate();
     };
 
-    render(): React.ReactNode {
-        return (
-            <Grid columns={16} style={{padding: "1rem"}}>
-                <Grid.Column mobile={16} tablet={16} computer={16}>
-                    <Header as="h1">Dashboard</Header>
-                </Grid.Column>
-                <Grid.Column mobile={16} tablet={8} computer={8}>
-                    <Segment>
-                        {/* need marginTop because for some reason Header has an extra margin when it is placed before a chart */}
-                        <Header style={{marginTop: "-.14285714em"}}>Expenses Chart</Header>
-                        <ExpenseChart expenses={this.props.user.expenses} />
-                    </Segment>
-                </Grid.Column>
-                <Grid.Column mobile={16} tablet={8} computer={8}>
-                    <Segment>
-                        <Header>Add Transaction</Header>
-                        <AddTransaction incomeNames={this.getAccountNames("income")} onAddIncomeTransaction={this.onAddIncomeTransaction} expenseNames={this.getAccountNames("expenses")} onAddExpenseTransaction={this.onAddExpenseTransaction} />
-                    </Segment>
-                </Grid.Column>
-                <Grid.Column mobile={16} tablet={8} computer={8}>
-                    <Segment>
-                        <Header>Recent Transactions</Header>
-                        <RecentTransactions transactions={this.props.user.transactions} accountInfo={this.accountInfo} show={5} />
-                    </Segment>
-                </Grid.Column>
-                <Grid.Column mobile={16} tablet={8} computer={8}>
-                    <Segment>
-                        <Header>Upcoming Transactions</Header>
-                        <UpcomingTransactions transactions={this.props.user.upcomingTransactions} accountInfo={this.accountInfo} onPaidTransaction={this.onPaidTransaction} onDeleteTransaction={this.onDeleteTransaction} detail={false} />
-                    </Segment>
-                </Grid.Column>
-            </Grid>
-        );
-    }
+    return (
+        <Grid columns={16} style={{padding: "1rem"}}>
+            <Grid.Column mobile={16} tablet={16} computer={16}>
+                <Header as="h1">Dashboard</Header>
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={8} computer={8}>
+                <Segment>
+                    {/* need marginTop because for some reason Header has an extra margin when it is placed before a chart */}
+                    <Header style={{marginTop: "-.14285714em"}}>Expenses Chart</Header>
+                    <ExpenseChart expenses={props.user.expenses} />
+                </Segment>
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={8} computer={8}>
+                <Segment>
+                    <Header>Add Transaction</Header>
+                    <AddTransaction incomeNames={getAccountNames("income")} onAddIncomeTransaction={onAddIncomeTransaction} expenseNames={getAccountNames("expenses")} onAddExpenseTransaction={onAddExpenseTransaction} />
+                </Segment>
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={8} computer={8}>
+                <Segment>
+                    <Header>Recent Transactions</Header>
+                    <RecentTransactions transactions={props.user.transactions} accountInfo={accountInfo} show={5} />
+                </Segment>
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={8} computer={8}>
+                <Segment>
+                    <Header>Upcoming Transactions</Header>
+                    <UpcomingTransactions transactions={props.user.upcomingTransactions} accountInfo={accountInfo} onPaidTransaction={onPaidTransaction} onDeleteTransaction={onDeleteTransaction} detail={false} />
+                </Segment>
+            </Grid.Column>
+        </Grid>
+    );
 }
