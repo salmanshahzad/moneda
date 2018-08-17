@@ -82,7 +82,7 @@ export default class UserInformation extends React.Component<UserInformationProp
                     <label>Current Password</label>
                     <input type="password" value={this.state.currentPassword} onChange={this.changeCurrentPassword} />
                 </Form.Field>
-                <Button primary type="submit">Submit</Button>
+                <Button primary type="submit">Update</Button>
             </Form>
         );
     }
