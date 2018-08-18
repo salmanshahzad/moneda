@@ -1,15 +1,19 @@
 import React from "react";
 import { Form, Message, Input, Select, Button, DropdownProps, InputOnChangeData } from "semantic-ui-react";
+import moment from "moment";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
 interface AddIncomeTransactionProps {
     incomeNames: string[];
-    onAddIncomeTransaction: (name: string, amount: number, note: string) => Promise<{}>;
+    onAddIncomeTransaction: (name: string, amount: number, note: string, date: number) => Promise<{}>;
 }
 
 interface AddIncomeTransactionState {
     name: string;
     amount: string;
     note: string;
+    date: moment.Moment;
     errors: string[];
 }
 
@@ -18,6 +22,7 @@ export default class AddIncomeTransaction extends React.Component<AddIncomeTrans
         name: this.props.incomeNames[0],
         amount: "0.00",
         note: "",
+        date: moment().startOf("day"),
         errors: []
     };
 
@@ -48,13 +53,19 @@ export default class AddIncomeTransaction extends React.Component<AddIncomeTrans
         this.setState({note: data.value});
     };
 
+    changeDate = (date: moment.Moment, e: React.SyntheticEvent<any>) => {
+        this.setState({date});
+    };
+
     submit = async () => {
         try {
-            await this.props.onAddIncomeTransaction(this.state.name, parseFloat(this.state.amount), this.state.note);
+            const date = this.state.date || moment().startOf("day");
+            await this.props.onAddIncomeTransaction(this.state.name, parseFloat(this.state.amount), this.state.note, date.valueOf());
             this.setState({
                 name: this.props.incomeNames[0],
                 amount: "0.00",
                 note: "",
+                date: moment().startOf("day"),
                 errors: []
             });
         } catch (errors) {
@@ -83,6 +94,9 @@ export default class AddIncomeTransaction extends React.Component<AddIncomeTrans
                 </Form.Field>
                 <Form.Field>
                     <Input type="text" placeholder="Note (optional)" value={this.state.note} onChange={this.changeNote} fluid />
+                </Form.Field>
+                <Form.Field>
+                    <DatePicker selected={this.state.date} onChange={this.changeDate} dateFormat="MMMM DD, YYYY" maxDate={moment()} todayButton="Today" />
                 </Form.Field>
                 <Button primary type="submit">Add</Button>
             </Form>

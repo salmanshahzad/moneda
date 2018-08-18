@@ -59,7 +59,8 @@ export default class AddExpenseTransaction extends React.Component<AddExpenseTra
 
     submit = async () => {
         try {
-            await this.props.onAddExpenseTransaction(this.state.name, parseFloat(this.state.amount), this.state.note, this.state.date.valueOf());
+            const date = this.state.date || moment().startOf("day");
+            await this.props.onAddExpenseTransaction(this.state.name, parseFloat(this.state.amount), this.state.note, date.valueOf());
             this.setState({
                 name: this.props.expenseNames[0],
                 amount: "0.00",
@@ -95,7 +96,7 @@ export default class AddExpenseTransaction extends React.Component<AddExpenseTra
                     <Input type="text" placeholder="Note (optional)" value={this.state.note} onChange={this.changeNote} fluid />
                 </Form.Field>
                 <Form.Field>
-                    <DatePicker selected={this.state.date} onChange={this.changeDate} todayButton="Today" />
+                    <DatePicker selected={this.state.date} onChange={this.changeDate} dateFormat="MMMM DD, YYYY" todayButton="Today" />
                 </Form.Field>
                 <Button primary type="submit">Add</Button>
             </Form>

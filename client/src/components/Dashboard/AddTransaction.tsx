@@ -5,7 +5,7 @@ import { Tab } from "semantic-ui-react";
 
 interface AddTransactionProps {
     incomeNames: string[];
-    onAddIncomeTransaction: (name: string, amount: number, note: string) => Promise<{}>;
+    onAddIncomeTransaction: (name: string, amount: number, note: string, date: number) => Promise<{}>;
     expenseNames: string[];
     onAddExpenseTransaction: (name: string, amount: number, note: string, date: number) => Promise<{}>;
 }

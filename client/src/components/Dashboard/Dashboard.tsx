@@ -13,10 +13,10 @@ interface DashboardProps {
 }
 
 export default (props: DashboardProps) => {
-    const onAddIncomeTransaction = (name: string, amount: number, note: string): Promise<{}> => {
+    const onAddIncomeTransaction = (name: string, amount: number, note: string, date: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/add_transaction", {account: name, amount, note, type: "income"});
+                await axios.post("/api/add_transaction", {account: name, amount, note, date, type: "income"});
                 resolve();
                 props.onUpdate();
             } catch (e) {
