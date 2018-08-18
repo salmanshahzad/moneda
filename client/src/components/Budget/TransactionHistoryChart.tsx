@@ -36,18 +36,35 @@ export default (props: TransactionHistoryChartProps) => {
         return amounts.reverse();
     };
 
-    const getData = () => {
+    const getData = (): {labels: string[], datasets: object[]} => {
         // return the data in the format needed for the Line component
-        return {
+        const data = {
             labels: getMonthLabels(),
             datasets: [
                 {
-                    label: "Total",
+                    label: "Spent",
                     backgroundColor: props.account.colour,
+                    borderColor: props.account.colour,
+                    fill: true,
                     data: getAmountsPerMonth()
                 }
             ]
         };
+        
+        // if the account is an expense, add a straight line representing the budget
+        const isExpense = Object.keys(props.account).indexOf("budget") > -1;
+        if (isExpense) {
+            const expense = props.account as Expense;
+            data.datasets.push({
+                label: "Budget",
+                backgroundColor: "#FF0000",
+                borderColor: "#FF0000",
+                fill: false,
+                data: new Array<number>(props.monthsToShow).fill(expense.budget)
+            });
+        }
+
+        return data;
     };
 
     const options = {
@@ -62,7 +79,8 @@ export default (props: TransactionHistoryChartProps) => {
                 {
                     display: true,
                     ticks: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        callback: value => `$${value.toFixed(2)}`
                     }
                 }
             ]
