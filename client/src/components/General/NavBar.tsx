@@ -5,15 +5,16 @@ import { NavLink } from "react-router-dom";
 interface NavBarProps {
     sidebarOpen: boolean;
     onOpenSidebar: () => void;
+    onCloseSidebar: () => void;
 }
 
 export default (props: NavBarProps) => {
     const menuItems = [
-        <Menu.Item name="Dashboard" as={NavLink} to="/dashboard" key={0} />,
-        <Menu.Item name="Budget" as={NavLink} to="/budget" key={1} />,
-        <Menu.Item name="Portfolio" as={NavLink} to="/portfolio" key={2} />,
-        <Menu.Item name="Settings" as={NavLink} to="/settings" key={3} />,
-        <Menu.Item name="Sign Out" as={NavLink} to="/sign_out" key={4} />
+        <Menu.Item name="Dashboard" as={NavLink} to="/dashboard" onClick={props.onCloseSidebar} key={0} />,
+        <Menu.Item name="Budget" as={NavLink} to="/budget" onClick={props.onCloseSidebar} key={1} />,
+        <Menu.Item name="Portfolio" as={NavLink} to="/portfolio" onClick={props.onCloseSidebar} key={2} />,
+        <Menu.Item name="Settings" as={NavLink} to="/settings" onClick={props.onCloseSidebar} key={3} />,
+        <Menu.Item name="Sign Out" as={NavLink} to="/sign_out" onClick={props.onCloseSidebar} key={4} />
     ];
 
     return (

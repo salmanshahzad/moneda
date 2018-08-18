@@ -65,7 +65,7 @@ export default class Layout extends React.Component<{}, LayoutState> {
         }
         return (
             <Sidebar.Pushable>
-                <NavBar sidebarOpen={this.state.sidebarOpen} onOpenSidebar={this.openSidebar} />
+                <NavBar sidebarOpen={this.state.sidebarOpen} onOpenSidebar={this.openSidebar} onCloseSidebar={this.closeSidebar} />
                 <Sidebar.Pusher onClick={this.closeSidebar}>
                     <Route path="/dashboard" render={props => <Dashboard user={this.state.user} onUpdate={this.updateUser} {...props} />} />
                     <Route path="/budget" render={props => <Budget user={this.state.user} onUpdate={this.updateUser} {...props} />} />

@@ -6,7 +6,8 @@ import { Menu } from "semantic-ui-react";
 
 describe("NavBar", () => {
     it("renders", () => {
-        const wrapper = mount(<NavBar sidebarOpen={false} onOpenSidebar={jest.fn()} />, routerContext);
+        const emptyFunction = jest.fn();
+        const wrapper = mount(<NavBar sidebarOpen={false} onOpenSidebar={emptyFunction} onCloseSidebar={emptyFunction} />, routerContext);
         expect(wrapper.find(Menu)).toHaveLength(1);
     });
 });
