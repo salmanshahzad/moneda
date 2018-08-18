@@ -2,13 +2,18 @@ import React from "react";
 import { User } from "../../../../user";
 import { Grid, Segment, Header } from "semantic-ui-react";
 import ExpenseChart from "./ExpenseChart";
-import IncomeItem from "./IncomeItem";
-import ExpenseItem from "./ExpenseItem";
+import { Link } from "react-router-dom";
+import ProgressBar from "./ProgressBar";
 
 interface BudgetProps {
     user: User;
     onUpdate: () => void;
 }
+
+const textStyle: React.CSSProperties = {
+    fontStyle: "italic",
+    fontWeight: "bold"
+};
 
 export default (props: BudgetProps) => (
     <Grid style={{padding: "1rem"}}>
@@ -26,13 +31,26 @@ export default (props: BudgetProps) => (
             <Segment>
                 <Header>Income</Header>
                 {
-                    props.user.income.map((income, i) => <IncomeItem name={income.name} amount={income.income} percentage={0} key={i} />)
+                    props.user.income.map((income, i) => (
+                        <div style={{display: "flex", justifyContent: "space-between"}} key={i}>
+                            <Link to={"/income/" + income.name} style={textStyle}>{income.name}</Link>
+                            <span style={textStyle}>${income.income.toFixed(2)}</span>
+                        </div>
+                    ))
                 }
             </Segment>
             <Segment>
                 <Header>Expenses</Header>
                 {
-                    props.user.expenses.map((expense, i) => <ExpenseItem name={expense.name} spent={expense.spent} budget={expense.budget} key={i} />)
+                    props.user.expenses.map((expense, i) => (
+                        <React.Fragment key={i}>
+                            <div style={{display: "flex", justifyContent: "space-between"}}>
+                                <Link to={"/expense/" + expense.name} style={textStyle}>{expense.name}</Link>
+                                <span style={textStyle}>${expense.spent.toFixed(2)} of ${expense.budget.toFixed(2)}</span>
+                            </div>
+                            <ProgressBar value={expense.spent} total={expense.budget} />
+                        </React.Fragment>
+                    ))
                 }
             </Segment>
         </Grid.Column>
