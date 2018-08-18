@@ -1,5 +1,6 @@
 import React from "react";
 import { Income, Expense, Transaction } from "../../../../user";
+import moment from "moment";
 import { Line } from "react-chartjs-2";
 
 interface TransactionHistoryChartProps {
@@ -11,34 +12,26 @@ interface TransactionHistoryChartProps {
 export default (props: TransactionHistoryChartProps) => {
     const getMonthLabels = (): string[] => {
         // return month strings for the last props.monthsToShow months
-        const currentMonth = new Date().getMonth();
-        const monthNumbers = [currentMonth];
+        const months = [moment()];
         for (let i = 1; i < props.monthsToShow; i++) {
-            monthNumbers.push((currentMonth - i) % 12);
+            months.push(moment().subtract(i, "months"));
         }
-        const convertMonthNumberToName = (num: number) => new Date(2018, num).toLocaleString("en-us", {month: "long"});
-        return monthNumbers.reverse().map(num => convertMonthNumberToName(num));
+        return months.reverse().map(m => m.format("MMMM"));
     };
 
     const getAmountsPerMonth = (): number[] => {
         // return the total amounts for the last props.monthsToShow months
         const amounts = new Array<number>(props.monthsToShow).fill(0);
-        let currentMonth = new Date().getMonth();
+        let pointerDate = moment().startOf("month");
         let pointer = 0;
         for (let i = 0; i < props.transactions.length; i++) {
             if (pointer > props.monthsToShow - 1) {
                 break;
             }
-            const month = new Date(props.transactions[i].date).getMonth();
-            if (month < currentMonth) {
-                // increment the pointer by the difference (how many months back we went)
-                pointer += currentMonth - month;
-            } else if (month > currentMonth) {
-                // went back one year, add 11 to pointer to deal with wrapping
-                pointer += 11 + currentMonth - month;
-            }
+            const transactionDate = moment(props.transactions[i].date).startOf("month");
+            pointer += pointerDate.diff(transactionDate, "months");
             amounts[pointer] += props.transactions[i].amount;
-            currentMonth = month;
+            pointerDate = transactionDate;
         }
         return amounts.reverse();
     };
