@@ -58,6 +58,12 @@ export default (props: TransactionHistoryChartProps) => {
     };
 
     const options = {
+        layout: {
+            padding: {
+                bottom: 20
+            }
+        },
+        maintainAspectRatio: false,
         scales: {
             yAxes: [
                 {

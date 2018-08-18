@@ -27,6 +27,12 @@ export default (props: ExpenseChartProps) => {
     };
 
     const options = {
+        layout: {
+            padding: {
+                bottom: 20
+            }
+        },
+        maintainAspectRatio: false,
         tooltips: {
             callbacks: {
                 label: (tooltipItem, data) => {

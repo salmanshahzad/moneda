@@ -16,7 +16,7 @@ export default (props: BudgetProps) => (
             <Header as="h1">Budget</Header>
         </Grid.Column>
         <Grid.Column mobile={16} tablet={8} computer={8}>
-            <Segment>
+            <Segment style={{height: "50vh"}}>
                 {/* need marginTop because for some reason Header has an extra margin when it is placed before a chart */}
                 <Header style={{marginTop: "-.14285714em"}}>Expenses Chart</Header>
                 <ExpenseChart expenses={props.user.expenses} />
