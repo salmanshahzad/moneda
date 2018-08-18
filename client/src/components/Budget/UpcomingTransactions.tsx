@@ -1,6 +1,6 @@
 import React from "react";
 import { Transaction } from "../../../../user";
-import { Table, Button } from "semantic-ui-react";
+import { Table, Icon, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import ConfirmButton from "../General/ConfirmButton";
@@ -31,15 +31,20 @@ export default (props: UpcomingTransactionsProps) => (
         <Table.Body>
             {
                 props.transactions.map((transaction, i) => {
+                    const difference = moment(transaction.date).diff(moment().startOf("day"), "days");
                     const account = props.detail ? null : props.accountInfo(transaction.account_id);
                     const payTransaction = () => props.onPaidTransaction(transaction.id);
                     const deleteTransaction = () => props.onDeleteTransaction(transaction.id);
+                    console.log(difference);
                     return (
-                        <Table.Row key={i}>
+                        <Table.Row error={difference < 0} warning={difference >= 0 && difference <= 3} key={i}>
                             {
                                 !props.detail && <Table.Cell><Link to={`${account.type}/${account.name}`}>{account.name}</Link></Table.Cell>
                             }
-                            <Table.Cell collapsing={props.detail}>{moment(transaction.date).format("MMMM D")}</Table.Cell>
+                            <Table.Cell collapsing={props.detail}>
+                                {difference < 0 && <Icon name="attention" />}
+                                {moment(transaction.date).format("MMMM D")}
+                            </Table.Cell>
                             <Table.Cell collapsing={props.detail}>${transaction.amount.toFixed(2)}</Table.Cell>
                             {
                                 props.detail && <Table.Cell>{transaction.note}</Table.Cell>
