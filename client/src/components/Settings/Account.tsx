@@ -66,22 +66,22 @@ export default class Account extends React.Component<AccountProps, AccountState>
         if (this.state.editing) {
             return (
                 <Grid columns={16}>
-                    <Grid.Column mobile={1} tablet={1} computer={1}>
+                    <Grid.Column mobile={2} tablet={1} computer={1}>
                         <Button primary icon="save" onClick={this.save} />
                     </Grid.Column>
-                    <Grid.Column mobile={2} tablet={2} computer={2}>
+                    <Grid.Column mobile={10} tablet={5} computer={4}>
                         <SketchPicker color={this.state.colour} onChangeComplete={this.changeColour} />
                     </Grid.Column>
-                    <Grid.Column mobile={4} tablet={4} computer={4}>
+                    <Grid.Column mobile={6} tablet={5} computer={6}>
                         <Input type="text" value={this.state.name} onChange={this.changeName} fluid />
                     </Grid.Column>
                     {
                         this.props.type === "expenses" &&
-                        <Grid.Column mobile={4} tablet={4} computer={4}>
+                        <Grid.Column mobile={6} tablet={5} computer={5}>
                             <Input type="number" min="0" step="0.01" label="$" value={this.state.budget} onChange={this.changeBudget} onBlur={this.makeBudgetTwoDecimalPlaces} fluid />
                         </Grid.Column>
                     }
-                    <Grid.Column mobile={5} tablet={5} computer={5}>
+                    <Grid.Column mobile={12} tablet={12} computer={12}>
                         <Message error hidden={this.state.error.length === 0}>{this.state.error}</Message>
                     </Grid.Column>
                 </Grid>
@@ -89,16 +89,16 @@ export default class Account extends React.Component<AccountProps, AccountState>
         } else {
             return (
                 <Grid columns={16}>
-                    <Grid.Column mobile={1} tablet={1} computer={1}>
-                        <Button primary icon="pencil" onClick={this.edit} />
+                    <Grid.Column mobile={6} tablet={2} computer={2}>
+                        <Button.Group>
+                            <Button primary icon="pencil" onClick={this.edit} />
+                            <ConfirmButton icon="delete" negative header="Delete Account" content="Are you sure you want to delete this account? This action cannot be reversed and all transaction history related to this account will be lost." confirm="Delete" onConfirm={this.delete} />
+                        </Button.Group>
                     </Grid.Column>
-                    <Grid.Column mobile={1} tablet={1} computer={1}>
-                        <ConfirmButton icon="delete" negative header="Delete Account" content="Are you sure you want to delete this account? This action cannot be reversed and all transaction history related to this account will be lost." confirm="Delete" onConfirm={this.delete} />
-                    </Grid.Column>
-                    <Grid.Column mobile={1} tablet={1} computer={1}>
+                    <Grid.Column mobile={6} tablet={1} computer={1}>
                         <Icon name="circle" circular style={{backgroundColor: this.state.colour, color: this.state.colour}} />
                     </Grid.Column>
-                    <Grid.Column mobile={7} tablet={7} computer={7}>
+                    <Grid.Column mobile={6} tablet={7} computer={7}>
                         <span>{this.state.name}</span>
                     </Grid.Column>
                     {
