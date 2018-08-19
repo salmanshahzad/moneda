@@ -2,6 +2,7 @@ import React from "react";
 import { mount } from "enzyme";
 import AddIncomeTransaction from "../../src/components/Dashboard/AddIncomeTransaction";
 import { Form, Message } from "semantic-ui-react";
+import moment from "moment";
 
 describe("AddIncomeTransaction", () => {
     const wrapper = mount(<AddIncomeTransaction incomeNames={["Primary Income", "Secondary Income"]} onAddIncomeTransaction={jest.fn(() => new Promise<{}>((resolve, reject) => {}))} />);
@@ -14,6 +15,7 @@ describe("AddIncomeTransaction", () => {
         expect(wrapper.state("name")).toBe("Primary Income");
         expect(wrapper.state("amount")).toBe("0.00");
         expect(wrapper.state("note")).toBe("");
+        expect(wrapper.state("date")).toEqual(moment().startOf("day"));
         expect(wrapper.state("errors")).toEqual([]);
     });
 
@@ -40,6 +42,6 @@ describe("AddIncomeTransaction", () => {
     it("calls onAddIncomeTransaction when the form is submitted", () => {
         wrapper.setState({name: "Primary Income", amount: "5.00", note: "Test"});
         wrapper.find(Form).simulate("submit");
-        expect(wrapper.prop("onAddIncomeTransaction")).toHaveBeenCalledWith("Primary Income", 5, "Test");
+        expect(wrapper.prop("onAddIncomeTransaction")).toHaveBeenCalledWith("Primary Income", 5, "Test", moment().startOf("day").valueOf());
     });
 });
