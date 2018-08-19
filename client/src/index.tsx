@@ -21,6 +21,7 @@ render(
             <PrivateRoute path="/expense/:account" component={Layout} exact />
             <PrivateRoute path="/settings" component={Layout} exact />
             <Route path="/sign_out" component={SignOut} exact />
+            <Route render={() => <Redirect to="/" />} />
         </Switch>
     </BrowserRouter>
 , document.getElementById("app"));
