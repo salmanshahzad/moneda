@@ -4,6 +4,7 @@ import axios from "axios";
 import { Grid, Segment, Header, Button } from "semantic-ui-react";
 import UserInformation from "./UserInformation";
 import Account from "./Account";
+import ExportData from "./ExportData";
 import ConfirmButton from "../General/ConfirmButton";
 
 interface SettingsProps {
@@ -84,12 +85,9 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
         });
     };
 
-    onDeleteUser = (): Promise<{}> => {
-        return new Promise<{}>(async resolve => {
-            await axios.post("/api/delete_user");
-            resolve();
-            this.props.onUpdate();
-        });
+    onDeleteUser = async () => {
+        await axios.post("/api/delete_user");
+        this.props.onUpdate();
     };
 
     render(): React.ReactNode {
@@ -149,7 +147,13 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={16} computer={16}>
                     <Segment>
-                    <ConfirmButton text="Delete Your Account" negative header="Delete User Account" content="Are you sure you want to delete your user account? This action cannot be reversed and everything will be erased." confirm="Delete" onConfirm={this.onDeleteUser} />
+                        <Header>Export Data</Header>
+                        <ExportData user={this.props.user} />
+                    </Segment>
+                </Grid.Column>
+                <Grid.Column mobile={16} tablet={16} computer={16}>
+                    <Segment>
+                        <ConfirmButton text="Delete Your Account" negative header="Delete User Account" content="Are you sure you want to delete your user account? This action cannot be reversed and everything will be erased." confirm="Delete" onConfirm={this.onDeleteUser} />
                     </Segment>
                 </Grid.Column>
             </Grid>
