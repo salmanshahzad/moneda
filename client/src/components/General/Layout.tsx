@@ -6,6 +6,7 @@ import { Sidebar } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import Dashboard from "../Dashboard/Dashboard";
 import Budget from "../Budget/Budget";
+import Transactions from "../Transactions/Transactions";
 import AccountDetail from "../Budget/AccountDetail";
 import Settings from "../Settings/Settings";
 
@@ -69,6 +70,7 @@ export default class Layout extends React.Component<{}, LayoutState> {
                 <Sidebar.Pusher onClick={this.closeSidebar}>
                     <Route path="/dashboard" render={props => <Dashboard user={this.state.user} onUpdate={this.updateUser} {...props} />} />
                     <Route path="/budget" render={props => <Budget user={this.state.user} onUpdate={this.updateUser} {...props} />} />
+                    <Route path="/transactions" render={props => <Transactions user={this.state.user} onUpdate={this.updateUser} {...props} />} />
                     <Route path="/income/:account" render={props => <AccountDetail account={this.getAccountDetails(props.match.params.account, "income")} onUpdate={this.updateUser} />} />
                     <Route path="/expense/:account" render={props => <AccountDetail account={this.getAccountDetails(props.match.params.account, "expense")} onUpdate={this.updateUser} />} />
                     <Route path="/settings" render={props => <Settings user={this.state.user} onUpdate={this.updateUser} />} />

@@ -17,6 +17,7 @@ render(
             <Route path="/" render={props => auth.isAuthenticated() ? <Redirect to="/dashboard" /> : <Home {...props} />} exact />
             <PrivateRoute path="/dashboard" component={Layout} exact />
             <PrivateRoute path="/budget" component={Layout} exact />
+            <PrivateRoute path="/transactions" component={Layout} exact />
             <PrivateRoute path="/income/:account" component={Layout} exact />
             <PrivateRoute path="/expense/:account" component={Layout} exact />
             <PrivateRoute path="/settings" component={Layout} exact />

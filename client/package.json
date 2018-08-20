@@ -40,6 +40,7 @@
     "@types/react-datepicker": "^1.1.7",
     "@types/react-dom": "^16.0.5",
     "@types/react-router-dom": "^4.2.7",
+    "@types/react-table": "^6.7.12",
     "axios": "^0.18.0",
     "chart.js": "^2.7.2",
     "json2csv": "^4.2.1",
@@ -51,6 +52,7 @@
     "react-dom": "^16.4.0",
     "react-parallax": "^1.7.0",
     "react-router-dom": "^4.2.2",
+    "react-table": "^6.8.6",
     "semantic-ui-css": "^2.3.1",
     "semantic-ui-react": "^0.81.1"
   },
