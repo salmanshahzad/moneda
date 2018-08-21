@@ -4,7 +4,7 @@ import ExportData from "../../src/components/Settings/ExportData";
 import testUser from "../testUser";
 import { Form } from "semantic-ui-react";
 
-describe("Settings", () => {
+describe("ExportData", () => {
     const wrapper = mount(<ExportData user={testUser} />);
 
     it("renders", () => {
