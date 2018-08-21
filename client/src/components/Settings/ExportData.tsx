@@ -38,23 +38,33 @@ export default class ExportData extends React.Component<ExportDataProps, ExportD
         this.setState({format: data.value.toString()});
     };
 
-    accountIdToName = (id: string): string => {
+    accountInfo = (id: string): {type: string, name: string} => {
         const income = this.props.user.income.filter(income => income.id === id);
         if (income.length > 0) {
-            return income[0].name;
+            return {
+                type: "income",
+                name: income[0].name
+            };
         }
         const expenses = this.props.user.expenses.filter(expense => expense.id === id);
         if (expenses.length > 0) {
-            return expenses[0].name;
+            return {
+                type: "expense",
+                name: expenses[0].name
+            };
         }
     };
 
     export = () => {
-        const formattedDate = moment().format("DD-MMM-YYYY");
+        const getFileName = (data: "account" | "transactions", type: "csv" | "json"): string => {
+            return `${this.props.user.username}-moneda-${data}-${moment().format("DD-MMM-YYYY")}.${type}`;
+        };
 
         // if data is account, format must be json
         if (this.state.data === "account") {
-            download(JSON.stringify(this.props.user), `moneda-account-${formattedDate}.json`, "application/json");
+            const user = Object.assign({}, this.props.user);
+            delete user.username;
+            download(JSON.stringify(user), getFileName("account", "json"), "application/json");
         } else if (this.state.data === "transactions") {
             // transactions will be in reverse chronological order
             let transactions = this.props.user.transactions;
@@ -62,20 +72,23 @@ export default class ExportData extends React.Component<ExportDataProps, ExportD
             if (this.state.includeUpcoming) {
                 transactions.unshift(...this.props.user.upcomingTransactions.reverse());
             }
-            // remove unneeded information like id, user_id etc...
+            
+            // format transaction information
             const t = transactions.map(t => {
+                const info = this.accountInfo(t.account_id);
                 return {
                     date: moment(t.date).format("MMMM DD, YYYY"),
-                    account: this.accountIdToName(t.account_id),
+                    account: info.name,
                     amount: t.amount,
-                    note: t.note
+                    note: t.note,
+                    type: info.type
                 };
             });
 
             if (this.state.format === "json") {
-                download(JSON.stringify(t), `moneda-transactions-${formattedDate}.json`, "application/json");
+                download(JSON.stringify(t), getFileName("transactions", "json"), "application/json");
             } else if (this.state.format === "csv") {
-                download(Papa.unparse(t), `moneda-transactions-${formattedDate}.csv`, "text/csv");
+                download(Papa.unparse(t), getFileName("transactions", "csv"), "text/csv");
             }
         }
     };
