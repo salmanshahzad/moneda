@@ -1,6 +1,6 @@
 import React from "react";
 import { User } from "../../../../user";
-import json2csv from "json2csv";
+import Papa from "papaparse";
 import download from "../../download";
 import { CheckboxProps, Form, Checkbox, Button } from "semantic-ui-react";
 import moment from "moment";
@@ -75,7 +75,7 @@ export default class ExportData extends React.Component<ExportDataProps, ExportD
             if (this.state.format === "json") {
                 download(JSON.stringify(t), `moneda-transactions-${formattedDate}.json`, "application/json");
             } else if (this.state.format === "csv") {
-                download(json2csv.parse(t), `moneda-transactions-${formattedDate}.csv`, "text/csv");
+                download(Papa.unparse(t), `moneda-transactions-${formattedDate}.csv`, "text/csv");
             }
         }
     };
