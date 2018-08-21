@@ -4,6 +4,7 @@ import axios from "axios";
 import { Grid, Segment, Header, Button } from "semantic-ui-react";
 import UserInformation from "./UserInformation";
 import Account from "./Account";
+import ImportData from "./ImportData";
 import ExportData from "./ExportData";
 import ConfirmButton from "../General/ConfirmButton";
 
@@ -85,6 +86,18 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
         });
     };
 
+    onImportData = (data: object): Promise<{}> => {
+        return new Promise<{}>(async (resolve, reject) => {
+            try {
+                await axios.post("/api/import_data", {data});
+                resolve();
+                this.props.onUpdate();
+            } catch (e) {
+                reject(e.response.data);
+            }
+        });
+    };
+
     onDeleteUser = async () => {
         await axios.post("/api/delete_user");
         this.props.onUpdate();
@@ -143,6 +156,12 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
                                 budget: 0
                             }} onUpdateAccount={this.onAddAccount} onDeleteAccount={null} editing />
                         }
+                    </Segment>
+                </Grid.Column>
+                <Grid.Column mobile={16} tablet={16} computer={16}>
+                    <Segment>
+                        <Header>Import Data</Header>
+                        <ImportData onImportData={this.onImportData} />
                     </Segment>
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={16} computer={16}>
