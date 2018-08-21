@@ -86,7 +86,7 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
         });
     };
 
-    onImportData = (data: object): Promise<{}> => {
+    onImportData = (data: any[]): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
                 await axios.post("/api/import_data", {data});

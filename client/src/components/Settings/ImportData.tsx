@@ -3,7 +3,7 @@ import Papa from "papaparse";
 import { Message, Input } from "semantic-ui-react";
 
 interface ImportDataProps {
-    onImportData: (data: object) => Promise<{}>;
+    onImportData: (data: any[]) => Promise<{}>;
 }
 
 interface ImportDataState {
@@ -17,24 +17,15 @@ export default class ImportData extends React.Component<ImportDataProps, ImportD
 
     importData = (e: React.SyntheticEvent<HTMLInputElement>) => {
         const file = e.currentTarget.files[0];
-        if (file.name.endsWith(".csv") || file.name.endsWith(".json")) {
+        if (file.name.endsWith(".csv")) {
             const reader = new FileReader();
             reader.onload = async e => {
                 const text = (e.target as any).result;
-                if (file.name.endsWith(".csv")) {
-                    try {
-                        await this.props.onImportData(Papa.parse(text, {header: true}).data);
-                        this.setState({message: "Successfully imported data."});
-                    } catch (error) {
-                        this.setState({message: error});
-                    }
-                } else {
-                    try {
-                        await this.props.onImportData(JSON.parse(text));
-                        this.setState({message: "Successfully imported data."});
-                    } catch (error) {
-                        this.setState({message: error});
-                    }
+                try {
+                    await this.props.onImportData(Papa.parse(text, {header: true}).data);
+                    this.setState({message: "Successfully imported data."});
+                } catch (error) {
+                    this.setState({message: error});
                 }
             };
             reader.readAsText(file);
@@ -47,9 +38,8 @@ export default class ImportData extends React.Component<ImportDataProps, ImportD
         return (
             <React.Fragment>
                 <Message hidden={this.state.message === ""} success={this.state.message.startsWith("Success")} error={!this.state.message.startsWith("Success")}>{this.state.message}</Message>
-                <p>CSV data must be formatted as: date,account,amount,note</p>
-                <p>JSON data must be formatted the same way it was exported</p>
-                <Input type="file" accept=".csv,.json" onChange={this.importData} />
+                <p>CSV data must include date, account, and amount headers. Note and type headers are optional. Any invalid rows will be skipped. Accounts that do not exist will be created as specified by their type. If there is no type, expenses will be used as the default.</p>
+                <Input type="file" accept=".csv" onChange={this.importData} />
             </React.Fragment>
         );
     }
