@@ -65,9 +65,9 @@ export default class ExportData extends React.Component<ExportDataProps, ExportD
             // remove unneeded information like id, user_id etc...
             const t = transactions.map(t => {
                 return {
+                    date: moment(t.date).format("MMMM DD, YYYY"),
                     account: this.accountIdToName(t.account_id),
                     amount: t.amount,
-                    date: moment(t.date).format("MMMM DD, YYYY"),
                     note: t.note
                 };
             });
