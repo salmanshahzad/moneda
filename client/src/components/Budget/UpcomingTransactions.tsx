@@ -35,7 +35,6 @@ export default (props: UpcomingTransactionsProps) => (
                     const account = props.detail ? null : props.accountInfo(transaction.account_id);
                     const payTransaction = () => props.onPaidTransaction(transaction.id);
                     const deleteTransaction = () => props.onDeleteTransaction(transaction.id);
-                    console.log(difference);
                     return (
                         <Table.Row error={difference < 0} warning={difference >= 0 && difference <= 3} key={i}>
                             {
