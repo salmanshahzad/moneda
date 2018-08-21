@@ -4,8 +4,8 @@ import axios from "axios";
 import { Grid, Segment, Header, Button } from "semantic-ui-react";
 import UserInformation from "./UserInformation";
 import Account from "./Account";
-import ImportData from "./ImportData";
-import ExportData from "./ExportData";
+import ImportTransactions from "./ImportTransactions";
+import ExportTransactions from "./ExportTransactions";
 import ConfirmButton from "../General/ConfirmButton";
 
 interface SettingsProps {
@@ -86,10 +86,10 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
         });
     };
 
-    onImportData = (data: any[]): Promise<{}> => {
+    onImportTransactions = (transactions: any[]): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/import_data", {data});
+                await axios.post("/api/import_transactions", {transactions});
                 resolve();
                 this.props.onUpdate();
             } catch (e) {
@@ -160,14 +160,14 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={16} computer={16}>
                     <Segment>
-                        <Header>Import Data</Header>
-                        <ImportData onImportData={this.onImportData} />
+                        <Header>Import Transactions</Header>
+                        <ImportTransactions onImportTransactions={this.onImportTransactions} />
                     </Segment>
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={16} computer={16}>
                     <Segment>
-                        <Header>Export Data</Header>
-                        <ExportData user={this.props.user} />
+                        <Header>Export Transactions</Header>
+                        <ExportTransactions user={this.props.user} />
                     </Segment>
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={16} computer={16}>

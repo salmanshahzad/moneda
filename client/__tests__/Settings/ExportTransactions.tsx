@@ -1,11 +1,11 @@
 import React from "react";
 import { mount } from "enzyme";
-import ExportData from "../../src/components/Settings/ExportData";
+import ExportTransactions from "../../src/components/Settings/ExportTransactions";
 import testUser from "../testUser";
 import { Form } from "semantic-ui-react";
 
-describe("ExportData", () => {
-    const wrapper = mount(<ExportData user={testUser} />);
+describe("ExportTransactions", () => {
+    const wrapper = mount(<ExportTransactions user={testUser} />);
 
     it("renders", () => {
         expect(wrapper.find(Form)).toHaveLength(1);

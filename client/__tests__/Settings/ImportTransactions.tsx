@@ -1,10 +1,10 @@
 import React from "react";
 import { mount } from "enzyme";
-import ImportData from "../../src/components/Settings/ImportData";
+import ImportTransactions from "../../src/components/Settings/ImportTransactions";
 import { Input, Message } from "semantic-ui-react";
 
-describe("ImportData", () => {
-    const wrapper = mount(<ImportData onImportData={() => new Promise<{}>((resolve, reject) => {})} />);
+describe("ImportTransactions", () => {
+    const wrapper = mount(<ImportTransactions onImportTransactions={() => new Promise<{}>((resolve, reject) => {})} />);
 
     it("renders", () => {
         expect(wrapper.find(Input)).toHaveLength(1);

@@ -5,16 +5,16 @@ import download from "../../download";
 import { Form, Checkbox, Button } from "semantic-ui-react";
 import moment from "moment";
 
-interface ExportDataProps {
+interface ExportTransactionsProps {
     user: User;
 }
 
-interface ExportDataState {
+interface ExportTransactionsState {
     includeUpcoming: boolean;
 }
 
-export default class ExportData extends React.Component<ExportDataProps, ExportDataState> {
-    state: ExportDataState = {
+export default class ExportTransactions extends React.Component<ExportTransactionsProps, ExportTransactionsState> {
+    state: ExportTransactionsState = {
         includeUpcoming: false
     };
 
