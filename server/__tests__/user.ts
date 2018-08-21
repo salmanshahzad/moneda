@@ -399,3 +399,28 @@ describe("/api/delete_account", () => {
         }).expect(200, done);
     });
 });
+
+describe("/api/import_transactions", () => {
+    let server: request.SuperTest<request.Test>;
+
+    beforeAll(async done => {
+        server = request.agent(app);
+        await server.post("/api/sign_in").send({
+            username: "testuser2",
+            password: "testuser2"
+        });
+        done();
+    });
+
+    it("sends 401 when not signed in", done => {
+        request(app).post("/api/import_transactions").expect(401, done);
+    });
+
+    it("sends 400 with no inputs", done => {
+        server.post("/api/import_transactions").expect(400, "Please send an array of transactions to import.", done);
+    });
+
+    it("sends 200 with valid inputs", done => {
+        server.post("/api/import_transactions").send({transactions: []}).expect(200, done);
+    });
+});

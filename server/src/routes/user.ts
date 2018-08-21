@@ -271,4 +271,52 @@ router.post("/delete_account", checkSignedIn, async (req, res) => {
     res.sendStatus(200);
 });
 
+router.post("/import_transactions", checkSignedIn, async (req, res) => {
+    // validate
+    if (typeof req.body.transactions === "undefined" || !Array.isArray(req.body.transactions)) {
+        return res.status(400).send("Please send an array of transactions to import.");
+    }
+
+    for (let i = 0; i < req.body.transactions.length; i++) {
+        const t = req.body.transactions[i];
+        const type = t.type === "income" ? "income" : "expenses";
+
+        // if account does not exist, create it
+        let account_id: string;
+        const rows = await db(type).select("id").where({user_id: req.session.userId, name: t.account});
+        if (rows.length === 0) {
+            if (type === "income") {
+                account_id = (await db(type).insert({user_id: req.session.userId, name: t.account, colour: "#FF0000"}, "id"))[0];
+            } else {
+                account_id = (await db(type).insert({user_id: req.session.userId, name: t.account, colour: "#FF0000", budget: 0}, "id"))[0];
+            }
+        } else {
+            account_id = rows[0].id;
+        }
+
+        // validate positive amount
+        const amount = parseFloat(t.amount);
+        if (isNaN(amount) || amount <= 0) {
+            continue;
+        }
+
+        // validate date
+        const date = moment(t.date, "MMMM DD, YYYY").valueOf();
+        if (isNaN(date)) {
+            continue;
+        }
+
+        await db("transactions").insert({
+            user_id: req.session.userId,
+            account_id,
+            amount,
+            date,
+            note: t.note || "",
+            upcoming: date > moment().startOf("day").valueOf()
+        });
+    }
+
+    res.sendStatus(200);
+});
+
 export default router;
