@@ -7,6 +7,7 @@ describe("Feature", () => {
     it("renders", () => {
         const wrapper = mount(<Feature image="img" icon="calculator" content="Feature" />);
         expect(wrapper.find(Image).prop("src")).toBe("img");
+        expect(wrapper.find(Image).prop("alt")).toBe("Feature");
         expect(wrapper.find(Icon).prop("name")).toBe("calculator");
         expect(wrapper.find(Header).text()).toBe("Feature");
     });
