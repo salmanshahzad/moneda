@@ -35,7 +35,7 @@ router.get("/user", checkSignedIn, async (req, res) => {
 router.post("/add_transaction", checkSignedIn ,async (req, res) => {
     // validate
     const errors = [];
-    if (typeof req.body.account === "undefined") {
+    if (typeof req.body.account !== "string") {
         errors.push("Please enter an account name.");
     }
 
@@ -43,7 +43,7 @@ router.post("/add_transaction", checkSignedIn ,async (req, res) => {
         errors.push("Please enter a positive amount.");
     }
 
-    if (typeof req.body.type === "undefined" || (req.body.type !== "income" && req.body.type !== "expenses")) {
+    if (typeof req.body.type !== "string" || (req.body.type !== "income" && req.body.type !== "expenses")) {
         errors.push("Please enter income or expenses as the type.");
     }
 
@@ -71,7 +71,7 @@ router.post("/add_transaction", checkSignedIn ,async (req, res) => {
 
 router.post("/delete_transaction", checkSignedIn, async (req, res) => {
     // validate
-    if (typeof req.body.id === "undefined" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
+    if (typeof req.body.id !== "string" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
         return res.status(400).send(["Please enter a valid transaction id."]);
     }
 
@@ -81,7 +81,7 @@ router.post("/delete_transaction", checkSignedIn, async (req, res) => {
 
 router.post("/pay_upcoming_transaction", checkSignedIn, async (req, res) => {
     // validate
-    if (typeof req.body.id === "undefined" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
+    if (typeof req.body.id !== "string" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
         return res.status(400).send(["Please enter a valid transaction id."]);
     }
 
@@ -91,7 +91,7 @@ router.post("/pay_upcoming_transaction", checkSignedIn, async (req, res) => {
 
 router.post("/update_user", checkSignedIn, async (req, res) => {
     // validate
-    if (typeof req.body.username === "undefined" || typeof req.body.password === "undefined" || typeof req.body.confirmPassword === "undefined" || typeof req.body.currentPassword === "undefined") {
+    if (typeof req.body.username !== "string" || typeof req.body.password !== "string" || typeof req.body.confirmPassword !== "string" || typeof req.body.currentPassword !== "string") {
         return res.status(400).send(["Please enter a username, password, confirm password, and current password."]);
     }
 
@@ -152,19 +152,19 @@ router.post("/delete_user", checkSignedIn, async (req, res) => {
 router.post("/update_account", checkSignedIn, async (req, res) => {
     // validate
     const errors = [];
-    if (typeof req.body.type === "undefined" || (req.body.type !== "income" && req.body.type !== "expenses")) {
+    if (typeof req.body.type !== "string" || (req.body.type !== "income" && req.body.type !== "expenses")) {
         errors.push("Please enter income or expenses as the type.");
     }
 
-    if (typeof req.body.id === "undefined" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
+    if (typeof req.body.id !== "string" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
         errors.push("Please enter a valid account id.");
     }
     
-    if (typeof req.body.name === "undefined" || (typeof req.body.name === "string" && req.body.name.length === 0)) {
+    if (typeof req.body.name !== "string" || req.body.name.length === 0) {
         errors.push("Please enter the new account name.");
     }
 
-    if (typeof req.body.colour === "undefined" || (typeof req.body.colour === "string" && req.body.colour.indexOf("#") !== 0)) {
+    if (typeof req.body.colour !== "string" || req.body.colour.indexOf("#") !== 0) {
         errors.push("Please enter the new account colour as a hex string.");
     }
 
@@ -203,15 +203,15 @@ router.post("/update_account", checkSignedIn, async (req, res) => {
 router.post("/add_account", checkSignedIn, async (req, res) => {
     // validate
     const errors = [];
-    if (typeof req.body.type === "undefined" || (req.body.type !== "income" && req.body.type !== "expenses")) {
+    if (typeof req.body.type !== "string" || (req.body.type !== "income" && req.body.type !== "expenses")) {
         errors.push("Please enter income or expenses as the type.");
     }
     
-    if (typeof req.body.name === "undefined" || (typeof req.body.name === "string" && req.body.name.length === 0)) {
+    if (typeof req.body.name !== "string" || req.body.name.length === 0) {
         errors.push("Please enter the new account name.");
     }
 
-    if (typeof req.body.colour === "undefined" || (typeof req.body.colour === "string" && req.body.colour.indexOf("#") !== 0)) {
+    if (typeof req.body.colour !== "string" || req.body.colour.indexOf("#") !== 0) {
         errors.push("Please enter the new account colour as a hex string.");
     }
 
@@ -244,11 +244,11 @@ router.post("/add_account", checkSignedIn, async (req, res) => {
 router.post("/delete_account", checkSignedIn, async (req, res) => {
     // validate
     const errors = [];
-    if (typeof req.body.type === "undefined" || (req.body.type !== "income" && req.body.type !== "expenses")) {
+    if (typeof req.body.type !== "string" || (req.body.type !== "income" && req.body.type !== "expenses")) {
         errors.push("Please enter income or expenses as the type.");
     }
 
-    if (typeof req.body.id === "undefined" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
+    if (typeof req.body.id !== "string" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
         errors.push("Please enter a valid account id.");
     }
 
@@ -273,7 +273,7 @@ router.post("/delete_account", checkSignedIn, async (req, res) => {
 
 router.post("/import_transactions", checkSignedIn, async (req, res) => {
     // validate
-    if (typeof req.body.transactions === "undefined" || !Array.isArray(req.body.transactions)) {
+    if (!Array.isArray(req.body.transactions)) {
         return res.status(400).send("Please send an array of transactions to import.");
     }
 

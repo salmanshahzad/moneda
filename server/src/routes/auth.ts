@@ -48,7 +48,7 @@ const expenses = [
 router.post("/register", async (req, res) => {
     // validate
     const errors = [];
-    if (typeof req.body.username === "undefined" || req.body.username.length < 5) {
+    if (typeof req.body.username !== "string" || req.body.username.length < 5) {
         errors.push("Please enter a username with at least 5 characters.");
     } else {
         const rows = await db("users").select().where({username: req.body.username});
@@ -57,15 +57,16 @@ router.post("/register", async (req, res) => {
         }
     }
 
-    if (typeof req.body.password === "undefined" || req.body.password.length < 8) {
+    if (typeof req.body.password !== "string" || req.body.password.length < 8) {
         errors.push("Please enter a password with at least 8 characters.");
-    } else if (typeof req.body.confirmPassword === "undefined" || req.body.confirmPassword !== req.body.password) {
+    } else if (typeof req.body.confirmPassword !== "string" || req.body.confirmPassword !== req.body.password) {
         errors.push("Passwords do not match.");
     }
 
     if (errors.length > 0) {
         return res.status(400).send(errors);
     }
+
     // hash password and insert
     const hash = await bcrypt.hash(req.body.password, 10);
     const userId = (await db("users").insert({
@@ -80,13 +81,14 @@ router.post("/register", async (req, res) => {
     for (let i = 0; i < expenses.length; i++) {
         await db("expenses").insert(createExpense(userId, expenses[i]));
     }
+
     req.session.userId = userId;
     res.sendStatus(200);
 });
 
 router.post("/sign_in", async (req, res) => {
     // validate
-    if (typeof req.body.username === "undefined" || typeof req.body.password === "undefined") {
+    if (typeof req.body.username !== "string" || typeof req.body.password !== "string") {
         return res.status(400).send(["Incorrect username/password."]);
     }
 
@@ -99,6 +101,7 @@ router.post("/sign_in", async (req, res) => {
     if (!compareSuccess) {
         return res.status(400).send(["Incorrect username/password."]);
     }
+    
     req.session.userId = rows[0].id;
     res.sendStatus(200);
 });
