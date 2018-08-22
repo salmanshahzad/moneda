@@ -13,12 +13,12 @@ interface AddTransactionProps {
 export default (props: AddTransactionProps) => {
     const panes = [
         {
-            menuItem: "Income",
-            render: () => <AddIncomeTransaction incomeNames={props.incomeNames} onAddIncomeTransaction={props.onAddIncomeTransaction} />
-        },
-        {
             menuItem: "Expense",
             render: () => <AddExpenseTransaction expenseNames={props.expenseNames} onAddExpenseTransaction={props.onAddExpenseTransaction} />
+        },
+        {
+            menuItem: "Income",
+            render: () => <AddIncomeTransaction incomeNames={props.incomeNames} onAddIncomeTransaction={props.onAddIncomeTransaction} />
         }
     ];
     return <Tab panes={panes} />;
