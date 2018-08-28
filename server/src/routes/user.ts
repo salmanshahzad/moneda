@@ -1,322 +1,152 @@
-import express from "express";
-import checkSignedIn from "../checkSignedInMiddleware";
-import db from "../../db";
+import { Router } from "express";
 import moment from "moment";
-import bcrypt from "bcrypt";
+import { hash, compare } from "bcrypt";
+import { sign } from "jsonwebtoken";
+import verifyToken from "../verifyToken";
+import db from "../../db";
+import { generateRandomColour, createExpense, expenses } from "../userUtils";
 
-const router = express.Router();
+const router = Router();
 
-router.get("/user", checkSignedIn, async (req, res) => {
+router.get("/user", verifyToken, async (req, res) => {
     const monthStart = moment().startOf("month").valueOf();
     const monthEnd = moment().endOf("month").valueOf();
 
-    const username = (await db("users").select("username").where({id: req.session.userId}))[0].username;
+    const username = (await db("user").select("username").where({ id: req["user"].id }))[0].username;
 
-    const income = await db("income").select().where({user_id: req.session.userId}).orderBy("name");
+    const income = await db("category").select().where({ user_id: req["user"].id, type: "income" }).orderBy("name");
     for (let i = 0; i < income.length; i++) {
-        income[i].income = (await db("transactions").sum("amount").where({user_id: req.session.userId, account_id: income[i].id, upcoming: false}).andWhereBetween("date", [monthStart, monthEnd]))[0].sum || 0;
+        income[i].income = (await db("transaction").sum("amount").where({ user_id: req["user"].id, category_id: income[i].id, upcoming: false }).andWhereBetween("date", [monthStart, monthEnd]))[0].sum || 0;
     }
 
-    const expenses = await db("expenses").select().where({user_id: req.session.userId}).orderBy("name");
+    const expenses = await db("category").select().where({ user_id: req["user"].id, type: "expense" }).orderBy("name");
     for (let i = 0; i < expenses.length; i++) {
-        expenses[i].spent = (await db("transactions").sum("amount").where({user_id: req.session.userId, account_id: expenses[i].id, upcoming: false}).andWhereBetween("date", [monthStart, monthEnd]))[0].sum || 0;
+        expenses[i].spent = (await db("transaction").sum("amount").where({ user_id: req["user"].id, category_id: expenses[i].id, upcoming: false }).andWhereBetween("date", [monthStart, monthEnd]))[0].sum || 0;
     }
 
     const user = {
         username,
         income,
         expenses,
-        transactions: await db("transactions").select().where({user_id: req.session.userId, upcoming: false}).orderBy("date", "desc"),
-        upcomingTransactions: await db("transactions").select().where({user_id: req.session.userId, upcoming: true}).orderBy("date", "asc")
+        transactions: await db("transaction").select().where({ user_id: req["user"].id, upcoming: false }).orderBy("date", "desc"),
+        upcomingTransactions: await db("transaction").select().where({ user_id: req["user"].id, upcoming: true }).orderBy("date", "asc")
     };
-    res.send(user);
+    res.send({ user });
 });
 
-router.post("/add_transaction", checkSignedIn ,async (req, res) => {
-    // validate
+router.post("/user", async (req, res) => {
+    // validate required parameters
     const errors = [];
-    if (typeof req.body.account !== "string") {
-        errors.push("Please enter an account name.");
+    if (typeof req.body.username !== "string" || req.body.username.length < 5) {
+        errors.push("Username must contain at least five characters.");
     }
 
-    if (typeof req.body.amount !== "number" || req.body.amount <= 0) {
-        errors.push("Please enter a positive amount.");
-    }
-
-    if (typeof req.body.type !== "string" || (req.body.type !== "income" && req.body.type !== "expenses")) {
-        errors.push("Please enter income or expenses as the type.");
+    if (typeof req.body.password !== "string" || req.body.password.length < 8) {
+        errors.push("Password must contain at least eight characters.");
+    } else if (typeof req.body.confirmPassword !== "string" || req.body.confirmPassword !== req.body.password) {
+        errors.push("Passwords do not match.");
     }
 
     if (errors.length > 0) {
-        return res.status(400).send(errors);
+        return res.status(400).send({ errors });
     }
 
-    // check that the account exists
-    const rows = await db(req.body.type).select().where({user_id: req.session.userId, name: req.body.account});
-    if (rows.length === 0) {
-        return res.status(400).send(["Account does not exist."]);
+    // ensure username does not already exist    
+    const usernameExists = (await db("user").select().where({ username: req.body.username })).length > 0;
+    if (usernameExists) {
+        return res.status(422).send({ errors: ["A user with that username already exists."] });
     }
 
-    // add the transaction
-    await db("transactions").insert({
-        user_id: req.session.userId,
-        account_id: (await db(req.body.type).select("id").where({user_id: req.session.userId, name: req.body.account}))[0].id,
-        amount: req.body.amount,
-        date: req.body.date || Date.now(),
-        note: req.body.note || "",
-        upcoming: (req.body.date || Date.now()) > Date.now()
+    // hash password and insert
+    const hashedPassword = await hash(req.body.password, 10);
+    const userId = (await db("user").insert({
+        username: req.body.username,
+        password: hashedPassword
+    }, "id"))[0];
+
+    await db("category").insert({
+        user_id: userId,
+        name: "Primary Income",
+        colour: generateRandomColour(),
+        type: "income"
     });
-    res.sendStatus(200);
-});
 
-router.post("/delete_transaction", checkSignedIn, async (req, res) => {
-    // validate
-    if (typeof req.body.id !== "string" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
-        return res.status(400).send(["Please enter a valid transaction id."]);
+    for (let i = 0; i < expenses.length; i++) {
+        await db("category").insert(createExpense(userId, expenses[i]));
     }
 
-    await db("transactions").delete().where({user_id: req.session.userId, id: req.body.id});
-    res.sendStatus(200);
+    // send token
+    const token = await sign({ id: userId, password: hashedPassword }, process.env.SECRET, { expiresIn: "12h" });
+    res.send({ token });
 });
 
-router.post("/pay_upcoming_transaction", checkSignedIn, async (req, res) => {
-    // validate
-    if (typeof req.body.id !== "string" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
-        return res.status(400).send(["Please enter a valid transaction id."]);
-    }
-
-    await db("transactions").update({date: moment().startOf("day").valueOf(), upcoming: false}).where({id: req.body.id});
-    res.sendStatus(200);
-});
-
-router.post("/update_user", checkSignedIn, async (req, res) => {
-    // validate
-    if (typeof req.body.username !== "string" || typeof req.body.password !== "string" || typeof req.body.confirmPassword !== "string" || typeof req.body.currentPassword !== "string") {
-        return res.status(400).send(["Please enter a username, password, confirm password, and current password."]);
-    }
-
-    const currentUsername = (await db("users").select("username").where({id: req.session.userId}))[0].username;
+router.put("/user", verifyToken, async (req, res) => {
+    // validate required parameters
     const errors = [];
-    // if username is not blank or username and not the same as before, check if already exists
-    if (req.body.username !== "" && req.body.username !== currentUsername) {
-        if (req.body.username.length < 5) {
-            errors.push("Please enter a username with at least 5 characters.");
-        } else {
-            const exists = (await db("users").select("username").where({username: req.body.username})).length > 0;
-            if (exists) {
-                errors.push("A user with that username already exits.");
-            }
+    if (typeof req.body.username !== "string" || req.body.username.length < 5) {
+        errors.push("Username must contain at least five characters.");
+    }
+
+    if (typeof req.body.currentPassword !== "string") {
+        errors.push("Current password is required.");
+    }
+
+    // if a new password is given, ensure it has a matching confirmation
+    if (typeof req.body.newPassword === "string") {
+        if (req.body.newPassword.length < 8) {
+            errors.push("New password must contain at least eight characters.");
+        }
+
+        if (typeof req.body.confirmNewPassword !== "string" || req.body.confirmNewPassword !== req.body.newPassword) {
+            errors.push("New passwords do not match.");
         }
     }
 
-    if (req.body.password !== "") {
-        if (req.body.password.length < 8) {
-            errors.push("Please enter a password with at least 8 characters.");
-        } else if (req.body.confirmPassword !== req.body.password) {
-            errors.push("Passwords do not match.");
+    if (errors.length > 0) {
+        return res.status(400).send({ errors });
+    }
+
+    // if the username is not the same, check if it already exists
+    const currentUsername = (await db("user").select("username").where({ id: req["user"].id }))[0].username;
+    if (req.body.username !== currentUsername) {
+        const usernameExists = (await db("user").select("username").where({ username: req.body.username })).length > 0;
+        if (usernameExists) {
+            errors.push("A user with that username already exists.");
         }
     }
 
     // check current password against hash
-    const hash = (await db("users").select("password").where({id: req.session.userId}))[0].password;
-    const match = await bcrypt.compare(req.body.currentPassword, hash);
+    const match = await compare(req.body.currentPassword, req["user"].password);
     if (!match) {
         errors.push("Incorrect password.");
     }
 
     if (errors.length > 0) {
-        return res.status(400).send(errors);
+        return res.status(422).send({ errors });
     }
 
-    if (req.body.username !== "" && req.body.username !== currentUsername) {
-        await db("users").update({username: req.body.username}).where({id: req.session.userId});
-        req.session.username = req.body.username;
+    // if the username is not the same, update it
+    if (req.body.username !== currentUsername) {
+        await db("user").update({ username: req.body.username }).where({ id: req["user"].id });
     }
 
-    if (req.body.password !== "") {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        await db("users").update({password: hashedPassword}).where({id: req.session.userId});
+    // if new password is given, update it
+    let hashedPassword = req["user"].password;
+    if (typeof req.body.newPassword === "string") {
+        hashedPassword = await hash(req.body.newPassword, 10);
+        await db("user").update({ password: hashedPassword }).where({ id: req["user"].id });
     }
-    
-    res.sendStatus(200);
+
+    // send a new token
+    const token = await sign({ id: req["user"].id, password: hashedPassword }, process.env.SECRET, { expiresIn: "12h" });
+    res.send({ token });
 });
 
-router.post("/delete_user", checkSignedIn, async (req, res) => {
-    await db("users").delete().where({id: req.session.userId});
-    await db("income").delete().where({user_id: req.session.userId});
-    await db("expenses").delete().where({user_id: req.session.userId});
-    await db("transactions").delete().where({user_id: req.session.userId});
-    req.session.destroy(() => res.sendStatus(200));
-});
-
-router.post("/update_account", checkSignedIn, async (req, res) => {
-    // validate
-    const errors = [];
-    if (typeof req.body.type !== "string" || (req.body.type !== "income" && req.body.type !== "expenses")) {
-        errors.push("Please enter income or expenses as the type.");
-    }
-
-    if (typeof req.body.id !== "string" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
-        errors.push("Please enter a valid account id.");
-    }
-    
-    if (typeof req.body.name !== "string" || req.body.name.length === 0) {
-        errors.push("Please enter the new account name.");
-    }
-
-    if (typeof req.body.colour !== "string" || req.body.colour.indexOf("#") !== 0) {
-        errors.push("Please enter the new account colour as a hex string.");
-    }
-
-    // budget must be given if type is expenses
-    if (req.body.type === "expenses" && (typeof req.body.budget !== "number" || req.body.budget < 0)) {
-        errors.push("Please enter a non-negative budget.");
-    }
-
-    if (errors.length > 0) {
-        return res.status(400).send(errors);
-    }
-
-    // check that account with id exists
-    const accountExists = (await db(req.body.type).select().where({user_id: req.session.userId, id: req.body.id})).length > 0;
-    if (!accountExists) {
-        errors.push("An account with that id does not exist.");
-    }
-
-    const rows = await db(req.body.type).select("id", "name").where({user_id: req.session.userId, name: req.body.name});
-    if (rows.length > 0 && rows[0].id !== req.body.id && rows[0].name === req.body.name) {
-        errors.push("An account with that name already exists.");
-    }
-
-    if (errors.length > 0) {
-        return res.status(400).send(errors);
-    }
-
-    if (req.body.type === "income") {
-        await db("income").update({name: req.body.name, colour: req.body.colour.toUpperCase()}).where({user_id: req.session.userId, id: req.body.id});
-    } else {
-        await db("expenses").update({name: req.body.name, colour: req.body.colour.toUpperCase(), budget: req.body.budget}).where({user_id: req.session.userId, id: req.body.id});
-    }
-    res.sendStatus(200);
-});
-
-router.post("/add_account", checkSignedIn, async (req, res) => {
-    // validate
-    const errors = [];
-    if (typeof req.body.type !== "string" || (req.body.type !== "income" && req.body.type !== "expenses")) {
-        errors.push("Please enter income or expenses as the type.");
-    }
-    
-    if (typeof req.body.name !== "string" || req.body.name.length === 0) {
-        errors.push("Please enter the new account name.");
-    }
-
-    if (typeof req.body.colour !== "string" || req.body.colour.indexOf("#") !== 0) {
-        errors.push("Please enter the new account colour as a hex string.");
-    }
-
-    // budget must be given if type is expenses
-    if (req.body.type === "expenses" && (typeof req.body.budget !== "number" || req.body.budget < 0)) {
-        errors.push("Please enter a non-negative budget.");
-    }
-
-    if (errors.length > 0) {
-        return res.status(400).send(errors);
-    }
-
-    const rows = await db(req.body.type).select("name").where({user_id: req.session.userId, name: req.body.name});
-    if (rows.length > 0 && rows[0].name === req.body.name) {
-        errors.push("An account with that name already exists.");
-    }
-
-    if (errors.length > 0) {
-        return res.status(400).send(errors);
-    }
-
-    if (req.body.type === "income") {
-        await db("income").insert({user_id: req.session.userId, name: req.body.name, colour: req.body.colour.toUpperCase()});
-    } else {
-        await db("expenses").insert({user_id: req.session.userId, name: req.body.name, colour: req.body.colour.toUpperCase(), budget: req.body.budget});
-    }
-    res.sendStatus(200);
-});
-
-router.post("/delete_account", checkSignedIn, async (req, res) => {
-    // validate
-    const errors = [];
-    if (typeof req.body.type !== "string" || (req.body.type !== "income" && req.body.type !== "expenses")) {
-        errors.push("Please enter income or expenses as the type.");
-    }
-
-    if (typeof req.body.id !== "string" || !/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/.test(req.body.id)) {
-        errors.push("Please enter a valid account id.");
-    }
-
-    if (errors.length > 0) {
-        return res.status(400).send(errors);
-    }
-
-    // check that account with id exists
-    const accountExists = (await db(req.body.type).select().where({user_id: req.session.userId, id: req.body.id})).length > 0;
-    if (!accountExists) {
-        errors.push("An account with that id does not exist.");
-    }
-
-    if (errors.length > 0) {
-        return res.status(400).send(errors);
-    }
-
-    await db(req.body.type).delete().where({user_id: req.session.userId, id: req.body.id});
-    await db("transactions").delete().where({user_id: req.session.userId, account_id: req.body.id});
-    res.sendStatus(200);
-});
-
-router.post("/import_transactions", checkSignedIn, async (req, res) => {
-    // validate
-    if (!Array.isArray(req.body.transactions)) {
-        return res.status(400).send("Please send an array of transactions to import.");
-    }
-
-    for (let i = 0; i < req.body.transactions.length; i++) {
-        const t = req.body.transactions[i];
-        const type = t.type === "income" ? "income" : "expenses";
-
-        // if account does not exist, create it
-        let account_id: string;
-        const rows = await db(type).select("id").where({user_id: req.session.userId, name: t.account});
-        if (rows.length === 0) {
-            if (type === "income") {
-                account_id = (await db(type).insert({user_id: req.session.userId, name: t.account, colour: "#FF0000"}, "id"))[0];
-            } else {
-                account_id = (await db(type).insert({user_id: req.session.userId, name: t.account, colour: "#FF0000", budget: 0}, "id"))[0];
-            }
-        } else {
-            account_id = rows[0].id;
-        }
-
-        // validate positive amount
-        const amount = parseFloat(t.amount);
-        if (isNaN(amount) || amount <= 0) {
-            continue;
-        }
-
-        // validate date
-        const date = moment(t.date, "MMMM DD, YYYY").valueOf();
-        if (isNaN(date)) {
-            continue;
-        }
-
-        await db("transactions").insert({
-            user_id: req.session.userId,
-            account_id,
-            amount,
-            date,
-            note: t.note || "",
-            upcoming: date > moment().startOf("day").valueOf()
-        });
-    }
-
-    res.sendStatus(200);
+router.delete("/user", verifyToken, async (req, res) => {
+    await db("user").delete().where({ id: req["user"].id });
+    await db("category").delete().where({ user_id: req["user"].id });
+    await db("transaction").delete().where({ user_id: req["user"].id });
+    res.sendStatus(204);
 });
 
 export default router;

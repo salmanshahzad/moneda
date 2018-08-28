@@ -1,24 +1,22 @@
 import express from "express";
-import bodyParser from "body-parser";
+import { json, urlencoded } from "body-parser";
 import compression from "compression";
-import dotenv from "dotenv";
-import path from "path";
-import session from "express-session";
-import routes from "./routes/index";
+import { config } from "dotenv";
+import { join } from "path";
+import routes from "./routes";
 
-dotenv.config({path: path.join(__dirname, "..", "..", ".env")});
+config({ path: join(__dirname, "..", "..", ".env") });
 
 const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(json());
+app.use(urlencoded({ extended: true }));
 app.use(compression());
-app.use(session({secret: process.env.SECRET, resave: false, saveUninitialized: false}));
-app.use(process.env.BASE, express.static(path.join(__dirname, "..", "..", "client", "dist")));
+app.use(process.env.BASE, express.static(join(__dirname, "..", "..", "client", "dist")));
 
 app.use("/api", routes);
 
 app.get(process.env.BASE + "*", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "..", "client", "dist", "index.html"));
+    res.sendFile(join(__dirname, "..", "..", "client", "dist", "index.html"));
 });
 
 export default app;
