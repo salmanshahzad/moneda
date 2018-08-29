@@ -1,9 +1,0 @@
-{
-    "compilerOptions": {
-        "allowSyntheticDefaultImports": true, // allows import React from "react" instead of import * as React from "react"
-        "esModuleInterop": true,
-        "jsx": "react",
-        "moduleResolution": "node", // needed for axios
-        "target": "es6" // ReactDOM.render does not work without this
-    }
-}
