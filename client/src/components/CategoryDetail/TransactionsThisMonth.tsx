@@ -12,15 +12,17 @@ interface TransactionsThisMonthProps {
 
 export default (props: TransactionsThisMonthProps) => {
     const getTransactionsThisMonth = (): Transaction[] => {
-        // since props.transactions are in descending order, find the first index where the transaction happened last month and slice the array
+        // since props.transactions are in descending order, find the last index where the transaction happened this month and slice the array
         const startOfMonth = moment().startOf("month").valueOf();
-        let index = 0;
+        let index = -1;
         for (let i = 0; i < props.transactions.length; i++) {
-            if (props.transactions[i].date < startOfMonth) {
+            if (props.transactions[i].date >= startOfMonth) {
                 index = i;
+            } else {
+                break;
             }
         }
-        return props.transactions.slice(0, index);
+        return props.transactions.slice(0, index + 1);
     };
 
     const getTransactionsToShow = (): Transaction[] => {
