@@ -1,19 +1,19 @@
 import React from "react";
 import testUser from "../testUser";
 import { mount } from "enzyme";
-import AccountDetail from "../../src/components/Budget/AccountDetail";
+import CategoryDetail from "../../src/components/Budget/CategoryDetail";
 import { Header } from "semantic-ui-react";
 import { Line } from "react-chartjs-2";
 import TransactionsThisMonth from "../../src/components/Budget/TransactionsThisMonth";
 import ProgressBar from "../../src/components/Budget/ProgressBar";
 
-describe("AccountDetail", () => {
-    const account = {
-        account: testUser.income[0],
+describe("CategoryDetail", () => {
+    const category = {
+        category: testUser.income[0],
         transactions: [],
         upcomingTransactions: []
     };
-    const wrapper = mount(<AccountDetail account={account} onUpdate={jest.fn()}  />);
+    const wrapper = mount(<CategoryDetail categoryDetail={category} onUpdate={jest.fn()}  />);
 
     it("renders", () => {
         expect(wrapper.find(Header).at(0).text()).toBe("Test Income 1");
@@ -21,8 +21,8 @@ describe("AccountDetail", () => {
         expect(wrapper.find(ProgressBar)).toHaveLength(0);
         expect(wrapper.find(Line)).toHaveLength(1);
         expect(wrapper.find(TransactionsThisMonth)).toHaveLength(1);
-        wrapper.setProps({account: {
-            account: testUser.expenses[0],
+        wrapper.setProps({categoryDetail: {
+            category: testUser.expenses[0],
             transactions: [],
             upcomingTransactions: []
         }});
