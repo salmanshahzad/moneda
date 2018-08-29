@@ -1,10 +1,10 @@
 import React from "react";
-import { Income, Expense, Transaction } from "../../../../user";
+import { Category, Expense, Transaction } from "../../user";
 import moment from "moment";
 import { Line } from "react-chartjs-2";
 
 interface TransactionHistoryChartProps {
-    account: Income | Expense;
+    category: Category;
     transactions: Transaction[];
     monthsToShow: number;
 }
@@ -43,8 +43,8 @@ export default (props: TransactionHistoryChartProps) => {
             datasets: [
                 {
                     label: "Spent",
-                    backgroundColor: props.account.colour,
-                    borderColor: props.account.colour,
+                    backgroundColor: props.category.colour,
+                    borderColor: props.category.colour,
                     fill: true,
                     data: getAmountsPerMonth()
                 }
@@ -52,9 +52,8 @@ export default (props: TransactionHistoryChartProps) => {
         };
         
         // if the account is an expense, add a straight line representing the budget
-        const isExpense = Object.keys(props.account).indexOf("budget") > -1;
-        if (isExpense) {
-            const expense = props.account as Expense;
+        if (props.category.type === "expense") {
+            const expense = props.category as Expense;
             data.datasets.push({
                 label: "Budget",
                 backgroundColor: "#FF0000",
