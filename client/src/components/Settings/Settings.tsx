@@ -1,9 +1,10 @@
 import React from "react";
-import { User } from "../../../../user";
+import { User, Expense } from "../../user";
 import axios from "axios";
+import getAxiosHeaderConfig from "../../axiosHeaderConfig";
 import { Grid, Segment, Header, Button } from "semantic-ui-react";
 import UserInformation from "./UserInformation";
-import Account from "./Account";
+import Category from "./Category";
 import ImportTransactions from "./ImportTransactions";
 import ExportTransactions from "./ExportTransactions";
 import ConfirmButton from "../General/ConfirmButton";
@@ -24,38 +25,40 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
         addExpense: false
     };
 
-    onUpdateUserInformation = (username: string, password: string, confirmPassword: string, currentPassword: string): Promise<{}> => {
+    onUpdateUserInformation = (username: string, newPassword: string, confirmNewPassword: string, currentPassword: string): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/update_user", {username, password, confirmPassword, currentPassword});
+                const response = await axios.put("/api/user", {username, newPassword, confirmNewPassword, currentPassword}, getAxiosHeaderConfig());
+                const token = response.data.token;
+                localStorage.setItem("token", token);
                 resolve();
                 this.props.onUpdate();
             } catch (e) {
-                reject(e.response.data);
+                reject(e.response.data.errors);
             }
         });
     };
 
-    onUpdateAccount = (type: "income" | "expenses", id: string, name: string, colour: string, budget?: number): Promise<{}> => {
+    onUpdateCategory = (id: string, name: string, type: string, colour: string, budget?: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/update_account", {type, id, name, colour, budget});
+                await axios.put(`/api/user/category/${id}`, {name, type, colour, budget}, getAxiosHeaderConfig());
                 resolve();
                 this.props.onUpdate();
             } catch (e) {
-                reject(e.response.data);
+                reject(e.response.data.errors);
             }
         });
     };
 
-    onDeleteAccount = (type: "income" | "expenses", id: string): Promise<{}> => {
+    onDeleteCategory = (id: string): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/delete_account", {type, id});
+                await axios.delete(`/api/user/category/${id}`, getAxiosHeaderConfig());
                 resolve();
                 this.props.onUpdate();
             } catch (e) {
-                reject(e.response.data);
+                reject(e.response.data.errors);
             }
         });
     };
@@ -68,20 +71,20 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
         this.setState({addExpense: true});
     };
 
-    // has the same parameters as onUpdateAccount because this function is passed to the Account component as the prop onUpdateAccount for adding a new account
-    onAddAccount = (type: "income" | "expenses", id: string, name: string, colour: string, budget?: number): Promise<{}> => {
+    // has the same parameters as onUpdateCategory because this function is passed to the Category component as the prop onUpdateCategory for adding a new category
+    onAddCategory = (id: string, name: string, type: string, colour: string, budget?: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/add_account", {type, name, colour, budget});
+                await axios.post("/api/user/category", {name, type, colour, budget}, getAxiosHeaderConfig());
                 resolve();
                 if (type === "income") {
                     this.setState({addIncome: false});
-                } else if (type === "expenses") {
+                } else if (type === "expense") {
                     this.setState({addExpense: false});
                 }
                 this.props.onUpdate();
             } catch (e) {
-                reject(e.response.data);
+                reject(e.response.data.errors);
             }
         });
     };
@@ -89,17 +92,17 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
     onImportTransactions = (transactions: any[]): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/import_transactions", {transactions});
+                await axios.post("/api/user/transaction/import", {transactions}, getAxiosHeaderConfig());
                 resolve();
                 this.props.onUpdate();
             } catch (e) {
-                reject(e.response.data);
+                reject(e.response.data.errors);
             }
         });
     };
 
     onDeleteUser = async () => {
-        await axios.post("/api/delete_user");
+        await axios.delete("/api/user", getAxiosHeaderConfig());
         this.props.onUpdate();
     };
 
@@ -120,19 +123,20 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
                         <Header>Income Accounts</Header>
                         {
                             this.props.user.income.map(income => (
-                                <Account type="income" account={income} onUpdateAccount={this.onUpdateAccount} onDeleteAccount={this.onDeleteAccount} key={income.name} />
+                                <Category category={income} onUpdateCategory={this.onUpdateCategory} onDeleteCategory={this.onDeleteCategory} key={income.name} />
                             ))
                         }
                         {
                             !this.state.addIncome && <div style={{paddingTop: "2rem"}}><Button positive icon="plus" onClick={this.showAddIncome} /></div>
                         }
                         {
-                            this.state.addIncome && <Account type="income" account={{
+                            this.state.addIncome && <Category category={{
                                 id: "",
+                                user_id: "",
                                 name: "",
                                 colour: "#FF0000",
-                                income: 0
-                            }} onUpdateAccount={this.onAddAccount} onDeleteAccount={null} editing />
+                                type: "income"
+                            }} onUpdateCategory={this.onAddCategory} onDeleteCategory={null} editing />
                         }
                     </Segment>
                 </Grid.Column>
@@ -141,20 +145,21 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
                         <Header>Expense Accounts</Header>
                         {
                             this.props.user.expenses.map(expense => (
-                                <Account type="expenses" account={expense} onUpdateAccount={this.onUpdateAccount} onDeleteAccount={this.onDeleteAccount} key={expense.name} />
+                                <Category category={expense} onUpdateCategory={this.onUpdateCategory} onDeleteCategory={this.onDeleteCategory} key={expense.name} />
                             ))
                         }
                         {
                             !this.state.addExpense && <div style={{paddingTop: "2rem"}}><Button positive icon="plus" onClick={this.showAddExpense} /></div>
                         }
                         {
-                            this.state.addExpense && <Account type="expenses" account={{
+                            this.state.addExpense && <Category category={{
                                 id: "",
+                                user_id: "",
                                 name: "",
                                 colour: "#FF0000",
-                                spent: 0,
+                                type: "expense",
                                 budget: 0
-                            }} onUpdateAccount={this.onAddAccount} onDeleteAccount={null} editing />
+                            } as Expense} onUpdateCategory={this.onAddCategory} onDeleteCategory={null} editing />
                         }
                     </Segment>
                 </Grid.Column>
