@@ -1,5 +1,5 @@
 import React from "react";
-import { Expense } from "../../../../user";
+import { Expense } from "../../user";
 import { Pie } from "react-chartjs-2";
 
 interface ExpenseChartProps {
