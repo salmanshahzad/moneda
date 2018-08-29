@@ -23,6 +23,6 @@ describe("RecentTransactions", () => {
     });
 
     it("shows transactions in order", () => {
-        expect(wrapper.find(Table.Row).at(1).find(Table.Cell).at(0).text()).toBe("test1");
+        expect(wrapper.find(Table.Row).at(1).find(Table.Cell).at(0).text()).toBe("test3");
     });
 });

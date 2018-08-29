@@ -35,12 +35,12 @@ const user: User = {
     ],
     transactions: [
         {
-            id: "1",
+            id: "3",
             user_id: "s",
-            category_id: "1",
-            amount: 1,
-            note: "Test 1",
-            date: moment().startOf("month").subtract(1, "months").valueOf(),
+            category_id: "3",
+            amount: 3,
+            note: "Test 3",
+            date: moment().startOf("day").valueOf(),
             upcoming: false
         },
         {
@@ -53,12 +53,12 @@ const user: User = {
             upcoming: false
         },
         {
-            id: "3",
+            id: "1",
             user_id: "s",
-            category_id: "3",
-            amount: 3,
-            note: "Test 3",
-            date: moment().startOf("day").valueOf(),
+            category_id: "1",
+            amount: 1,
+            note: "Test 1",
+            date: moment().startOf("month").subtract(1, "months").valueOf(),
             upcoming: false
         }
     ],

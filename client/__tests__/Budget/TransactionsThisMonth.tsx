@@ -16,6 +16,7 @@ describe("TransactionsThisMonth", () => {
     });
 
     it("shows transactions in order", () => {
-        expect(wrapper.find(Table.Row).at(1).find(Table.Cell).at(1).text()).toBe("$2.00");
+        expect(wrapper.find(Table.Row).at(1).find(Table.Cell).at(1).text()).toBe("$3.00");
+        expect(wrapper.find(Table.Row).at(2).find(Table.Cell).at(1).text()).toBe("$2.00");
     });
 });
