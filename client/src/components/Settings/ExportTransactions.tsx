@@ -1,5 +1,5 @@
 import React from "react";
-import { User } from "../../../../user";
+import { User } from "../../user";
 import Papa from "papaparse";
 import download from "../../download";
 import { Form, Checkbox, Button } from "semantic-ui-react";
@@ -49,7 +49,7 @@ export default class ExportTransactions extends React.Component<ExportTransactio
         
         // format transaction information
         const t = transactions.map(t => {
-            const info = this.accountInfo(t.account_id);
+            const info = this.accountInfo(t.category_id);
             return {
                 date: moment(t.date).format("MMMM DD, YYYY"),
                 account: info.name,
