@@ -1,6 +1,6 @@
 import React from "react";
 import { mount } from "enzyme";
-import TransactionHistoryChart from "../../src/components/Budget/TransactionHistoryChart";
+import TransactionHistoryChart from "../../src/components/CategoryDetail/TransactionHistoryChart";
 import testUser from "../testUser";
 import { Line } from "react-chartjs-2";
 

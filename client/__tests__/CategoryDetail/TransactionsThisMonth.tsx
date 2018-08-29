@@ -1,6 +1,6 @@
 import React from "react";
 import { mount } from "enzyme";
-import TransactionsThisMonth from "../../src/components/Budget/TransactionsThisMonth";
+import TransactionsThisMonth from "../../src/components/CategoryDetail/TransactionsThisMonth";
 import testUser from "../testUser";
 import { Table } from "semantic-ui-react";
 

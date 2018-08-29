@@ -3,10 +3,10 @@ import { Category, Income, Expense, Transaction } from "../../user";
 import axios from "axios";
 import getAxiosHeaderConfig from "../../axiosHeaderConfig";
 import { Grid, Header, Segment } from "semantic-ui-react";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "../Budget/ProgressBar";
 import TransactionHistoryChart from "./TransactionHistoryChart";
 import TransactionsThisMonth from "./TransactionsThisMonth";
-import UpcomingTransactions from "./UpcomingTransactions";
+import UpcomingTransactions from "../Budget/UpcomingTransactions";
 
 interface CategoryDetail {
     category: Category;

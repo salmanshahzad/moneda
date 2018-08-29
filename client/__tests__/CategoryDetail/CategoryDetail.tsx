@@ -1,10 +1,10 @@
 import React from "react";
 import testUser from "../testUser";
 import { mount } from "enzyme";
-import CategoryDetail from "../../src/components/Budget/CategoryDetail";
+import CategoryDetail from "../../src/components/CategoryDetail/CategoryDetail";
 import { Header } from "semantic-ui-react";
 import { Line } from "react-chartjs-2";
-import TransactionsThisMonth from "../../src/components/Budget/TransactionsThisMonth";
+import TransactionsThisMonth from "../../src/components/CategoryDetail/TransactionsThisMonth";
 import ProgressBar from "../../src/components/Budget/ProgressBar";
 
 describe("CategoryDetail", () => {

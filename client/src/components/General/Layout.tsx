@@ -8,7 +8,7 @@ import NavBar from "./NavBar";
 import Dashboard from "../Dashboard/Dashboard";
 import Budget from "../Budget/Budget";
 import Transactions from "../Transactions/Transactions";
-import CategoryDetail from "../Budget/CategoryDetail";
+import CategoryDetail from "../CategoryDetail/CategoryDetail";
 import Settings from "../Settings/Settings";
 
 interface LayoutState {
