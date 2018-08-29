@@ -1,5 +1,5 @@
 import React from "react";
-import { Transaction } from "../../../../user";
+import { Transaction } from "../../user";
 import { Table } from "semantic-ui-react";
 import moment from "moment";
 import ConfirmButton from "../General/ConfirmButton";
@@ -40,19 +40,16 @@ export default (props: TransactionsThisMonthProps) => {
             </Table.Header>
             <Table.Body>
                 {
-                    getTransactionsToShow().map((transaction, i) => {
-                        const deleteFunction = () => props.onDeleteTransaction(transaction.id);
-                        return (
-                            <Table.Row key={i}>
-                                <Table.Cell collapsing>{moment(transaction.date).format("MMMM D")}</Table.Cell>
-                                <Table.Cell collapsing>${transaction.amount.toFixed(2)}</Table.Cell>
-                                <Table.Cell>{transaction.note}</Table.Cell>
-                                <Table.Cell collapsing>
-                                    <ConfirmButton negative icon="delete" header="Delete Transaction" content="Are you sure you want to delete this transaction?" confirm="Delete" onConfirm={deleteFunction} />
-                                </Table.Cell>
-                            </Table.Row>
-                        );
-                    })
+                    getTransactionsToShow().map((transaction, i) => (
+                        <Table.Row key={i}>
+                            <Table.Cell collapsing>{moment(transaction.date).format("MMMM D")}</Table.Cell>
+                            <Table.Cell collapsing>${transaction.amount.toFixed(2)}</Table.Cell>
+                            <Table.Cell>{transaction.note}</Table.Cell>
+                            <Table.Cell collapsing>
+                                <ConfirmButton negative icon="delete" header="Delete Transaction" content="Are you sure you want to delete this transaction? This action cannot be reversed." confirm="Delete" onConfirm={() => props.onDeleteTransaction(transaction.id)} />
+                            </Table.Cell>
+                        </Table.Row>
+                    ))
                 }
             </Table.Body>
         </Table>
