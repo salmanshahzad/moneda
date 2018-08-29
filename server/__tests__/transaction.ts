@@ -118,6 +118,57 @@ describe("POST /api/user/transaction", () => {
     });
 });
 
+describe("POST /api/user/transaction/import", () => {
+    it("sends 401 if the token is not given", done => {
+        request(app).post("/api/user/transaction/import").expect(401, {
+            errors: ["No authorization token."]
+        }, done);
+    });
+
+    it("sends 401 if the token is invalid", done => {
+        request(app).post("/api/user/transaction/import").set("Authorization", "Bearer x").expect(401, {
+            errors: ["Invalid token."]
+        }, done);
+    });
+
+    it("sends 400 if the required parameters are not given", done => {
+        request(app).post("/api/user/transaction/import").set("Authorization", `Bearer ${token}`).expect(400, {
+            errors: [
+                "Transactions array is required."
+            ]
+        }, done);
+    });
+
+    it("sends 200 and the transactions array if the parameters are valid", done => {
+        request(app).post("/api/user/transaction/import").set("Authorization", `Bearer ${token}`).send({
+            transactions: [
+                {
+                    category: "A",
+                    amount: 1,
+                    date: "January 1, 2018"
+                },
+                {
+                    category: "B",
+                    amount: 0,
+                    date: "January 1, 2018"
+                },
+                {
+                    category: "C",
+                    amount: 2,
+                    date: "January 1, 2018"
+                }
+            ]
+        }).expect(200).end((err, res) => {
+            expect(res.body).toHaveProperty("transactions");
+            expect(res.body.transactions).toBeInstanceOf(Array);
+            expect(res.body.transactions).toHaveLength(2);
+            expect(res.body.transactions[0]).toHaveProperty("amount");
+            expect(res.body.transactions[0].amount).toBe(1);
+            done();
+        });
+    });
+});
+
 describe("PUT /api/user/transaction/:id", () => {
     it("sends 401 if the token is not given", done => {
         request(app).put("/api/user/transaction/x").expect(401, {

@@ -54,6 +54,56 @@ router.post("/transaction", verifyToken, async (req, res) => {
     res.send({ transaction });
 });
 
+router.post("/transaction/import", verifyToken, async (req, res) => {
+    // validate required parameters
+    if (!Array.isArray(req.body.transactions)) {
+        return res.status(400).send({ errors: ["Transactions array is required."] });
+    }
+
+    const transactions = [];
+
+    for (let i = 0; i < req.body.transactions.length; i++) {
+        const t = req.body.transactions[i];
+
+        // validate positive amount
+        const amount = parseFloat(t.amount);
+        if (isNaN(amount) || amount <= 0) {
+            continue;
+        }
+
+        // validate date
+        const date = moment(t.date, "MMMM DD, YYYY").valueOf();
+        if (isNaN(date)) {
+            continue;
+        }
+
+        // if category does not exist, create it
+        let category_id: string;
+        const rows = await db("category").select("id").where({ user_id: req["user"].id, name: t.category });
+        if (rows.length === 0) {
+            if (t.type === "income") {
+                category_id = (await db("category").insert({ user_id: req["user"].id, name: t.category, colour: "#FF0000", type: "income" }, "id"))[0];
+            } else {
+                category_id = (await db("category").insert({ user_id: req["user"].id, name: t.category, colour: "#FF0000", type: "expense", budget: 0 }, "id"))[0];
+            }
+        } else {
+            category_id = rows[0].id;
+        }
+
+        const transaction = (await db("transaction").insert({
+            user_id: req["user"].id,
+            category_id,
+            amount,
+            date,
+            note: t.note || "",
+            upcoming: date > moment().startOf("day").valueOf()
+        }, ["id", "user_id", "category_id", "amount", "date", "note", "upcoming"]))[0];
+        transactions.push(transaction);
+    }
+
+    res.send({ transactions });
+});
+
 // currently only used for paying upcoming transactions
 router.put("/transaction/:id", verifyToken, async (req, res) => {
     // check valid uuid
