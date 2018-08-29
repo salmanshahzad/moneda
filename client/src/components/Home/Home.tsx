@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import auth from "../../auth";
 import { Redirect } from "react-router-dom";
 import { Parallax } from "react-parallax";
 import backgroundImage from "../../assets/home/bg_cropped_compressed.jpg";
@@ -54,12 +53,12 @@ export default class Home extends React.Component<{}, HomeState> {
     onRegister = (username: string, password: string, confirmPassword: string) => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/register", {username, password, confirmPassword});
-                await auth.signIn(username, password);
+                const response = await axios.post("/api/user", {username, password, confirmPassword});
+                localStorage.setItem("token", response.data.token);
                 resolve();
                 this.setState({signedIn: true});
             } catch (e) {
-                reject(e.response.data);
+                reject(e.response.data.errors);
             }
         });
     };
@@ -67,12 +66,12 @@ export default class Home extends React.Component<{}, HomeState> {
     onSignIn = (username: string, password: string) => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/sign_in", {username, password});
-                await auth.signIn(username, password);
+                const response = await axios.post("/api/session", {username, password});
+                localStorage.setItem("token", response.data.token);
                 resolve();
                 this.setState({signedIn: true});
             } catch (e) {
-                reject(e.response.data);
+                reject(e.response.data.errors);
             }
         });
     };
