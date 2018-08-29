@@ -1,6 +1,7 @@
 import React from "react";
-import { User } from "../../../../user";
+import { User } from "../../user";
 import axios from "axios";
+import getAxiosHeaderConfig from "../../axiosHeaderConfig";
 import { Redirect, Route } from "react-router-dom";
 import { Sidebar } from "semantic-ui-react";
 import NavBar from "./NavBar";
@@ -37,8 +38,8 @@ export default class Layout extends React.Component<{}, LayoutState> {
 
     updateUser = async () => {
         try {
-            const response = await axios.get("/api/user");
-            this.setState({auth: "yes", user: response.data});
+            const response = await axios.get("/api/user", getAxiosHeaderConfig());
+            this.setState({auth: "yes", user: response.data.user});
         } catch {
             this.setState({auth: "no"});
         }

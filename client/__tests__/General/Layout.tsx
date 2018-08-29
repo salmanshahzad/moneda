@@ -2,17 +2,19 @@ import React from "react";
 import { mount } from "enzyme";
 import routerContext from "../routerContext";
 import Layout from "../../src/components/General/Layout";
+import { Redirect } from "react-router-dom";
 
 describe("Layout", () => {
     const wrapper = mount(<Layout />, routerContext);
 
     it("renders", () => {
-        expect(wrapper.find("br")).toHaveLength(1);
+        // since auth state becomes "no" after mounting, Redirect is rendered
+        expect(wrapper.find(Redirect)).toHaveLength(1);
     });
 
     it("has the correct initial state", () => {
         expect(wrapper.state("sidebarOpen")).toBe(false);
-        // auth should be loading at start but becomes no since componentDidMount calls the server
+        // auth should be "loading" at start but becomes "no" since componentDidMount calls the server
         // expect(wrapper.state("auth")).toBe("loading");
         expect(wrapper.state("user")).toBe(null);
     });
