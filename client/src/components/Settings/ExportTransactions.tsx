@@ -22,23 +22,6 @@ export default class ExportTransactions extends React.Component<ExportTransactio
         this.setState({includeUpcoming: !this.state.includeUpcoming});
     };
 
-    accountInfo = (id: string): {type: string, name: string} => {
-        const income = this.props.user.income.filter(income => income.id === id);
-        if (income.length > 0) {
-            return {
-                type: "income",
-                name: income[0].name
-            };
-        }
-        const expenses = this.props.user.expenses.filter(expense => expense.id === id);
-        if (expenses.length > 0) {
-            return {
-                type: "expense",
-                name: expenses[0].name
-            };
-        }
-    };
-
     export = () => {
         // transactions will be in reverse chronological order
         let transactions = this.props.user.transactions;
@@ -49,10 +32,10 @@ export default class ExportTransactions extends React.Component<ExportTransactio
         
         // format transaction information
         const t = transactions.map(t => {
-            const info = this.accountInfo(t.category_id);
+            const info = this.props.user.categoryInfo(t.category_id);
             return {
                 date: moment(t.date).format("MMMM DD, YYYY"),
-                account: info.name,
+                category: info.name,
                 amount: t.amount,
                 note: t.note,
                 type: info.type
