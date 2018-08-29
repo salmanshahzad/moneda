@@ -1,4 +1,4 @@
-import { User } from "../../user";
+import { User } from "../src/user";
 import moment from "moment";
 
 const user: User = {
@@ -6,23 +6,29 @@ const user: User = {
     income: [
         {
             id: "1",
+            user_id: "s",
             name: "Test Income 1",
             colour: "#FF0000",
+            type: "income",
             income: 0
         }
     ],
     expenses: [
         {
             id: "2",
+            user_id: "s",
             name: "Test Expense 1",
             colour: "#FF0000",
+            type: "expense",
             spent: 0,
             budget: 0
         },
         {
             id: "3",
+            user_id: "s",
             name: "Test Expense 2",
             colour: "#FF0000",
+            type: "expense",
             spent: 0,
             budget: 0
         }
@@ -30,33 +36,41 @@ const user: User = {
     transactions: [
         {
             id: "1",
-            account_id: "1",
+            user_id: "s",
+            category_id: "1",
             amount: 1,
             note: "Test 1",
-            date: moment().startOf("month").subtract(1, "months").valueOf()
+            date: moment().startOf("month").subtract(1, "months").valueOf(),
+            upcoming: false
         },
         {
             id: "2",
-            account_id: "2",
+            user_id: "s",
+            category_id: "2",
             amount: 2,
             note: "Test 2",
-            date: moment().startOf("month").valueOf()
+            date: moment().startOf("month").valueOf(),
+            upcoming: false
         },
         {
             id: "3",
-            account_id: "3",
+            user_id: "s",
+            category_id: "3",
             amount: 3,
             note: "Test 3",
-            date: moment().startOf("day").valueOf()
+            date: moment().startOf("day").valueOf(),
+            upcoming: false
         }
     ],
     upcomingTransactions: [
         {
             id: "4",
-            account_id: "2",
+            user_id: "s",
+            category_id: "2",
             amount: 4,
             note: "Test 4",
-            date: moment().startOf("day").add(1, "day").valueOf()
+            date: moment().startOf("day").add(1, "day").valueOf(),
+            upcoming: true
         }
     ]
 };
