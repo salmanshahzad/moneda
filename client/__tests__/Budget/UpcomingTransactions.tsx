@@ -6,14 +6,14 @@ import testUser from "../testUser";
 import { Table, Button } from "semantic-ui-react";
 
 describe("UpcomingTransactions", () => {
-    const accountInfo = (id: string): {type: string, name: string} => {
+    const categoryInfo = (id: string): {type: string, name: string} => {
         return {
             type: "expense",
             name: `test${id}`
         };
     };
     const emptyFunction = jest.fn();
-    const wrapper = mount(<UpcomingTransactions transactions={testUser.upcomingTransactions} accountInfo={accountInfo} onPaidTransaction={emptyFunction} onDeleteTransaction={emptyFunction} detail={true} />, routerContext);
+    const wrapper = mount(<UpcomingTransactions transactions={testUser.upcomingTransactions} categoryInfo={categoryInfo} onPayTransaction={emptyFunction} onDeleteTransaction={emptyFunction} detail={true} />, routerContext);
 
     it("renders", () => {
         expect(wrapper.find(Table)).toHaveLength(1);
@@ -29,8 +29,8 @@ describe("UpcomingTransactions", () => {
         expect(wrapper.find(Table.Row).at(1).find(Table.Cell).at(2).text()).toBe("$4.00");
     });
 
-    it("calls props.onPaidTransaction when the Paid button is clicked", () => {
+    it("calls props.onPayTransaction when the Paid button is clicked", () => {
         wrapper.find(Button).at(0).simulate("click");
-        expect(wrapper.prop("onPaidTransaction")).toBeCalledWith("4");
+        expect(wrapper.prop("onPayTransaction")).toBeCalledWith("4");
     });
 });
