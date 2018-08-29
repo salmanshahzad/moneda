@@ -1,7 +1,7 @@
 import React from "react";
 import { Category, Income, Expense } from "../../user";
 import { Link } from "react-router-dom";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "../General/ProgressBar";
 
 interface CategoryItemProps {
     category: Category;

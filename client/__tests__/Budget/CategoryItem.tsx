@@ -4,7 +4,7 @@ import CategoryItem from "../../src/components/Budget/CategoryItem";
 import testUser from "../testUser";
 import routerContext from "../routerContext";
 import { Link } from "react-router-dom";
-import ProgressBar from "../../src/components/Budget/ProgressBar";
+import ProgressBar from "../../src/components/General/ProgressBar";
 
 describe("CategoryItem", () => {
     const wrapper = mount(<CategoryItem category={testUser.income[0]} />, routerContext);

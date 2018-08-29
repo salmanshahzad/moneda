@@ -1,6 +1,6 @@
 import React from "react";
 import { mount } from "enzyme";
-import ProgressBar from "../../src/components/Budget/ProgressBar";
+import ProgressBar from "../../src/components/General/ProgressBar";
 import { Progress } from "semantic-ui-react";
 
 describe("ProgressBar", () => {

@@ -5,7 +5,7 @@ import CategoryDetail from "../../src/components/CategoryDetail/CategoryDetail";
 import { Header } from "semantic-ui-react";
 import { Line } from "react-chartjs-2";
 import TransactionsThisMonth from "../../src/components/CategoryDetail/TransactionsThisMonth";
-import ProgressBar from "../../src/components/Budget/ProgressBar";
+import ProgressBar from "../../src/components/General/ProgressBar";
 
 describe("CategoryDetail", () => {
     const category = {
