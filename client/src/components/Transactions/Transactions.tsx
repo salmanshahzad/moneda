@@ -12,17 +12,6 @@ interface TransactionsProps {
 }
 
 export default (props: TransactionsProps) => {
-    const categoryIdToName = (id: string): string => {
-        const income = props.user.income.filter(income => income.id === id);
-        if (income.length > 0) {
-            return income[0].name;
-        }
-        const expenses = props.user.expenses.filter(expense => expense.id === id);
-        if (expenses.length > 0) {
-            return expenses[0].name;
-        }
-    };
-
     const deleteTransaction = async (id: string) => {
         await axios.delete(`/api/user/transaction/${id}`, getAxiosHeaderConfig());
         props.onUpdate();
@@ -49,7 +38,7 @@ export default (props: TransactionsProps) => {
                             props.user.transactions.map(t => (
                                 <Table.Row key={t.id}>
                                     <Table.Cell>{moment(t.date).format("MMMM DD, YYYY")}</Table.Cell>
-                                    <Table.Cell>{categoryIdToName(t.category_id)}</Table.Cell>
+                                    <Table.Cell>{props.user.categoryInfo(t.category_id).name}</Table.Cell>
                                     <Table.Cell>${t.amount.toFixed(2)}</Table.Cell>
                                     <Table.Cell>{t.note}</Table.Cell>
                                     <Table.Cell>

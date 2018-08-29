@@ -72,7 +72,23 @@ const user: User = {
             date: moment().startOf("day").add(1, "day").valueOf(),
             upcoming: true
         }
-    ]
+    ],
+    categoryInfo: (id: string) => {
+        const income = user.income.filter(income => income.id === id);
+        if (income.length > 0) {
+            return {
+                type: "income",
+                name: income[0].name
+            };
+        }
+        const expenses = user.expenses.filter(expense => expense.id === id);
+        if (expenses.length > 0) {
+            return {
+                type: "expense",
+                name: expenses[0].name
+            };
+        }
+    }
 };
 
 export default user;

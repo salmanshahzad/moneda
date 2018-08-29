@@ -26,23 +26,6 @@ export default (props: DashboardProps) => {
         });
     };
 
-    const categoryInfo = (id: string): {type: string, name: string} => {
-        const income = props.user.income.filter(income => income.id === id);
-        if (income.length > 0) {
-            return {
-                type: "income",
-                name: income[0].name
-            };
-        }
-        const expenses = props.user.expenses.filter(expense => expense.id === id);
-        if (expenses.length > 0) {
-            return {
-                type: "expense",
-                name: expenses[0].name
-            };
-        }
-    };
-
     const onPayTransaction = async (id: string) => {
         await axios.put(`/api/user/transaction/${id}`, null, getAxiosHeaderConfig());
         props.onUpdate();
@@ -83,13 +66,13 @@ export default (props: DashboardProps) => {
             <Grid.Column mobile={16} tablet={8} computer={8}>
                 <Segment>
                     <Header>Recent Transactions</Header>
-                    <RecentTransactions transactions={props.user.transactions} categoryInfo={categoryInfo} show={5} />
+                    <RecentTransactions transactions={props.user.transactions} categoryInfo={props.user.categoryInfo} show={5} />
                 </Segment>
             </Grid.Column>
             <Grid.Column mobile={16} tablet={8} computer={8}>
                 <Segment>
                     <Header>Upcoming Transactions</Header>
-                    <UpcomingTransactions transactions={props.user.upcomingTransactions} categoryInfo={categoryInfo} onPayTransaction={onPayTransaction} onDeleteTransaction={onDeleteTransaction} detail={false} />
+                    <UpcomingTransactions transactions={props.user.upcomingTransactions} categoryInfo={props.user.categoryInfo} onPayTransaction={onPayTransaction} onDeleteTransaction={onDeleteTransaction} detail={false} />
                 </Segment>
             </Grid.Column>
         </Grid>

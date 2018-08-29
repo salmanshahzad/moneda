@@ -38,8 +38,24 @@ export default class Layout extends React.Component<{}, LayoutState> {
 
     updateUser = async () => {
         try {
-            const response = await axios.get("/api/user", getAxiosHeaderConfig());
-            this.setState({auth: "yes", user: response.data.user});
+            const user = (await axios.get("/api/user", getAxiosHeaderConfig())).data.user;
+            user.categoryInfo = (id: string) => {
+                const income = user.income.filter(income => income.id === id);
+                if (income.length > 0) {
+                    return {
+                        type: "income",
+                        name: income[0].name
+                    };
+                }
+                const expenses = user.expenses.filter(expense => expense.id === id);
+                if (expenses.length > 0) {
+                    return {
+                        type: "expense",
+                        name: expenses[0].name
+                    };
+                }
+            };
+            this.setState({auth: "yes", user});
         } catch {
             this.setState({auth: "no"});
         }
