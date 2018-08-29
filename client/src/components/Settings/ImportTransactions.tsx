@@ -38,7 +38,7 @@ export default class ImportTransactions extends React.Component<ImportTransactio
         return (
             <React.Fragment>
                 <Message hidden={this.state.message === ""} success={this.state.message.startsWith("Success")} error={!this.state.message.startsWith("Success")}>{this.state.message}</Message>
-                <p>CSV data must include date, account, and amount headers. Note and type headers are optional. Any invalid rows will be skipped. Accounts that do not exist will be created as specified by their type. If there is no type, expenses will be used as the default.</p>
+                <p>CSV data must include date, category, and amount headers. Note and type headers are optional. Any invalid rows will be skipped. Categories that do not exist will be created as specified by their type. If there is no type, expense will be used as the default.</p>
                 <Input type="file" accept=".csv" onChange={this.importTransactions} />
             </React.Fragment>
         );
