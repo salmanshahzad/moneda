@@ -1,18 +1,17 @@
 import React from "react";
-import { Income, Expense } from "../../../../user";
+import { Category as C, Expense } from "../../user";
 import { ColorResult, SketchPicker } from "react-color";
 import { InputOnChangeData, Grid, Input, Button, Icon, Message, Modal } from "semantic-ui-react";
 import ConfirmButton from "../General/ConfirmButton";
 
-interface AccountProps {
+interface CategoryProps {
     editing?: boolean;
-    type: "income" | "expenses";
-    account: Income | Expense;
-    onUpdateAccount: (type: "income" | "expenses", id: string, name: string, colour: string, budget?: number) => Promise<{}>;
-    onDeleteAccount: (type: "income" | "expenses", id: string) => Promise<{}>;
+    category: C;
+    onUpdateCategory: (id: string, name: string, type: string, colour: string, budget?: number) => Promise<{}>;
+    onDeleteCategory: (id: string) => Promise<{}>;
 }
 
-interface AccountState {
+interface CategoryState {
     colour: string;
     name: string;
     budget: string;
@@ -20,11 +19,11 @@ interface AccountState {
     error: string;
 }
 
-export default class Account extends React.Component<AccountProps, AccountState> {
-    state: AccountState = {
-        colour: this.props.account.colour,
-        name: this.props.account.name,
-        budget: this.props.type === "expenses" ? (this.props.account as Expense).budget.toFixed(2) : "0",
+export default class Category extends React.Component<CategoryProps, CategoryState> {
+    state: CategoryState = {
+        colour: this.props.category.colour,
+        name: this.props.category.name,
+        budget: this.props.category.type === "expense" ? (this.props.category as Expense).budget.toFixed(2) : "0",
         editing: Boolean(this.props.editing),
         error: ""
     };
@@ -47,7 +46,7 @@ export default class Account extends React.Component<AccountProps, AccountState>
 
     save = async () => {
         try {
-            await this.props.onUpdateAccount(this.props.type, this.props.account.id, this.state.name, this.state.colour, parseFloat(this.state.budget));
+            await this.props.onUpdateCategory(this.props.category.id, this.state.name, this.props.category.type, this.state.colour, parseFloat(this.state.budget));
             this.setState({editing: false, error: ""});
         } catch (errors) {
             this.setState({error: errors[0]});
@@ -59,7 +58,7 @@ export default class Account extends React.Component<AccountProps, AccountState>
     };
 
     delete = () => {
-        this.props.onDeleteAccount(this.props.type, this.props.account.id);
+        this.props.onDeleteCategory(this.props.category.id);
     };
 
     render(): React.ReactNode {
@@ -76,7 +75,7 @@ export default class Account extends React.Component<AccountProps, AccountState>
                         <Input type="text" value={this.state.name} onChange={this.changeName} fluid />
                     </Grid.Column>
                     {
-                        this.props.type === "expenses" &&
+                        this.props.category.type === "expense" &&
                         <Grid.Column mobile={6} tablet={5} computer={5}>
                             <Input type="number" min="0" step="0.01" label="$" value={this.state.budget} onChange={this.changeBudget} onBlur={this.makeBudgetTwoDecimalPlaces} fluid />
                         </Grid.Column>
@@ -92,7 +91,7 @@ export default class Account extends React.Component<AccountProps, AccountState>
                     <Grid.Column mobile={6} tablet={2} computer={2}>
                         <Button.Group>
                             <Button primary icon="pencil" onClick={this.edit} />
-                            <ConfirmButton icon="delete" negative header="Delete Account" content="Are you sure you want to delete this account? This action cannot be reversed and all transaction history related to this account will be lost." confirm="Delete" onConfirm={this.delete} />
+                            <ConfirmButton icon="delete" negative header="Delete Category" content="Are you sure you want to delete this category? This action cannot be reversed and all transaction history related to this category will be lost." confirm="Delete" onConfirm={this.delete} />
                         </Button.Group>
                     </Grid.Column>
                     <Grid.Column mobile={6} tablet={1} computer={1}>
@@ -102,7 +101,7 @@ export default class Account extends React.Component<AccountProps, AccountState>
                         <span>{this.state.name}</span>
                     </Grid.Column>
                     {
-                        this.props.type === "expenses" &&
+                        this.props.category.type === "expense" &&
                         <Grid.Column mobile={6} tablet={6} computer={6}>
                             <span>Budget: ${this.state.budget}</span>
                         </Grid.Column>

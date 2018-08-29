@@ -1,13 +1,13 @@
 import React from "react";
 import { mount } from "enzyme";
-import Account from "../../src/components/Settings/Account";
+import Category from "../../src/components/Settings/Category";
 import testUser from "../testUser";
 import { Grid, Button, Input, Message } from "semantic-ui-react";
 import { SketchPicker } from "react-color";
 
-describe("Account", () => {
+describe("Category", () => {
     const emptyPromise = jest.fn(() => new Promise<{}>((resolve, reject) => {}));
-    const wrapper = mount(<Account type="income" account={testUser.income[0]} onUpdateAccount={emptyPromise} onDeleteAccount={emptyPromise} />);
+    const wrapper = mount(<Category category={testUser.income[0]} onUpdateCategory={emptyPromise} onDeleteCategory={emptyPromise} />);
 
     it("renders", () => {
         expect(wrapper.find(Grid)).toHaveLength(1);
@@ -39,9 +39,9 @@ describe("Account", () => {
         expect(wrapper.find(Message).text()).toBe("Error");
     });
 
-    it("calls onUpdateAccount when the save button is clicked", () => {
+    it("calls onUpdateCategory when the save button is clicked", () => {
         wrapper.setState({editing: true, name: "Test", colour: "#00FF00"});
         wrapper.find(Button).at(0).simulate("click");
-        expect(wrapper.prop("onUpdateAccount")).toHaveBeenCalledWith("income", "1", "Test", "#00FF00", 0);
+        expect(wrapper.prop("onUpdateCategory")).toHaveBeenCalledWith("1", "Test", "income", "#00FF00", 0);
     });
 });
