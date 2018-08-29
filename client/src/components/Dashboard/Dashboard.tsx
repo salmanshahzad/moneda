@@ -1,7 +1,8 @@
 import React from "react";
 import axios from "axios";
-import { User } from "../../../../user";
-import { Header, Grid, Segment } from "semantic-ui-react";
+import { User } from "../../user";
+import getAxiosHeaderConfig from "../../axiosHeaderConfig";
+import { Header, Grid, Segment, Tab } from "semantic-ui-react";
 import ExpenseChart from "../Budget/ExpenseChart";
 import AddTransaction from "./AddTransaction";
 import RecentTransactions from "./RecentTransactions";
@@ -13,39 +14,19 @@ interface DashboardProps {
 }
 
 export default (props: DashboardProps) => {
-    const onAddIncomeTransaction = (name: string, amount: number, note: string, date: number): Promise<{}> => {
+    const onAddTransaction = (categoryId: string, amount: number, note: string, date: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/add_transaction", {account: name, amount, note, date, type: "income"});
+                await axios.post("/api/user/transaction", {categoryId, amount, note, date}, getAxiosHeaderConfig());
                 resolve();
                 props.onUpdate();
             } catch (e) {
-                reject(e.response.data);
+                reject(e.response.data.errors);
             }
         });
     };
 
-    const onAddExpenseTransaction = (name: string, amount: number, note: string, date: number): Promise<{}> => {
-        return new Promise<{}>(async (resolve, reject) => {
-            try {
-                await axios.post("/api/add_transaction", {account: name, amount, note, date, type: "expenses"});
-                resolve();
-                props.onUpdate();
-            } catch (e) {
-                reject(e.response.data);
-            }
-        });
-    };
-
-    const getAccountNames = (type: "income" | "expenses"): string[] => {
-        if (type === "income") {
-            return props.user.income.map(income => income.name);
-        } else if (type === "expenses") {
-            return props.user.expenses.map(expense => expense.name);
-        }
-    };
-
-    const accountInfo = (id: string): {type: string, name: string} => {
+    const categoryInfo = (id: string): {type: string, name: string} => {
         const income = props.user.income.filter(income => income.id === id);
         if (income.length > 0) {
             return {
@@ -62,13 +43,13 @@ export default (props: DashboardProps) => {
         }
     };
 
-    const onPaidTransaction = async (id: string) => {
-        await axios.post("/api/pay_upcoming_transaction", {id});
+    const onPayTransaction = async (id: string) => {
+        await axios.put(`/api/user/transaction/${id}`, null, getAxiosHeaderConfig());
         props.onUpdate();
     };
 
     const onDeleteTransaction = async (id: string) => {
-        await axios.post("/api/delete_transaction", {id});
+        await axios.delete(`/api/user/transaction/${id}`, getAxiosHeaderConfig());
         props.onUpdate();
     };
 
@@ -87,19 +68,28 @@ export default (props: DashboardProps) => {
             <Grid.Column mobile={16} tablet={8} computer={8}>
                 <Segment>
                     <Header>Add Transaction</Header>
-                    <AddTransaction incomeNames={getAccountNames("income")} onAddIncomeTransaction={onAddIncomeTransaction} expenseNames={getAccountNames("expenses")} onAddExpenseTransaction={onAddExpenseTransaction} />
+                    <Tab panes={[
+                        {
+                            menuItem: "Expense",
+                            render: () => <AddTransaction categories={props.user.expenses} onAddTransaction={onAddTransaction} key={0} />
+                        },
+                        {
+                            menuItem: "Income",
+                            render: () => <AddTransaction categories={props.user.income} onAddTransaction={onAddTransaction} key={1} />
+                        }
+                    ]} />
                 </Segment>
             </Grid.Column>
             <Grid.Column mobile={16} tablet={8} computer={8}>
                 <Segment>
                     <Header>Recent Transactions</Header>
-                    <RecentTransactions transactions={props.user.transactions} accountInfo={accountInfo} show={5} />
+                    <RecentTransactions transactions={props.user.transactions} categoryInfo={categoryInfo} show={5} />
                 </Segment>
             </Grid.Column>
             <Grid.Column mobile={16} tablet={8} computer={8}>
                 <Segment>
                     <Header>Upcoming Transactions</Header>
-                    <UpcomingTransactions transactions={props.user.upcomingTransactions} accountInfo={accountInfo} onPaidTransaction={onPaidTransaction} onDeleteTransaction={onDeleteTransaction} detail={false} />
+                    <UpcomingTransactions transactions={props.user.upcomingTransactions} categoryInfo={categoryInfo} onPayTransaction={onPayTransaction} onDeleteTransaction={onDeleteTransaction} detail={false} />
                 </Segment>
             </Grid.Column>
         </Grid>
