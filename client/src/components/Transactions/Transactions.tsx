@@ -1,6 +1,7 @@
 import React from "react";
-import { User } from "../../../../user";
+import { User } from "../../user";
 import axios from "axios";
+import getAxiosHeaderConfig from "../../axiosHeaderConfig";
 import { Grid, Header, Table } from "semantic-ui-react";
 import moment from "moment";
 import ConfirmButton from "../General/ConfirmButton";
@@ -11,7 +12,7 @@ interface TransactionsProps {
 }
 
 export default (props: TransactionsProps) => {
-    const accountIdToName = (id: string): string => {
+    const categoryIdToName = (id: string): string => {
         const income = props.user.income.filter(income => income.id === id);
         if (income.length > 0) {
             return income[0].name;
@@ -23,7 +24,7 @@ export default (props: TransactionsProps) => {
     };
 
     const deleteTransaction = async (id: string) => {
-        await axios.post("/api/delete_transaction", {id});
+        await axios.delete(`/api/user/transaction/${id}`, getAxiosHeaderConfig());
         props.onUpdate();
     };
 
@@ -37,7 +38,7 @@ export default (props: TransactionsProps) => {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell width={2}>Date</Table.HeaderCell>
-                            <Table.HeaderCell width={4}>Account</Table.HeaderCell>
+                            <Table.HeaderCell width={4}>Category</Table.HeaderCell>
                             <Table.HeaderCell width={2}>Amount</Table.HeaderCell>
                             <Table.HeaderCell width={7}>Note</Table.HeaderCell>
                             <Table.HeaderCell width={1}></Table.HeaderCell>
@@ -48,11 +49,11 @@ export default (props: TransactionsProps) => {
                             props.user.transactions.map(t => (
                                 <Table.Row key={t.id}>
                                     <Table.Cell>{moment(t.date).format("MMMM DD, YYYY")}</Table.Cell>
-                                    <Table.Cell>{accountIdToName(t.account_id)}</Table.Cell>
+                                    <Table.Cell>{categoryIdToName(t.category_id)}</Table.Cell>
                                     <Table.Cell>${t.amount.toFixed(2)}</Table.Cell>
                                     <Table.Cell>{t.note}</Table.Cell>
                                     <Table.Cell>
-                                        <ConfirmButton icon="delete" negative header="Delete Account" content="Are you sure you want to delete this account? This action cannot be reversed and all transaction history related to this account will be lost." confirm="Delete" onConfirm={() => deleteTransaction(t.id)} />
+                                        <ConfirmButton icon="delete" negative header="Delete Transaction" content="Are you sure you want to delete this transaction? This action cannot be reversed." confirm="Delete" onConfirm={() => deleteTransaction(t.id)} />
                                     </Table.Cell>
                                 </Table.Row>
                             ))
