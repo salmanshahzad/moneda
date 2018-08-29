@@ -1,5 +1,5 @@
 import React from "react";
-import { User } from "../../../../user";
+import { User } from "../../user";
 import { Grid, Segment, Header } from "semantic-ui-react";
 import ExpenseChart from "./ExpenseChart";
 import { Link } from "react-router-dom";
