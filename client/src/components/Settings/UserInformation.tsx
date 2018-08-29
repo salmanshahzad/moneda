@@ -1,16 +1,16 @@
 import React from "react";
-import { User } from "../../../../user";
+import { User } from "../../user";
 import { Form, Message, Button } from "semantic-ui-react";
 
 interface UserInformationProps {
     user: User;
-    onUpdateUserInformation: (username: string, password: string, confirmPassword: string, currentPassword: string) => Promise<{}>;
+    onUpdateUserInformation: (username: string, newPassword: string, confirmNewPassword: string, currentPassword: string) => Promise<{}>;
 }
 
 interface UserInformationState {
     username: string;
-    password: string;
-    confirmPassword: string;
+    newPassword: string;
+    confirmNewPassword: string;
     currentPassword: string;
     errors: string[];
 }
@@ -18,8 +18,8 @@ interface UserInformationState {
 export default class UserInformation extends React.Component<UserInformationProps, UserInformationState> {
     state: UserInformationState = {
         username: this.props.user.username,
-        password: "",
-        confirmPassword: "",
+        newPassword: "",
+        confirmNewPassword: "",
         currentPassword: "",
         errors: []
     };
@@ -28,12 +28,12 @@ export default class UserInformation extends React.Component<UserInformationProp
         this.setState({username: e.target.value});
     };
 
-    changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({password: e.target.value});
+    changeNewPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({newPassword: e.target.value});
     };
 
-    changeConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({confirmPassword: e.target.value});
+    changeConfirmNewPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({confirmNewPassword: e.target.value});
     };
 
     changeCurrentPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,10 +42,10 @@ export default class UserInformation extends React.Component<UserInformationProp
 
     updateUserInformation = async () => {
         try {
-            await this.props.onUpdateUserInformation(this.state.username, this.state.password, this.state.confirmPassword, this.state.currentPassword);
+            await this.props.onUpdateUserInformation(this.state.username, this.state.newPassword, this.state.confirmNewPassword, this.state.currentPassword);
             this.setState({
-                password: "",
-                confirmPassword: "",
+                newPassword: "",
+                confirmNewPassword: "",
                 currentPassword: "",
                 errors: []
             });
@@ -71,12 +71,12 @@ export default class UserInformation extends React.Component<UserInformationProp
                     <input type="text" value={this.state.username} onChange={this.changeUsername} />
                 </Form.Field>
                 <Form.Field>
-                    <label>Password (minimum 8 characters)</label>
-                    <input type="password" value={this.state.password} onChange={this.changePassword} />
+                    <label>New Password (minimum 8 characters)</label>
+                    <input type="password" value={this.state.newPassword} onChange={this.changeNewPassword} />
                 </Form.Field>
                 <Form.Field>
-                    <label>Confirm Password</label>
-                    <input type="password" value={this.state.confirmPassword} onChange={this.changeConfirmPassword} />
+                    <label>Confirm New Password</label>
+                    <input type="password" value={this.state.confirmNewPassword} onChange={this.changeConfirmNewPassword} />
                 </Form.Field>
                 <Form.Field>
                     <label>Current Password</label>

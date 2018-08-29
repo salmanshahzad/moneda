@@ -14,8 +14,8 @@ describe("UserInformation", () => {
 
     it("has the correct initial state", () => {
         expect(wrapper.state("username")).toBe("test");
-        expect(wrapper.state("password")).toBe("");
-        expect(wrapper.state("confirmPassword")).toBe("");
+        expect(wrapper.state("newPassword")).toBe("");
+        expect(wrapper.state("confirmNewPassword")).toBe("");
         expect(wrapper.state("currentPassword")).toBe("");
         expect(wrapper.state("errors")).toEqual([]);
     });
@@ -23,10 +23,10 @@ describe("UserInformation", () => {
     it("changes the state when an input value changes", () => {
         wrapper.find("input").at(0).simulate("change", {target: {value: "testUsername"}});
         expect(wrapper.state("username")).toBe("testUsername");
-        wrapper.find("input").at(1).simulate("change", {target: {value: "testPassword"}});
-        expect(wrapper.state("password")).toBe("testPassword");
-        wrapper.find("input").at(2).simulate("change", {target: {value: "testConfirmPassword"}});
-        expect(wrapper.state("confirmPassword")).toBe("testConfirmPassword");
+        wrapper.find("input").at(1).simulate("change", {target: {value: "testNewPassword"}});
+        expect(wrapper.state("newPassword")).toBe("testNewPassword");
+        wrapper.find("input").at(2).simulate("change", {target: {value: "testConfirmNewPassword"}});
+        expect(wrapper.state("confirmNewPassword")).toBe("testConfirmNewPassword");
         wrapper.find("input").at(3).simulate("change", {target: {value: "testCurrentPassword"}});
         expect(wrapper.state("currentPassword")).toBe("testCurrentPassword");
     });
@@ -42,7 +42,7 @@ describe("UserInformation", () => {
     });
 
     it("calls onUpdateUserInformation when the form is submitted", () => {
-        wrapper.setState({username: "test12345", password: "test12345", confirmPassword: "test12345", currentPassword: "test12345"});
+        wrapper.setState({username: "test12345", newPassword: "test12345", confirmNewPassword: "test12345", currentPassword: "test12345"});
         wrapper.find(Form).simulate("submit");
         expect(wrapper.prop("onUpdateUserInformation")).toHaveBeenCalledWith("test12345", "test12345", "test12345", "test12345");
     });
