@@ -1,12 +1,12 @@
 import React from "react";
-import { Transaction } from "../../../../user";
+import { Transaction } from "../../user";
 import { Table } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
 interface RecentTransactionsProps {
     transactions: Transaction[];
-    accountInfo: (id: string) => {type: string, name: string};
+    categoryInfo: (id: string) => {type: string, name: string};
     show: number;
 }
 
@@ -34,10 +34,10 @@ export default (props: RecentTransactionsProps) => {
             <Table.Body>
                 {
                     getTransactionsToShow().map((transaction, i) => {
-                        const account = props.accountInfo(transaction.account_id);
+                        const category = props.categoryInfo(transaction.category_id);
                         return (
                             <Table.Row key={i}>
-                                <Table.Cell><Link to={`${account.type}/${account.name}`}>{account.name}</Link></Table.Cell>
+                                <Table.Cell><Link to={`${category.type}/${category.name}`}>{category.name}</Link></Table.Cell>
                                 <Table.Cell>${transaction.amount.toFixed(2)}</Table.Cell>
                                 <Table.Cell>{moment(transaction.date).format("MMMM D")}</Table.Cell>
                             </Table.Row>

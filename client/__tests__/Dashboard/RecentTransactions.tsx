@@ -6,13 +6,13 @@ import testUser from "../testUser";
 import { Table } from "semantic-ui-react";
 
 describe("RecentTransactions", () => {
-    const accountInfo = (id: string): {type: string, name: string} => {
+    const categoryInfo = (id: string): {type: string, name: string} => {
         return {
             type: "expense",
             name: `test${id}`
         };
     };
-    const wrapper = mount(<RecentTransactions transactions={testUser.transactions} accountInfo={accountInfo} show={1} />, routerContext);
+    const wrapper = mount(<RecentTransactions transactions={testUser.transactions} categoryInfo={categoryInfo} show={1} />, routerContext);
 
     it("renders", () => {
         expect(wrapper.find(Table)).toHaveLength(1);
