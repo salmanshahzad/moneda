@@ -6,7 +6,6 @@ import ConfirmButton from "../General/ConfirmButton";
 
 interface TransactionsThisMonthProps {
     transactions: Transaction[];
-    show: number;
     onDeleteTransaction: (id: string) => void;
 }
 
@@ -24,17 +23,6 @@ export default (props: TransactionsThisMonthProps) => {
         }
         return props.transactions.slice(0, index + 1);
     };
-
-    const getTransactionsToShow = (): Transaction[] => {
-        // return an array of transactions of length min(props.show, props.transactions.length)
-        const transactionsThisMonth = getTransactionsThisMonth();
-        const toShow = Math.min(transactionsThisMonth.length, props.show);
-        const transactions = [];
-        for (let i = 0; i < toShow; i++) {
-            transactions.push(transactionsThisMonth[i]);
-        }
-        return transactions;
-    };
     
     return (
         <Table celled striped>
@@ -48,7 +36,7 @@ export default (props: TransactionsThisMonthProps) => {
             </Table.Header>
             <Table.Body>
                 {
-                    getTransactionsToShow().map((transaction, i) => (
+                    getTransactionsThisMonth().map((transaction, i) => (
                         <Table.Row key={i}>
                             <Table.Cell collapsing>{moment(transaction.date).format("MMMM D")}</Table.Cell>
                             <Table.Cell collapsing>${transaction.amount.toFixed(2)}</Table.Cell>

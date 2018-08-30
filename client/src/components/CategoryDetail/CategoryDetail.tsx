@@ -65,7 +65,7 @@ export default (props: CategoryDetailProps) => {
             <Grid.Column mobile={16} tablet={8} computer={8}>
                 <Segment>
                     <Header>Transactions This Month</Header>
-                    <TransactionsThisMonth transactions={props.categoryDetail.transactions} show={10} onDeleteTransaction={onDeleteTransaction} />
+                    <TransactionsThisMonth transactions={props.categoryDetail.transactions} onDeleteTransaction={onDeleteTransaction} />
                 </Segment>
             </Grid.Column>
             <Grid.Column mobile={16} tablet={8} computer={8}>

@@ -5,14 +5,11 @@ import testUser from "../testUser";
 import { Table } from "semantic-ui-react";
 
 describe("TransactionsThisMonth", () => {
-    const wrapper = mount(<TransactionsThisMonth transactions={testUser.transactions} show={3} onDeleteTransaction={jest.fn()} />);
+    const wrapper = mount(<TransactionsThisMonth transactions={testUser.transactions} onDeleteTransaction={jest.fn()} />);
 
     it("renders", () => {
         expect(wrapper.find(Table)).toHaveLength(1);
-    });
-
-    it("shows min(transactionsThisMonth.length, props.show) transactions", () => {
-        expect(wrapper.find(Table.Row)).toHaveLength(3); // header + 2 rows
+        expect(wrapper.find(Table.Row)).toHaveLength(3); // header + 2 transactions
     });
 
     it("shows transactions in order", () => {
