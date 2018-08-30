@@ -1,17 +1,16 @@
 import React from "react";
-import { Category as C, Expense } from "../../user";
+import { Category, Expense } from "../../user";
 import { ColorResult, SketchPicker } from "react-color";
 import { InputOnChangeData, Grid, Input, Button, Icon, Message, Modal } from "semantic-ui-react";
 import ConfirmButton from "../General/ConfirmButton";
 
-interface CategoryProps {
-    editing?: boolean;
-    category: C;
+interface EditCategoryProps {
+    category: Category;
     onUpdateCategory: (id: string, name: string, type: string, colour: string, budget?: number) => Promise<{}>;
     onDeleteCategory: (id: string) => Promise<{}>;
 }
 
-interface CategoryState {
+interface EditCategoryState {
     colour: string;
     name: string;
     budget: string;
@@ -19,14 +18,16 @@ interface CategoryState {
     error: string;
 }
 
-export default class Category extends React.Component<CategoryProps, CategoryState> {
-    state: CategoryState = {
+export default class EditCategory extends React.Component<EditCategoryProps, EditCategoryState> {
+    defaultState: EditCategoryState = {
         colour: this.props.category.colour,
         name: this.props.category.name,
         budget: this.props.category.type === "expense" ? (this.props.category as Expense).budget.toFixed(2) : "0",
-        editing: Boolean(this.props.editing),
+        editing: false,
         error: ""
     };
+
+    state = this.defaultState;
 
     changeColour = (colour: ColorResult) => {
         this.setState({colour: colour.hex});
@@ -53,8 +54,12 @@ export default class Category extends React.Component<CategoryProps, CategorySta
         }
     };
 
+    cancelEdit = () => {
+        this.setState(this.defaultState);
+    };
+    
     edit = () => {
-        this.setState({editing: true});
+        this.setState({editing: !this.state.editing});
     };
 
     delete = () => {
@@ -65,13 +70,16 @@ export default class Category extends React.Component<CategoryProps, CategorySta
         if (this.state.editing) {
             return (
                 <Grid columns={16}>
-                    <Grid.Column mobile={2} tablet={1} computer={1}>
-                        <Button primary icon="save" onClick={this.save} />
+                    <Grid.Column mobile={3} tablet={2} computer={2}>
+                        <Button.Group>
+                            <Button primary icon="save" onClick={this.save} />
+                            <Button negative icon="undo" onClick={this.cancelEdit} />
+                        </Button.Group>
                     </Grid.Column>
-                    <Grid.Column mobile={10} tablet={5} computer={4}>
+                    <Grid.Column mobile={9} tablet={4} computer={4}>
                         <SketchPicker color={this.state.colour} onChangeComplete={this.changeColour} />
                     </Grid.Column>
-                    <Grid.Column mobile={6} tablet={5} computer={6}>
+                    <Grid.Column mobile={6} tablet={5} computer={5}>
                         <Input type="text" value={this.state.name} onChange={this.changeName} fluid />
                     </Grid.Column>
                     {

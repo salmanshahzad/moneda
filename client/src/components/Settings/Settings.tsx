@@ -1,10 +1,11 @@
 import React from "react";
-import { User, Expense } from "../../user";
+import { User } from "../../user";
 import axios from "axios";
 import getAxiosHeaderConfig from "../../axiosHeaderConfig";
 import { Grid, Segment, Header, Button } from "semantic-ui-react";
 import UserInformation from "./UserInformation";
-import Category from "./Category";
+import EditCategory from "./EditCategory";
+import AddCategory from "./AddCategory";
 import ImportTransactions from "./ImportTransactions";
 import ExportTransactions from "./ExportTransactions";
 import ConfirmButton from "../General/ConfirmButton";
@@ -63,16 +64,15 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
         });
     };
 
-    showAddIncome = () => {
-        this.setState({addIncome: true});
+    toggleAddIncome = () => {
+        this.setState({addIncome: !this.state.addIncome});
     };
     
-    showAddExpense = () => {
-        this.setState({addExpense: true});
+    toggleAddExpense = () => {
+        this.setState({addExpense: !this.state.addExpense});
     };
 
-    // has the same parameters as onUpdateCategory because this function is passed to the Category component as the prop onUpdateCategory for adding a new category
-    onAddCategory = (id: string, name: string, type: string, colour: string, budget?: number): Promise<{}> => {
+    onAddCategory = (name: string, type: string, colour: string, budget?: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
                 await axios.post("/api/user/category", {name, type, colour, budget}, getAxiosHeaderConfig());
@@ -123,20 +123,13 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
                         <Header>Income Accounts</Header>
                         {
                             this.props.user.income.map(income => (
-                                <Category category={income} onUpdateCategory={this.onUpdateCategory} onDeleteCategory={this.onDeleteCategory} key={income.name} />
+                                <EditCategory category={income} onUpdateCategory={this.onUpdateCategory} onDeleteCategory={this.onDeleteCategory} key={income.name} />
                             ))
                         }
                         {
-                            !this.state.addIncome && <div style={{paddingTop: "2rem"}}><Button positive icon="plus" onClick={this.showAddIncome} /></div>
-                        }
-                        {
-                            this.state.addIncome && <Category category={{
-                                id: "",
-                                user_id: "",
-                                name: "",
-                                colour: "#FF0000",
-                                type: "income"
-                            }} onUpdateCategory={this.onAddCategory} onDeleteCategory={null} editing />
+                            this.state.addIncome ?
+                            <AddCategory type="income" onAddCategory={this.onAddCategory} onCancel={this.toggleAddIncome} /> :
+                            <div style={{paddingTop: "2rem"}}><Button positive icon="plus" onClick={this.toggleAddIncome} /></div>
                         }
                     </Segment>
                 </Grid.Column>
@@ -145,21 +138,13 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
                         <Header>Expense Accounts</Header>
                         {
                             this.props.user.expenses.map(expense => (
-                                <Category category={expense} onUpdateCategory={this.onUpdateCategory} onDeleteCategory={this.onDeleteCategory} key={expense.name} />
+                                <EditCategory category={expense} onUpdateCategory={this.onUpdateCategory} onDeleteCategory={this.onDeleteCategory} key={expense.name} />
                             ))
                         }
                         {
-                            !this.state.addExpense && <div style={{paddingTop: "2rem"}}><Button positive icon="plus" onClick={this.showAddExpense} /></div>
-                        }
-                        {
-                            this.state.addExpense && <Category category={{
-                                id: "",
-                                user_id: "",
-                                name: "",
-                                colour: "#FF0000",
-                                type: "expense",
-                                budget: 0
-                            } as Expense} onUpdateCategory={this.onAddCategory} onDeleteCategory={null} editing />
+                            this.state.addExpense ?
+                            <AddCategory type="expense" onAddCategory={this.onAddCategory} onCancel={this.toggleAddExpense} /> :
+                            <div style={{paddingTop: "2rem"}}><Button positive icon="plus" onClick={this.toggleAddExpense} /></div>
                         }
                     </Segment>
                 </Grid.Column>

@@ -1,13 +1,13 @@
 import React from "react";
 import { mount } from "enzyme";
-import Category from "../../src/components/Settings/Category";
+import EditCategory from "../../src/components/Settings/EditCategory";
 import testUser from "../testUser";
 import { Grid, Button, Input, Message } from "semantic-ui-react";
 import { SketchPicker } from "react-color";
 
-describe("Category", () => {
+describe("EditCategory", () => {
     const emptyPromise = jest.fn(() => new Promise<{}>((resolve, reject) => {}));
-    const wrapper = mount(<Category category={testUser.income[0]} onUpdateCategory={emptyPromise} onDeleteCategory={emptyPromise} />);
+    const wrapper = mount(<EditCategory category={testUser.income[0]} onUpdateCategory={emptyPromise} onDeleteCategory={emptyPromise} />);
 
     it("renders", () => {
         expect(wrapper.find(Grid)).toHaveLength(1);
