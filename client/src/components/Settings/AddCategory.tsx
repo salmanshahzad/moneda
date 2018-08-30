@@ -1,6 +1,6 @@
 import React from "react";
 import { ColorResult, SketchPicker } from "react-color";
-import { InputOnChangeData, Grid, Input, Button, Icon, Message, Modal } from "semantic-ui-react";
+import { InputOnChangeData, Grid, Input, Button, Message } from "semantic-ui-react";
 
 interface AddCategoryProps {
     type: string;

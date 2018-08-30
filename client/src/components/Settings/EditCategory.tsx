@@ -1,7 +1,7 @@
 import React from "react";
 import { Category, Expense } from "../../user";
 import { ColorResult, SketchPicker } from "react-color";
-import { InputOnChangeData, Grid, Input, Button, Icon, Message, Modal } from "semantic-ui-react";
+import { InputOnChangeData, Grid, Input, Button, Icon, Message } from "semantic-ui-react";
 import ConfirmButton from "../General/ConfirmButton";
 
 interface EditCategoryProps {
