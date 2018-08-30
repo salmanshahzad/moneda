@@ -18,7 +18,7 @@ export default class ExportTransactions extends React.Component<ExportTransactio
         includeUpcoming: false
     };
 
-    changeIncludeUpcoming = () => {
+    toggleIncludeUpcoming = () => {
         this.setState({ includeUpcoming: !this.state.includeUpcoming });
     };
 
@@ -49,7 +49,7 @@ export default class ExportTransactions extends React.Component<ExportTransactio
         return (
             <Form onSubmit={this.export}>
                 <Form.Field>
-                    <Checkbox label="Include upcoming transactions" value="includeUpcoming" onChange={this.changeIncludeUpcoming} />
+                    <Checkbox label="Include upcoming transactions" value="includeUpcoming" onChange={this.toggleIncludeUpcoming} />
                 </Form.Field>
                 <Button primary type="submit">Export</Button>
             </Form>
