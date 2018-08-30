@@ -55,6 +55,8 @@ export default class Home extends React.Component<{}, HomeState> {
             try {
                 const response = await axios.post("/api/user", {username, password, confirmPassword});
                 localStorage.setItem("token", response.data.token);
+                // show tour on Dashboard
+                localStorage.setItem("show tour", "true");
                 resolve();
                 this.setState({signedIn: true});
             } catch (e) {
