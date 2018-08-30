@@ -7,7 +7,7 @@ export const generateRandomColour = (): string => {
     return colour;
 };
 
-export const createExpense = (userId: string, name: string) => {
+export const createExpense = (userId: string, name: string): { user_id: string; name: string; colour: string; budget: 0; type: "expense" } => {
     return {
         user_id: userId,
         name,

@@ -6,7 +6,7 @@ interface ProgressBarProps {
     total: number;
 }
 
-export default (props: ProgressBarProps) => {
+export default (props: ProgressBarProps): JSX.Element => {
     const getPercent = (): number => {
         // need this function to round to 1 decimal place otherwise Progress component may show e.g. 7.00000001%
         return parseFloat((props.value / props.total * 100).toFixed(1));
@@ -29,5 +29,6 @@ export default (props: ProgressBarProps) => {
             return "yellow";
         }
     };
+    
     return <Progress percent={getPercent()} progress color={getColour()} style={{ margin: "0.8em 0" }} />;
 }

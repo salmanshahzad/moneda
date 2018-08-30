@@ -8,7 +8,7 @@ interface FeatureProps {
     alignRight?: boolean;
 }
 
-export default (props: FeatureProps) => {
+export default (props: FeatureProps): JSX.Element => {
     const columns = (
         <React.Fragment>
             <Grid.Column mobile={16} tablet={16} computer={8}>

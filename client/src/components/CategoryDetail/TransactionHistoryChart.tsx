@@ -9,7 +9,7 @@ interface TransactionHistoryChartProps {
     monthsToShow: number;
 }
 
-export default (props: TransactionHistoryChartProps) => {
+export default (props: TransactionHistoryChartProps): JSX.Element => {
     const getMonthLabels = (): string[] => {
         // return month strings for the last props.monthsToShow months
         const months = [moment()];

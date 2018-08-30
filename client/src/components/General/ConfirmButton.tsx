@@ -41,7 +41,7 @@ export default class ConfirmButton extends React.Component<ConfirmButtonProps, C
         this.toggleDialog();
     };
 
-    render() {
+    render(): React.ReactNode {
         return (
             <Modal
                 trigger={<Button positive={this.props.positive} negative={this.props.negative} content={this.props.text} icon={this.props.icon} onClick={this.toggleDialog} />} size="mini" open={this.state.dialogOpen} onClose={this.toggleDialog}

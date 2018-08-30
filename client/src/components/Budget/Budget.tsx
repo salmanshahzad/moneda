@@ -9,7 +9,7 @@ interface BudgetProps {
     onUpdate: () => void;
 }
 
-export default (props: BudgetProps) => (
+export default (props: BudgetProps): JSX.Element => (
     <Grid style={{ padding: "1rem" }}>
         <Grid.Column mobile={16} tablet={16} computer={16}>
             <Header as="h1">Budget</Header>

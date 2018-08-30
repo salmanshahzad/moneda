@@ -6,14 +6,14 @@ interface ExpenseChartProps {
     expenses: Expense[];
 }
 
-export default (props: ExpenseChartProps) => {
+export default (props: ExpenseChartProps): JSX.Element => {
     const getExpensesSum = (): number => {
         let sum = 0;
         props.expenses.forEach(expense => sum += expense.spent);
         return sum;
     }
 
-    const getData = () => {
+    const getData = (): { labels: string[]; datasets: { data: number[]; backgroundColor: string[] }[] } => {
         // return the data in the format needed for the Pie component
         return {
             labels: props.expenses.map(expense => expense.name),

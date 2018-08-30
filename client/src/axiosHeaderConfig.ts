@@ -1,5 +1,5 @@
-export default () => ({
+export default (): { headers: { authorization: string } } => ({
     headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`
+        authorization: `Bearer ${localStorage.getItem("token")}`
     }
 });

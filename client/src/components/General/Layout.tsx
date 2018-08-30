@@ -1,5 +1,5 @@
 import React from "react";
-import { User } from "../../user";
+import { User, Category, Transaction } from "../../user";
 import axios from "axios";
 import getAxiosHeaderConfig from "../../axiosHeaderConfig";
 import { Redirect, Route } from "react-router-dom";
@@ -61,7 +61,7 @@ export default class Layout extends React.Component<{}, LayoutState> {
         }
     };
 
-    getCategoryDetails = (name: string, type: "income" | "expense") => {
+    getCategoryDetails = (name: string, type: "income" | "expense"): { category: Category; transactions: Transaction[]; upcomingTransactions: Transaction[] } => {
         let category;
         if (type === "income") {
             category = this.state.user.income.filter(income => income.name === name)[0];

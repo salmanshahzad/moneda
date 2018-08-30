@@ -8,7 +8,7 @@ interface SignInDialogModalProps {
     onSignIn: (username: string, password: string) => Promise<{}>;
 }
 
-export default (props: SignInDialogModalProps) => {
+export default (props: SignInDialogModalProps): JSX.Element => {
     const close = () => {
         props.onClose();
     };

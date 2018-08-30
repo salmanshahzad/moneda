@@ -10,7 +10,7 @@ interface RecentTransactionsProps {
     show: number;
 }
 
-export default (props: RecentTransactionsProps) => {
+export default (props: RecentTransactionsProps): JSX.Element => {
     const getTransactionsToShow = (): Transaction[] => {
         // return an array of transactions of length min(props.show, props.transactions.length)
         const length = props.transactions.length;

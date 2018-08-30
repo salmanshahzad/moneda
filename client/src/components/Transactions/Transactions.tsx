@@ -11,7 +11,7 @@ interface TransactionsProps {
     onUpdate: () => void;
 }
 
-export default (props: TransactionsProps) => {
+export default (props: TransactionsProps): JSX.Element => {
     const deleteTransaction = async (id: string) => {
         await axios.delete(`/api/user/transaction/${id}`, getAxiosHeaderConfig());
         props.onUpdate();

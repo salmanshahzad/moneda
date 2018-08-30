@@ -8,7 +8,7 @@ interface NavBarProps {
     onCloseSidebar: () => void;
 }
 
-export default (props: NavBarProps) => {
+export default (props: NavBarProps): JSX.Element => {
     const menuItems = [
         <Menu.Item name="Dashboard" as={NavLink} to="/dashboard" onClick={props.onCloseSidebar} key={0} />,
         <Menu.Item name="Budget" as={NavLink} to="/budget" onClick={props.onCloseSidebar} key={1} />,

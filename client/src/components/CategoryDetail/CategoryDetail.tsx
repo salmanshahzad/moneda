@@ -19,7 +19,7 @@ interface CategoryDetailProps {
     onUpdate: () => void;
 }
 
-export default (props: CategoryDetailProps) => {
+export default (props: CategoryDetailProps): JSX.Element => {
     const isExpense = props.categoryDetail.category.type === "expense";
 
     const onPayTransaction = async (id: string) => {

@@ -13,7 +13,7 @@ interface UpcomingTransactionsProps {
     detail: boolean; // should be false when using on the Dashboard
 }
 
-export default (props: UpcomingTransactionsProps) => (
+export default (props: UpcomingTransactionsProps): JSX.Element => (
     <Table celled striped>
         <Table.Header>
             <Table.Row>

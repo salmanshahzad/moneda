@@ -27,7 +27,7 @@ export default class AddTransaction extends React.Component<AddTransactionProps,
         errors: []
     };
 
-    getOptions = () => {
+    getOptions = (): { key: number; value: string; text: string }[] => {
         // returns expense names in the format needed for the Select component
         return this.props.categories.map((category, i) => {
             return {

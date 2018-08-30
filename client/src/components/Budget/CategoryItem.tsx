@@ -7,7 +7,7 @@ interface CategoryItemProps {
     category: Category;
 }
 
-export default (props: CategoryItemProps) => {
+export default (props: CategoryItemProps): JSX.Element => {
     const textStyle: React.CSSProperties = {
         fontStyle: "italic",
         fontWeight: "bold"

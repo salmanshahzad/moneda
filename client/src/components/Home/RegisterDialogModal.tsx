@@ -8,7 +8,7 @@ interface RegisterDialogModalProps {
     onRegister: (username: string, password: string, confirmPassword: string) => Promise<{}>;
 }
 
-export default (props: RegisterDialogModalProps) => {
+export default (props: RegisterDialogModalProps): JSX.Element => {
     const close = () => {
         props.onClose();
     };

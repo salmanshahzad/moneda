@@ -15,7 +15,7 @@ interface DashboardProps {
     onUpdate: () => void;
 }
 
-export default (props: DashboardProps) => {
+export default (props: DashboardProps): JSX.Element => {
     const joyrideSteps = [
         {
             target: ".title",
