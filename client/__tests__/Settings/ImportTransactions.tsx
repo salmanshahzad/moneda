@@ -11,18 +11,19 @@ describe("ImportTransactions", () => {
     });
 
     it("has the correct initial state", () => {
-        expect(wrapper.state("message")).toBe("");
+        expect(wrapper.state("errorMessage")).toBe("");
+        expect(wrapper.state("successMessage")).toBe("");
     });
 
     it("displays errors", () => {
         expect(wrapper.find(Message).prop("hidden")).toBe(true);
-        wrapper.setState({message: "Error"});
+        wrapper.setState({errorMessage: "Invalid file type."});
         expect(wrapper.find(Message).prop("hidden")).toBe(false);
         expect(wrapper.find(Message).prop("error")).toBe(true);
     });
 
     it("displays success messages", () => {
-        wrapper.setState({message: "Success"});
+        wrapper.setState({errorMessage: "", successMessage: "Imported transactions."});
         expect(wrapper.find(Message).prop("error")).toBe(false);
         expect(wrapper.find(Message).prop("success")).toBe(true);
     });

@@ -7,12 +7,14 @@ interface ImportTransactionsProps {
 }
 
 interface ImportTransactionsState {
-    message: string;
+    errorMessage: string;
+    successMessage: string;
 }
 
 export default class ImportTransactions extends React.Component<ImportTransactionsProps, ImportTransactionsState> {
     state: ImportTransactionsState = {
-        message: ""
+        errorMessage: "",
+        successMessage: ""
     };
 
     importTransactions = (e: React.SyntheticEvent<HTMLInputElement>) => {
@@ -23,21 +25,26 @@ export default class ImportTransactions extends React.Component<ImportTransactio
                 const text = (e.target as any).result;
                 try {
                     await this.props.onImportTransactions(Papa.parse(text, {header: true}).data);
-                    this.setState({message: "Successfully imported data."});
+                    this.setState({successMessage: "Imported transactions.", errorMessage: ""});
                 } catch (error) {
-                    this.setState({message: error});
+                    this.setState({successMessage: "", errorMessage: error});
                 }
             };
             reader.readAsText(file);
         } else {
-            this.setState({message: "Invalid file type."});
+            this.setState({successMessage: "", errorMessage: "Invalid file type."});
         }
     };
 
     render(): React.ReactNode {
         return (
             <React.Fragment>
-                <Message hidden={this.state.message === ""} success={this.state.message.startsWith("Success")} error={!this.state.message.startsWith("Success")}>{this.state.message}</Message>
+                <Message hidden={this.state.successMessage.length + this.state.errorMessage.length === 0} success={this.state.successMessage.length > 0} error={this.state.errorMessage.length > 0}>
+                    <Message.Header>{this.state.successMessage.length > 0 ? "Success" : "Error"}</Message.Header>
+                    <Message.List>
+                        <Message.Item>{this.state.successMessage.length > 0 ? this.state.successMessage : this.state.errorMessage}</Message.Item>
+                    </Message.List>
+                </Message>
                 <p>CSV data must include date, category, and amount headers. Note and type headers are optional. Any invalid rows will be skipped. Categories that do not exist will be created as specified by their type. If there is no type, expense will be used as the default.</p>
                 <Input type="file" accept=".csv" onChange={this.importTransactions} />
             </React.Fragment>
