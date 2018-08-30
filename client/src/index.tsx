@@ -8,7 +8,7 @@ import "semantic-ui-css/semantic.min.css";
 
 const isAuthenticated = (): boolean => localStorage.getItem("token") !== null;
 
-const PrivateRoute = ({component: Component, ...rest}) => (
+const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route render={props => isAuthenticated() ? <Component {...props} /> : <Redirect to="/" />} {...rest} />
 );
 
@@ -26,4 +26,4 @@ render(
             <Route render={() => <Redirect to="/" />} />
         </Switch>
     </BrowserRouter>
-, document.getElementById("app"));
+    , document.getElementById("app"));

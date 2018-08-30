@@ -24,15 +24,15 @@ export default class ImportTransactions extends React.Component<ImportTransactio
             reader.onload = async e => {
                 const text = (e.target as any).result;
                 try {
-                    await this.props.onImportTransactions(Papa.parse(text, {header: true}).data);
-                    this.setState({successMessage: "Imported transactions.", errorMessage: ""});
+                    await this.props.onImportTransactions(Papa.parse(text, { header: true }).data);
+                    this.setState({ successMessage: "Imported transactions.", errorMessage: "" });
                 } catch (error) {
-                    this.setState({successMessage: "", errorMessage: error});
+                    this.setState({ successMessage: "", errorMessage: error });
                 }
             };
             reader.readAsText(file);
         } else {
-            this.setState({successMessage: "", errorMessage: "Invalid file type."});
+            this.setState({ successMessage: "", errorMessage: "Invalid file type." });
         }
     };
 

@@ -7,7 +7,7 @@ import ConfirmButton from "../General/ConfirmButton";
 
 interface UpcomingTransactionsProps {
     transactions: Transaction[];
-    categoryInfo: (id: string) => {type: string, name: string};
+    categoryInfo: (id: string) => { type: string, name: string };
     onPayTransaction: (id: string) => void;
     onDeleteTransaction: (id: string) => void;
     detail: boolean; // should be false when using on the Dashboard

@@ -6,7 +6,7 @@ import moment from "moment";
 
 interface RecentTransactionsProps {
     transactions: Transaction[];
-    categoryInfo: (id: string) => {type: string, name: string};
+    categoryInfo: (id: string) => { type: string, name: string };
     show: number;
 }
 
@@ -21,7 +21,7 @@ export default (props: RecentTransactionsProps) => {
         }
         return transactions;
     };
-    
+
     return (
         <Table celled striped>
             <Table.Header>

@@ -4,7 +4,7 @@ import AddCategory from "../../src/components/Settings/AddCategory";
 import { Grid, Button, Input, Message } from "semantic-ui-react";
 
 describe("AddCategory", () => {
-    const wrapper = mount(<AddCategory type="income" onAddCategory={jest.fn(() => new Promise<{}>((resolve, reject) => {}))} onCancel={jest.fn()} />);
+    const wrapper = mount(<AddCategory type="income" onAddCategory={jest.fn(() => new Promise<{}>((resolve, reject) => { }))} onCancel={jest.fn()} />);
 
     it("renders", () => {
         expect(wrapper.find(Grid)).toHaveLength(1);
@@ -18,17 +18,17 @@ describe("AddCategory", () => {
     });
 
     it("changes the state when an input value changes", () => {
-        wrapper.find(Input).find("input").simulate("change", {target: {value: "Test"}});
+        wrapper.find(Input).find("input").simulate("change", { target: { value: "Test" } });
         expect(wrapper.state("name")).toBe("Test");
     });
 
     it("displays errors", () => {
-        wrapper.setState({error: "Error"});
+        wrapper.setState({ error: "Error" });
         expect(wrapper.find(Message).text()).toBe("Error");
     });
 
     it("calls onAddCategory when the save button is clicked", () => {
-        wrapper.setState({name: "Test", colour: "#00FF00"});
+        wrapper.setState({ name: "Test", colour: "#00FF00" });
         wrapper.find(Button).at(0).simulate("click");
         expect(wrapper.prop("onAddCategory")).toHaveBeenCalledWith("Test", "income", "#00FF00", 0);
     });

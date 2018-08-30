@@ -6,7 +6,7 @@ import testUser from "../testUser";
 import { Table, Button } from "semantic-ui-react";
 
 describe("UpcomingTransactions", () => {
-    const categoryInfo = (id: string): {type: string, name: string} => {
+    const categoryInfo = (id: string): { type: string, name: string } => {
         return {
             type: "expense",
             name: `test${id}`
@@ -25,7 +25,7 @@ describe("UpcomingTransactions", () => {
 
     it("shows the transaction note if props.detail is true", () => {
         expect(wrapper.find(Table.Row).at(1).find(Table.Cell).at(2).text()).toBe("Test 4");
-        wrapper.setProps({detail: false});
+        wrapper.setProps({ detail: false });
         expect(wrapper.find(Table.Row).at(1).find(Table.Cell).at(2).text()).toBe("$4.00");
     });
 

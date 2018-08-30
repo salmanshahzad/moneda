@@ -18,7 +18,7 @@ export default (props: TransactionsProps) => {
     };
 
     return (
-        <Grid columns={16} style={{padding: "1rem"}}>
+        <Grid columns={16} style={{ padding: "1rem" }}>
             <Grid.Column mobile={16} tablet={16} computer={16}>
                 <Header as="h1">Transactions</Header>
             </Grid.Column>

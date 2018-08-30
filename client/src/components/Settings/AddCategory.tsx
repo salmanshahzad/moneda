@@ -24,27 +24,27 @@ export default class AddCategory extends React.Component<AddCategoryProps, AddCa
     };
 
     changeColour = (colour: ColorResult) => {
-        this.setState({colour: colour.hex});
+        this.setState({ colour: colour.hex });
     };
 
     changeName = (e: React.SyntheticEvent<HTMLElement>, data: InputOnChangeData) => {
-        this.setState({name: data.value});
+        this.setState({ name: data.value });
     };
 
     changeBudget = (e: React.SyntheticEvent<HTMLElement>, data: InputOnChangeData) => {
-        this.setState({budget: data.value});
+        this.setState({ budget: data.value });
     };
 
     makeBudgetTwoDecimalPlaces = () => {
-        this.setState({budget: parseFloat(this.state.budget).toFixed(2)});
+        this.setState({ budget: parseFloat(this.state.budget).toFixed(2) });
     };
 
     save = async () => {
         try {
             await this.props.onAddCategory(this.state.name, this.props.type, this.state.colour, parseFloat(this.state.budget));
-            this.setState({error: ""});
+            this.setState({ error: "" });
         } catch (errors) {
-            this.setState({error: errors[0]});
+            this.setState({ error: errors[0] });
         }
     };
 

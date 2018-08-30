@@ -27,19 +27,19 @@ export default class UserInformation extends React.Component<UserInformationProp
     };
 
     changeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({username: e.target.value});
+        this.setState({ username: e.target.value });
     };
 
     changeNewPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({newPassword: e.target.value});
+        this.setState({ newPassword: e.target.value });
     };
 
     changeConfirmNewPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({confirmNewPassword: e.target.value});
+        this.setState({ confirmNewPassword: e.target.value });
     };
 
     changeCurrentPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({currentPassword: e.target.value});
+        this.setState({ currentPassword: e.target.value });
     };
 
     updateUserInformation = async () => {
@@ -53,7 +53,7 @@ export default class UserInformation extends React.Component<UserInformationProp
                 successMessage: "Updated user information."
             });
         } catch (errors) {
-            this.setState({errors});
+            this.setState({ errors });
         }
     };
 

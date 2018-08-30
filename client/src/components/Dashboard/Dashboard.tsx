@@ -54,7 +54,7 @@ export default (props: DashboardProps) => {
     const onAddTransaction = (categoryId: string, amount: number, note: string, date: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/user/transaction", {categoryId, amount, note, date}, getAxiosHeaderConfig());
+                await axios.post("/api/user/transaction", { categoryId, amount, note, date }, getAxiosHeaderConfig());
                 resolve();
                 props.onUpdate();
             } catch (e) {
@@ -74,15 +74,15 @@ export default (props: DashboardProps) => {
     };
 
     return (
-        <Grid columns={16} style={{padding: "1rem"}}>
-            <Joyride callback={joyrideCallback} continuous locale={{last: "Done"}} run={localStorage.getItem("show tour") === "true"} showSkipButton steps={joyrideSteps} />
+        <Grid columns={16} style={{ padding: "1rem" }}>
+            <Joyride callback={joyrideCallback} continuous locale={{ last: "Done" }} run={localStorage.getItem("show tour") === "true"} showSkipButton steps={joyrideSteps} />
             <Grid.Column mobile={16} tablet={16} computer={16}>
                 <Header as="h1" className="title">Dashboard</Header>
             </Grid.Column>
             <Grid.Column mobile={16} tablet={8} computer={8}>
-                <Segment style={{height: "50vh"}}>
+                <Segment style={{ height: "50vh" }}>
                     {/* need marginTop because for some reason Header has an extra margin when it is placed before a chart */}
-                    <Header style={{marginTop: "-.14285714em"}}>Expenses Chart</Header>
+                    <Header style={{ marginTop: "-.14285714em" }}>Expenses Chart</Header>
                     <ExpenseChart expenses={props.user.expenses} />
                 </Segment>
             </Grid.Column>

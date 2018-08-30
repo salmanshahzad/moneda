@@ -36,7 +36,7 @@ export default (props: TransactionHistoryChartProps) => {
         return amounts.reverse();
     };
 
-    const getData = (): {labels: string[], datasets: object[]} => {
+    const getData = (): { labels: string[], datasets: object[] } => {
         // return the data in the format needed for the Line component
         const data = {
             labels: getMonthLabels(),
@@ -50,7 +50,7 @@ export default (props: TransactionHistoryChartProps) => {
                 }
             ]
         };
-        
+
         // if the account is an expense, add a straight line representing the budget
         if (props.category.type === "expense") {
             const expense = props.category as Expense;

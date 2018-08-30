@@ -4,7 +4,7 @@ export interface User {
     expenses: Expense[];
     transactions: Transaction[];
     upcomingTransactions: Transaction[];
-    categoryInfo: (id: string) => {type: string, name: string};
+    categoryInfo: (id: string) => { type: string, name: string };
 }
 
 export interface Category {

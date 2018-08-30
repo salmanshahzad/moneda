@@ -3,7 +3,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-dotenv.config({path: path.join(__dirname, "..", ".env")});
+dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 module.exports = {
     devtool: "source-map", // enable source maps for debugging

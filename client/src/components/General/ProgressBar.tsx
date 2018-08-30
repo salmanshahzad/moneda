@@ -29,5 +29,5 @@ export default (props: ProgressBarProps) => {
             return "yellow";
         }
     };
-    return <Progress percent={getPercent()} progress color={getColour()} style={{margin: "0.8em 0"}} />;
+    return <Progress percent={getPercent()} progress color={getColour()} style={{ margin: "0.8em 0" }} />;
 }

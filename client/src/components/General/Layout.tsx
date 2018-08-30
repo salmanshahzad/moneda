@@ -29,11 +29,11 @@ export default class Layout extends React.Component<{}, LayoutState> {
     }
 
     openSidebar = () => {
-        this.setState({sidebarOpen: true});
+        this.setState({ sidebarOpen: true });
     };
-    
+
     closeSidebar = () => {
-        this.setState({sidebarOpen: false});
+        this.setState({ sidebarOpen: false });
     };
 
     updateUser = async () => {
@@ -55,9 +55,9 @@ export default class Layout extends React.Component<{}, LayoutState> {
                     };
                 }
             };
-            this.setState({auth: "yes", user});
+            this.setState({ auth: "yes", user });
         } catch {
-            this.setState({auth: "no"});
+            this.setState({ auth: "no" });
         }
     };
 

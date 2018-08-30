@@ -17,7 +17,7 @@ describe("CategoryItem", () => {
     });
 
     it("shows expense information correctly", () => {
-        wrapper.setProps({category: testUser.expenses[0]});
+        wrapper.setProps({ category: testUser.expenses[0] });
         expect(wrapper.find(Link).prop("to")).toBe("/expense/Test Expense 1");
         expect(wrapper.find(Link).text()).toBe("Test Expense 1");
         expect(wrapper.find("span").text()).toBe("$0.00 of $0.00");

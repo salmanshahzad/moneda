@@ -39,23 +39,23 @@ export default class AddTransaction extends React.Component<AddTransactionProps,
     };
 
     changeName = (e: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
-        this.setState({categoryId: data.value as string});
+        this.setState({ categoryId: data.value as string });
     };
 
     changeAmount = (e: React.SyntheticEvent<HTMLElement>, data: InputOnChangeData) => {
-        this.setState({amount: data.value});
+        this.setState({ amount: data.value });
     };
 
     makeAmountTwoDecimalPlaces = () => {
-        this.setState({amount: parseFloat(this.state.amount).toFixed(2)});
+        this.setState({ amount: parseFloat(this.state.amount).toFixed(2) });
     };
 
     changeNote = (e: React.SyntheticEvent<HTMLElement>, data: InputOnChangeData) => {
-        this.setState({note: data.value});
+        this.setState({ note: data.value });
     };
 
     changeDate = (date: moment.Moment, e: React.SyntheticEvent<any>) => {
-        this.setState({date});
+        this.setState({ date });
     };
 
     submit = async () => {
@@ -70,13 +70,13 @@ export default class AddTransaction extends React.Component<AddTransactionProps,
                 errors: []
             });
         } catch (errors) {
-            this.setState({errors});
+            this.setState({ errors });
         }
     };
 
     render(): React.ReactNode {
         return (
-            <Form onSubmit={this.submit} error={this.state.errors.length > 0} style={{paddingTop: "1rem"}}>
+            <Form onSubmit={this.submit} error={this.state.errors.length > 0} style={{ paddingTop: "1rem" }}>
                 <Message error>
                     <Message.Header>Error</Message.Header>
                     <Message.List>

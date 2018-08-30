@@ -19,24 +19,24 @@ export default class SignInDialog extends React.Component<SignInDialogProps, Sig
     };
 
     changeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({username: e.target.value});
+        this.setState({ username: e.target.value });
     };
 
     changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({password: e.target.value});
+        this.setState({ password: e.target.value });
     };
 
     submit = async () => {
         try {
             await this.props.onSignIn(this.state.username, this.state.password);
         } catch (errors) {
-            this.setState({errors});
+            this.setState({ errors });
         }
     };
 
     render(): React.ReactNode {
         return (
-            <Form onSubmit={this.submit} error={this.state.errors.length > 0} style={{padding: "1rem"}}>
+            <Form onSubmit={this.submit} error={this.state.errors.length > 0} style={{ padding: "1rem" }}>
                 <Message error>
                     <Message.Header>Error</Message.Header>
                     <Message.List>

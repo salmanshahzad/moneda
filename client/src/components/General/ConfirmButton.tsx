@@ -24,7 +24,7 @@ export default class ConfirmButton extends React.Component<ConfirmButtonProps, C
     };
 
     toggleDialog = () => {
-        this.setState({dialogOpen: !this.state.dialogOpen});
+        this.setState({ dialogOpen: !this.state.dialogOpen });
     };
 
     negativeClick = () => {

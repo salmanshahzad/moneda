@@ -6,7 +6,7 @@ import { Grid, Button, Input, Message } from "semantic-ui-react";
 import { SketchPicker } from "react-color";
 
 describe("EditCategory", () => {
-    const emptyPromise = jest.fn(() => new Promise<{}>((resolve, reject) => {}));
+    const emptyPromise = jest.fn(() => new Promise<{}>((resolve, reject) => { }));
     const wrapper = mount(<EditCategory category={testUser.income[0]} onUpdateCategory={emptyPromise} onDeleteCategory={emptyPromise} />);
 
     it("renders", () => {
@@ -29,18 +29,18 @@ describe("EditCategory", () => {
     });
 
     it("changes the state when an input value changes", () => {
-        wrapper.setState({editing: true});
-        wrapper.find(Input).find("input").simulate("change", {target: {value: "Test"}});
+        wrapper.setState({ editing: true });
+        wrapper.find(Input).find("input").simulate("change", { target: { value: "Test" } });
         expect(wrapper.state("name")).toBe("Test");
     });
 
     it("displays errors", () => {
-        wrapper.setState({editing: true, error: "Error"});
+        wrapper.setState({ editing: true, error: "Error" });
         expect(wrapper.find(Message).text()).toBe("Error");
     });
 
     it("calls onUpdateCategory when the save button is clicked", () => {
-        wrapper.setState({editing: true, name: "Test", colour: "#00FF00"});
+        wrapper.setState({ editing: true, name: "Test", colour: "#00FF00" });
         wrapper.find(Button).at(0).simulate("click");
         expect(wrapper.prop("onUpdateCategory")).toHaveBeenCalledWith("1", "Test", "income", "#00FF00", 0);
     });

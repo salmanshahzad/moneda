@@ -29,7 +29,7 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
     onUpdateUserInformation = (username: string, newPassword: string, confirmNewPassword: string, currentPassword: string): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                const response = await axios.put("/api/user", {username, newPassword, confirmNewPassword, currentPassword}, getAxiosHeaderConfig());
+                const response = await axios.put("/api/user", { username, newPassword, confirmNewPassword, currentPassword }, getAxiosHeaderConfig());
                 const token = response.data.token;
                 localStorage.setItem("token", token);
                 resolve();
@@ -43,7 +43,7 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
     onUpdateCategory = (id: string, name: string, type: string, colour: string, budget?: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.put(`/api/user/category/${id}`, {name, type, colour, budget}, getAxiosHeaderConfig());
+                await axios.put(`/api/user/category/${id}`, { name, type, colour, budget }, getAxiosHeaderConfig());
                 resolve();
                 this.props.onUpdate();
             } catch (e) {
@@ -65,22 +65,22 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
     };
 
     toggleAddIncome = () => {
-        this.setState({addIncome: !this.state.addIncome});
+        this.setState({ addIncome: !this.state.addIncome });
     };
-    
+
     toggleAddExpense = () => {
-        this.setState({addExpense: !this.state.addExpense});
+        this.setState({ addExpense: !this.state.addExpense });
     };
 
     onAddCategory = (name: string, type: string, colour: string, budget?: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/user/category", {name, type, colour, budget}, getAxiosHeaderConfig());
+                await axios.post("/api/user/category", { name, type, colour, budget }, getAxiosHeaderConfig());
                 resolve();
                 if (type === "income") {
-                    this.setState({addIncome: false});
+                    this.setState({ addIncome: false });
                 } else if (type === "expense") {
-                    this.setState({addExpense: false});
+                    this.setState({ addExpense: false });
                 }
                 this.props.onUpdate();
             } catch (e) {
@@ -92,7 +92,7 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
     onImportTransactions = (transactions: any[]): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/user/transaction/import", {transactions}, getAxiosHeaderConfig());
+                await axios.post("/api/user/transaction/import", { transactions }, getAxiosHeaderConfig());
                 resolve();
                 this.props.onUpdate();
             } catch (e) {
@@ -108,7 +108,7 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
 
     render(): React.ReactNode {
         return (
-            <Grid columns={16} style={{padding: "1rem"}}>
+            <Grid columns={16} style={{ padding: "1rem" }}>
                 <Grid.Column mobile={16} tablet={16} computer={16}>
                     <Header as="h1">Settings</Header>
                 </Grid.Column>
@@ -128,8 +128,8 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
                         }
                         {
                             this.state.addIncome ?
-                            <AddCategory type="income" onAddCategory={this.onAddCategory} onCancel={this.toggleAddIncome} /> :
-                            <div style={{paddingTop: "2rem"}}><Button positive icon="plus" onClick={this.toggleAddIncome} /></div>
+                                <AddCategory type="income" onAddCategory={this.onAddCategory} onCancel={this.toggleAddIncome} /> :
+                                <div style={{ paddingTop: "2rem" }}><Button positive icon="plus" onClick={this.toggleAddIncome} /></div>
                         }
                     </Segment>
                 </Grid.Column>
@@ -143,8 +143,8 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
                         }
                         {
                             this.state.addExpense ?
-                            <AddCategory type="expense" onAddCategory={this.onAddCategory} onCancel={this.toggleAddExpense} /> :
-                            <div style={{paddingTop: "2rem"}}><Button positive icon="plus" onClick={this.toggleAddExpense} /></div>
+                                <AddCategory type="expense" onAddCategory={this.onAddCategory} onCancel={this.toggleAddExpense} /> :
+                                <div style={{ paddingTop: "2rem" }}><Button positive icon="plus" onClick={this.toggleAddExpense} /></div>
                         }
                     </Segment>
                 </Grid.Column>

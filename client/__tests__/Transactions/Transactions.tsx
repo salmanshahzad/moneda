@@ -5,7 +5,7 @@ import testUser from "../testUser";
 import { Grid, Table } from "semantic-ui-react";
 
 describe("Transactions", () => {
-    const wrapper = mount(<Transactions user={testUser} onUpdate={() => {}} />);
+    const wrapper = mount(<Transactions user={testUser} onUpdate={() => { }} />);
 
     it("renders", () => {
         expect(wrapper.find(Grid)).toHaveLength(1);

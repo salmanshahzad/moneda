@@ -19,7 +19,7 @@ export default class ExportTransactions extends React.Component<ExportTransactio
     };
 
     changeIncludeUpcoming = () => {
-        this.setState({includeUpcoming: !this.state.includeUpcoming});
+        this.setState({ includeUpcoming: !this.state.includeUpcoming });
     };
 
     export = () => {
@@ -29,7 +29,7 @@ export default class ExportTransactions extends React.Component<ExportTransactio
         if (this.state.includeUpcoming) {
             transactions.unshift(...this.props.user.upcomingTransactions.reverse());
         }
-        
+
         // format transaction information
         const t = transactions.map(t => {
             const info = this.props.user.categoryInfo(t.category_id);

@@ -13,7 +13,7 @@ describe("CategoryDetail", () => {
         transactions: [],
         upcomingTransactions: []
     };
-    const wrapper = mount(<CategoryDetail categoryDetail={category} onUpdate={jest.fn()}  />);
+    const wrapper = mount(<CategoryDetail categoryDetail={category} onUpdate={jest.fn()} />);
 
     it("renders", () => {
         expect(wrapper.find(Header).at(0).text()).toBe("Test Income 1");
@@ -21,11 +21,13 @@ describe("CategoryDetail", () => {
         expect(wrapper.find(ProgressBar)).toHaveLength(0);
         expect(wrapper.find(Line)).toHaveLength(1);
         expect(wrapper.find(TransactionsThisMonth)).toHaveLength(1);
-        wrapper.setProps({categoryDetail: {
-            category: testUser.expenses[0],
-            transactions: [],
-            upcomingTransactions: []
-        }});
+        wrapper.setProps({
+            categoryDetail: {
+                category: testUser.expenses[0],
+                transactions: [],
+                upcomingTransactions: []
+            }
+        });
         expect(wrapper.find(Header).at(0).text()).toBe("Test Expense 1");
         expect(wrapper.find(Header).at(1).text()).toBe("$0.00 of $0.00");
         expect(wrapper.find(ProgressBar)).toHaveLength(1);

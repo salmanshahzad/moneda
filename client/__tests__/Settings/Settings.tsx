@@ -6,7 +6,7 @@ import UserInformation from "../../src/components/Settings/UserInformation";
 import EditCategory from "../../src/components/Settings/EditCategory";
 
 describe("Settings", () => {
-    const wrapper = mount(<Settings user={testUser} onUpdate={() => {}} />);
+    const wrapper = mount(<Settings user={testUser} onUpdate={() => { }} />);
 
     it("renders", () => {
         expect(wrapper.find(UserInformation)).toHaveLength(1);

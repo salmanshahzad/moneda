@@ -33,7 +33,7 @@ export default (props: CategoryDetailProps) => {
     };
 
     return (
-        <Grid columns={16} style={{padding: "1rem"}}>
+        <Grid columns={16} style={{ padding: "1rem" }}>
             <Grid.Column mobile={8} tablet={8} computer={8}>
                 <Header as="h1">{props.categoryDetail.category.name}</Header>
             </Grid.Column>
@@ -56,9 +56,9 @@ export default (props: CategoryDetailProps) => {
                 </Grid.Column>
             }
             <Grid.Column mobile={16} tablet={16} computer={16}>
-                <Segment style={{height: "50vh"}}>
+                <Segment style={{ height: "50vh" }}>
                     {/* need marginTop because for some reason Header has an extra margin when it is placed before a chart */}
-                    <Header style={{marginTop: "-.14285714em"}}>Past History</Header>
+                    <Header style={{ marginTop: "-.14285714em" }}>Past History</Header>
                     <TransactionHistoryChart category={props.categoryDetail.category} transactions={props.categoryDetail.transactions} monthsToShow={6} />
                 </Segment>
             </Grid.Column>

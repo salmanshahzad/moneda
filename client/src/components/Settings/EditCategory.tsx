@@ -30,36 +30,36 @@ export default class EditCategory extends React.Component<EditCategoryProps, Edi
     state = this.defaultState;
 
     changeColour = (colour: ColorResult) => {
-        this.setState({colour: colour.hex});
+        this.setState({ colour: colour.hex });
     };
 
     changeName = (e: React.SyntheticEvent<HTMLElement>, data: InputOnChangeData) => {
-        this.setState({name: data.value});
+        this.setState({ name: data.value });
     };
 
     changeBudget = (e: React.SyntheticEvent<HTMLElement>, data: InputOnChangeData) => {
-        this.setState({budget: data.value});
+        this.setState({ budget: data.value });
     };
 
     makeBudgetTwoDecimalPlaces = () => {
-        this.setState({budget: parseFloat(this.state.budget).toFixed(2)});
+        this.setState({ budget: parseFloat(this.state.budget).toFixed(2) });
     };
 
     save = async () => {
         try {
             await this.props.onUpdateCategory(this.props.category.id, this.state.name, this.props.category.type, this.state.colour, parseFloat(this.state.budget));
-            this.setState({editing: false, error: ""});
+            this.setState({ editing: false, error: "" });
         } catch (errors) {
-            this.setState({error: errors[0]});
+            this.setState({ error: errors[0] });
         }
     };
 
     cancelEdit = () => {
         this.setState(this.defaultState);
     };
-    
+
     edit = () => {
-        this.setState({editing: !this.state.editing});
+        this.setState({ editing: !this.state.editing });
     };
 
     delete = () => {
@@ -103,7 +103,7 @@ export default class EditCategory extends React.Component<EditCategoryProps, Edi
                         </Button.Group>
                     </Grid.Column>
                     <Grid.Column mobile={6} tablet={1} computer={1}>
-                        <Icon name="circle" circular style={{backgroundColor: this.state.colour, color: this.state.colour}} />
+                        <Icon name="circle" circular style={{ backgroundColor: this.state.colour, color: this.state.colour }} />
                     </Grid.Column>
                     <Grid.Column mobile={6} tablet={7} computer={7}>
                         <span>{this.state.name}</span>

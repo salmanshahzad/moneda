@@ -43,22 +43,22 @@ export default class Home extends React.Component<{}, HomeState> {
     ];
 
     toggleSignInDialog = () => {
-        this.setState({signInDialogOpen: !this.state.signInDialogOpen});
+        this.setState({ signInDialogOpen: !this.state.signInDialogOpen });
     };
 
     toggleRegisterDialog = () => {
-        this.setState({registerDialogOpen: !this.state.registerDialogOpen});
+        this.setState({ registerDialogOpen: !this.state.registerDialogOpen });
     };
 
     onRegister = (username: string, password: string, confirmPassword: string) => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                const response = await axios.post("/api/user", {username, password, confirmPassword});
+                const response = await axios.post("/api/user", { username, password, confirmPassword });
                 localStorage.setItem("token", response.data.token);
                 // show tour on Dashboard
                 localStorage.setItem("show tour", "true");
                 resolve();
-                this.setState({signedIn: true});
+                this.setState({ signedIn: true });
             } catch (e) {
                 reject(e.response.data.errors);
             }
@@ -68,10 +68,10 @@ export default class Home extends React.Component<{}, HomeState> {
     onSignIn = (username: string, password: string) => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                const response = await axios.post("/api/session", {username, password});
+                const response = await axios.post("/api/session", { username, password });
                 localStorage.setItem("token", response.data.token);
                 resolve();
-                this.setState({signedIn: true});
+                this.setState({ signedIn: true });
             } catch (e) {
                 reject(e.response.data.errors);
             }
@@ -84,10 +84,10 @@ export default class Home extends React.Component<{}, HomeState> {
         }
         return (
             // flex, flexColumn, minHeight needed for sticky footer
-            <div style={{display: "flex", flexDirection: "column", minHeight: "100%"}}>
+            <div style={{ display: "flex", flexDirection: "column", minHeight: "100%" }}>
                 <Parallax bgImage={backgroundImage} bgImageAlt="Moneda" strength={500} blur={3}>
-                    <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "50vh"}}>
-                        <h1 style={{fontSize: "5rem"}}>Moneda</h1>
+                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "50vh" }}>
+                        <h1 style={{ fontSize: "5rem" }}>Moneda</h1>
                         <h2>Budgeting Made Easy</h2>
                         <Button.Group>
                             <Button primary onClick={this.toggleSignInDialog}>Sign In</Button>
@@ -101,7 +101,7 @@ export default class Home extends React.Component<{}, HomeState> {
                         <Feature image={feature.image} icon={feature.icon} content={feature.content} alignRight={i % 2 === 1} key={i} />
                     ))
                 }
-                <footer style={{backgroundColor: "gainsboro", padding: "1em"}}>
+                <footer style={{ backgroundColor: "gainsboro", padding: "1em" }}>
                     <p>&copy;2018 Salman</p>
                 </footer>
                 <SignInDialogModal open={this.state.signInDialogOpen} onClose={this.toggleSignInDialog} onSignIn={this.onSignIn} />

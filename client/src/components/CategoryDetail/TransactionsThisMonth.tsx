@@ -23,7 +23,7 @@ export default (props: TransactionsThisMonthProps) => {
         }
         return props.transactions.slice(0, index + 1);
     };
-    
+
     return (
         <Table celled striped>
             <Table.Header>

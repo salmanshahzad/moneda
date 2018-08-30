@@ -15,7 +15,7 @@ export default (props: CategoryItemProps) => {
 
     return (
         <React.Fragment>
-            <div style={{display: "flex", justifyContent: "space-between"}}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Link to={`/${props.category.type}/${props.category.name}`} style={textStyle}>{props.category.name}</Link>
                 {
                     props.category.type === "income" &&

@@ -4,7 +4,7 @@ import ImportTransactions from "../../src/components/Settings/ImportTransactions
 import { Input, Message } from "semantic-ui-react";
 
 describe("ImportTransactions", () => {
-    const wrapper = mount(<ImportTransactions onImportTransactions={() => new Promise<{}>((resolve, reject) => {})} />);
+    const wrapper = mount(<ImportTransactions onImportTransactions={() => new Promise<{}>((resolve, reject) => { })} />);
 
     it("renders", () => {
         expect(wrapper.find(Input)).toHaveLength(1);
@@ -17,13 +17,13 @@ describe("ImportTransactions", () => {
 
     it("displays errors", () => {
         expect(wrapper.find(Message).prop("hidden")).toBe(true);
-        wrapper.setState({errorMessage: "Invalid file type."});
+        wrapper.setState({ errorMessage: "Invalid file type." });
         expect(wrapper.find(Message).prop("hidden")).toBe(false);
         expect(wrapper.find(Message).prop("error")).toBe(true);
     });
 
     it("displays success messages", () => {
-        wrapper.setState({errorMessage: "", successMessage: "Imported transactions."});
+        wrapper.setState({ errorMessage: "", successMessage: "Imported transactions." });
         expect(wrapper.find(Message).prop("error")).toBe(false);
         expect(wrapper.find(Message).prop("success")).toBe(true);
     });

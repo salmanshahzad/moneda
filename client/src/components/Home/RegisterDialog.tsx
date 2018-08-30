@@ -21,28 +21,28 @@ export default class RegisterDialog extends React.Component<RegisterDialogProps,
     };
 
     changeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({username: e.target.value});
+        this.setState({ username: e.target.value });
     };
 
     changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({password: e.target.value});
+        this.setState({ password: e.target.value });
     };
 
     changeConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({confirmPassword: e.target.value});
+        this.setState({ confirmPassword: e.target.value });
     };
 
     submit = async () => {
         try {
             await this.props.onRegister(this.state.username, this.state.password, this.state.confirmPassword);
         } catch (errors) {
-            this.setState({errors});
+            this.setState({ errors });
         }
     };
 
     render(): React.ReactNode {
         return (
-            <Form onSubmit={this.submit} error={this.state.errors.length > 0} style={{padding: "1rem"}}>
+            <Form onSubmit={this.submit} error={this.state.errors.length > 0} style={{ padding: "1rem" }}>
                 <Message error>
                     <Message.Header>Error</Message.Header>
                     <Message.List>

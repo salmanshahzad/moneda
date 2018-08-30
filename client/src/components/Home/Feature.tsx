@@ -22,5 +22,5 @@ export default (props: FeatureProps) => {
     );
 
     // reversed prop on Grid cannot be ""
-    return props.alignRight ? <Grid reversed="computer" style={{padding: "1rem"}}>{columns}</Grid> : <Grid style={{padding: "1rem"}}>{columns}</Grid>
+    return props.alignRight ? <Grid reversed="computer" style={{ padding: "1rem" }}>{columns}</Grid> : <Grid style={{ padding: "1rem" }}>{columns}</Grid>
 }

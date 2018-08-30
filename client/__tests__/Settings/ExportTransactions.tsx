@@ -16,7 +16,7 @@ describe("ExportTransactions", () => {
     });
 
     it("changes the state when the includeUpcoming checkbox is checked", () => {
-        wrapper.find("input[value='includeUpcoming']").simulate("change", {target: {checked: true}});
+        wrapper.find("input[value='includeUpcoming']").simulate("change", { target: { checked: true } });
         expect(wrapper.state("includeUpcoming")).toBe(true);
     });
 });

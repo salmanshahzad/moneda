@@ -12,13 +12,13 @@ describe("ProgressBar", () => {
 
     it("shows the correct colour", () => {
         expect(wrapper.find(Progress).prop("color")).toBe("green");
-        wrapper.setProps({value: 1});
+        wrapper.setProps({ value: 1 });
         expect(wrapper.find(Progress).prop("color")).toBe("red");
-        wrapper.setProps({value: 0, total: 1});
+        wrapper.setProps({ value: 0, total: 1 });
         expect(wrapper.find(Progress).prop("color")).toBe("green");
-        wrapper.setProps({value: 0.75, total: 1});
+        wrapper.setProps({ value: 0.75, total: 1 });
         expect(wrapper.find(Progress).prop("color")).toBe("yellow");
-        wrapper.setProps({value: 2, total: 1});
+        wrapper.setProps({ value: 2, total: 1 });
         expect(wrapper.find(Progress).prop("color")).toBe("red");
     });
 });

@@ -6,7 +6,7 @@ import testUser from "../testUser";
 import { Table } from "semantic-ui-react";
 
 describe("RecentTransactions", () => {
-    const categoryInfo = (id: string): {type: string, name: string} => {
+    const categoryInfo = (id: string): { type: string, name: string } => {
         return {
             type: "expense",
             name: `test${id}`
