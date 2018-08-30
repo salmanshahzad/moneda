@@ -6,7 +6,7 @@ import routerContext from "../routerContext";
 import ExpenseChart from "../../src/components/Budget/ExpenseChart";
 import { Tab } from "semantic-ui-react";
 import RecentTransactions from "../../src/components/Dashboard/RecentTransactions";
-import UpcomingTransactions from "../../src/components/Budget/UpcomingTransactions";
+import UpcomingTransactions from "../../src/components/Dashboard/UpcomingTransactions";
 
 describe("Dashboard", () => {
     it("renders", () => {

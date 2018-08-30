@@ -1,7 +1,7 @@
 import React from "react";
 import { mount } from "enzyme";
 import routerContext from "../routerContext";
-import UpcomingTransactions from "../../src/components/Budget/UpcomingTransactions";
+import UpcomingTransactions from "../../src/components/Dashboard/UpcomingTransactions";
 import testUser from "../testUser";
 import { Table, Button } from "semantic-ui-react";
 

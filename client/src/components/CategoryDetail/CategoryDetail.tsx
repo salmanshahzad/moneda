@@ -6,7 +6,7 @@ import { Grid, Header, Segment } from "semantic-ui-react";
 import ProgressBar from "../General/ProgressBar";
 import TransactionHistoryChart from "./TransactionHistoryChart";
 import TransactionsThisMonth from "./TransactionsThisMonth";
-import UpcomingTransactions from "../Budget/UpcomingTransactions";
+import UpcomingTransactions from "../Dashboard/UpcomingTransactions";
 
 interface CategoryDetail {
     category: Category;

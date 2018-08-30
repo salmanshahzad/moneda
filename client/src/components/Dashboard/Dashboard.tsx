@@ -6,7 +6,7 @@ import { Header, Grid, Segment, Tab } from "semantic-ui-react";
 import ExpenseChart from "../Budget/ExpenseChart";
 import AddTransaction from "./AddTransaction";
 import RecentTransactions from "./RecentTransactions";
-import UpcomingTransactions from "../Budget/UpcomingTransactions";
+import UpcomingTransactions from "./UpcomingTransactions";
 
 interface DashboardProps {
     user: User;
