@@ -1,5 +1,5 @@
 import React from "react";
-import Papa from "papaparse";
+import { parse } from "papaparse";
 import { Message, Input } from "semantic-ui-react";
 
 interface ImportTransactionsProps {
@@ -24,7 +24,7 @@ export default class ImportTransactions extends React.Component<ImportTransactio
             reader.onload = async e => {
                 const text = (e.target as any).result;
                 try {
-                    await this.props.onImportTransactions(Papa.parse(text, { header: true }).data);
+                    await this.props.onImportTransactions(parse(text, { header: true }).data);
                     this.setState({ successMessage: "Imported transactions.", errorMessage: "" });
                 } catch (error) {
                     this.setState({ successMessage: "", errorMessage: error });

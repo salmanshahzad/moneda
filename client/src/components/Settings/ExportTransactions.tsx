@@ -1,6 +1,6 @@
 import React from "react";
 import { User } from "../../user";
-import Papa from "papaparse";
+import { unparse } from "papaparse";
 import download from "../../download";
 import { Form, Checkbox, Button } from "semantic-ui-react";
 import moment from "moment";
@@ -42,7 +42,7 @@ export default class ExportTransactions extends React.Component<ExportTransactio
             };
         });
 
-        download(Papa.unparse(t), `${this.props.user.username}-moneda-transactions-${moment().format("DD-MMM-YYYY")}.csv`, "text/csv");
+        download(unparse(t), `${this.props.user.username}-moneda-transactions-${moment().format("DD-MMM-YYYY")}.csv`, "text/csv");
     };
 
     render(): React.ReactNode {
