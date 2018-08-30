@@ -40,11 +40,8 @@ export default (props: CategoryDetailProps): JSX.Element => {
             <Grid.Column mobile={8} tablet={8} computer={8}>
                 <Header as="h2" textAlign="right">
                     {
-                        isExpense &&
-                        `$${(props.categoryDetail.category as Expense).spent.toFixed(2)} of $${(props.categoryDetail.category as Expense).budget.toFixed(2)}`
-                    }
-                    {
-                        !isExpense &&
+                        isExpense ?
+                        `$${(props.categoryDetail.category as Expense).spent.toFixed(2)} of $${(props.categoryDetail.category as Expense).budget.toFixed(2)}` :
                         `$${(props.categoryDetail.category as Income).income.toFixed(2)}`
                     }
                 </Header>
