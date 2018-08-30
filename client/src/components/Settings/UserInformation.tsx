@@ -13,6 +13,7 @@ interface UserInformationState {
     confirmNewPassword: string;
     currentPassword: string;
     errors: string[];
+    successMessage: string;
 }
 
 export default class UserInformation extends React.Component<UserInformationProps, UserInformationState> {
@@ -21,7 +22,8 @@ export default class UserInformation extends React.Component<UserInformationProp
         newPassword: "",
         confirmNewPassword: "",
         currentPassword: "",
-        errors: []
+        errors: [],
+        successMessage: ""
     };
 
     changeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +49,8 @@ export default class UserInformation extends React.Component<UserInformationProp
                 newPassword: "",
                 confirmNewPassword: "",
                 currentPassword: "",
-                errors: []
+                errors: [],
+                successMessage: "Updated user information."
             });
         } catch (errors) {
             this.setState({errors});
@@ -56,8 +59,9 @@ export default class UserInformation extends React.Component<UserInformationProp
 
     render(): React.ReactNode {
         return (
-            <Form onSubmit={this.updateUserInformation} error={this.state.errors.length > 0}>
+            <Form onSubmit={this.updateUserInformation} error={this.state.errors.length > 0} success={this.state.successMessage.length > 0}>
                 <Message error>
+                    <Message.Header>Error</Message.Header>
                     <Message.List>
                         {
                             this.state.errors.map((error, i) => (
@@ -65,6 +69,10 @@ export default class UserInformation extends React.Component<UserInformationProp
                             ))
                         }
                     </Message.List>
+                </Message>
+                <Message success>
+                    <Message.Header>Success</Message.Header>
+                    <Message.Item>{this.state.successMessage}</Message.Item>
                 </Message>
                 <Form.Field>
                     <label>Username (minimum 5 characters)</label>

@@ -18,6 +18,7 @@ describe("UserInformation", () => {
         expect(wrapper.state("confirmNewPassword")).toBe("");
         expect(wrapper.state("currentPassword")).toBe("");
         expect(wrapper.state("errors")).toEqual([]);
+        expect(wrapper.state("successMessage")).toBe("");
     });
 
     it("changes the state when an input value changes", () => {
@@ -32,13 +33,19 @@ describe("UserInformation", () => {
     });
 
     it("displays errors", () => {
-        expect(wrapper.find(Message.Item)).toHaveLength(0);
+        expect(wrapper.find(Message).at(0).find(Message.Item)).toHaveLength(0);
         wrapper.setState({errors: ["test error 1", "test error 2"]});
-        expect(wrapper.find(Message.Item)).toHaveLength(2);
+        expect(wrapper.find(Message).at(0).find(Message.Item)).toHaveLength(2);
         expect(wrapper.find(Message.Item).at(0).text()).toBe("test error 1");
         expect(wrapper.find(Message.Item).at(1).text()).toBe("test error 2");
         wrapper.setState({errors: []});
-        expect(wrapper.find(Message.Item)).toHaveLength(0);
+        expect(wrapper.find(Message).at(0).find(Message.Item)).toHaveLength(0);
+    });
+
+    it("displays success messages", () => {
+        wrapper.setState({errors: [], successMessage: "Success"});
+        expect(wrapper.find(Message).at(0).find(Message.Item)).toHaveLength(0);
+        expect(wrapper.find(Message).at(1).text()).toContain("Success"); // not toBe because Message header is also Success
     });
 
     it("calls onUpdateUserInformation when the form is submitted", () => {
