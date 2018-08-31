@@ -78,6 +78,9 @@ router.post("/transaction/import", verifyToken, async (req, res) => {
             continue;
         }
 
+        // if there is no type, make it expense
+        t.type = t.type || "expense";
+
         // if category does not exist, create it
         let category_id: string;
         const rows = await db("category").select("id").where({ user_id: req["user"].id, name: t.category });
