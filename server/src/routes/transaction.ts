@@ -43,7 +43,7 @@ router.post("/transaction", verifyToken, async (req, res) => {
     }
 
     // add the transaction
-    const today = moment().startOf("day").valueOf();
+    const today = moment().valueOf();
     const transaction = (await db("transaction").insert({
         user_id: req["user"].id,
         category_id: req.body.categoryId,
@@ -127,7 +127,7 @@ router.put("/transaction/:id", verifyToken, async (req, res) => {
         return res.status(404).send({ errors: ["A transaction with that id does not exist."] });
     }
 
-    const transaction = (await db("transaction").update({ date: moment().startOf("day").valueOf(), upcoming: false }, ["id", "user_id", "category_id", "amount", "date", "note", "upcoming"]).where({ id: req.params.id }))[0];
+    const transaction = (await db("transaction").update({ date: moment().valueOf(), upcoming: false }, ["id", "user_id", "category_id", "amount", "date", "note", "upcoming"]).where({ id: req.params.id }))[0];
     res.send({ transaction });
 });
 

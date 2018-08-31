@@ -23,7 +23,7 @@ export default class AddTransaction extends React.Component<AddTransactionProps,
         categoryId: this.props.categories[0].id,
         amount: "0.00",
         note: "",
-        date: moment().startOf("day"),
+        date: moment(),
         errors: []
     };
 
@@ -60,13 +60,16 @@ export default class AddTransaction extends React.Component<AddTransactionProps,
 
     submit = async () => {
         try {
-            const date = this.state.date || moment().startOf("day");
+            // merge the date selected by the user and the current time
+            const date = moment();
+            date.set("year", this.state.date.year()).set("month", this.state.date.month()).set("date", this.state.date.date());
+            
             await this.props.onAddTransaction(this.state.categoryId, parseFloat(this.state.amount), this.state.note, date.valueOf());
             this.setState({
                 categoryId: this.props.categories[0].id,
                 amount: "0.00",
                 note: "",
-                date: moment().startOf("day"),
+                date: moment(),
                 errors: []
             });
         } catch (errors) {
