@@ -1,3 +1,7 @@
 import app from "./app";
+import { config } from "dotenv";
+import { join } from "path";
 
-app.listen(3000);
+config({ path: join(__dirname, "..", "..", ".env") });
+
+app.listen(process.env.PORT);
