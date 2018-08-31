@@ -42,7 +42,7 @@ export default (props: TransactionHistoryChartProps): JSX.Element => {
             labels: getMonthLabels(),
             datasets: [
                 {
-                    label: "Spent",
+                    label: props.category.type === "income" ? "Income" : "Spent",
                     backgroundColor: props.category.colour,
                     borderColor: props.category.colour,
                     fill: true,
