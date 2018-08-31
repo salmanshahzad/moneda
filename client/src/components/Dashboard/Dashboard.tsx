@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { User } from "../../user";
-import getAxiosHeaderConfig from "../../axiosHeaderConfig";
+import { getApiPath, getAxiosHeaderConfig } from "../../api";
 import { Header, Grid, Segment, Tab } from "semantic-ui-react";
 import Joyride from "react-joyride";
 import { EVENTS } from "react-joyride/lib/constants";
@@ -54,7 +54,7 @@ export default (props: DashboardProps): JSX.Element => {
     const onAddTransaction = (categoryId: string, amount: number, note: string, date: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post("/api/user/transaction", { categoryId, amount, note, date }, getAxiosHeaderConfig());
+                await axios.post(getApiPath("user/transaction"), { categoryId, amount, note, date }, getAxiosHeaderConfig());
                 resolve();
                 props.onUpdate();
             } catch (e) {
@@ -64,12 +64,12 @@ export default (props: DashboardProps): JSX.Element => {
     };
 
     const onPayTransaction = async (id: string) => {
-        await axios.put(`/api/user/transaction/${id}`, null, getAxiosHeaderConfig());
+        await axios.put(getApiPath(`user/transaction/${id}`), null, getAxiosHeaderConfig());
         props.onUpdate();
     };
 
     const onDeleteTransaction = async (id: string) => {
-        await axios.delete(`/api/user/transaction/${id}`, getAxiosHeaderConfig());
+        await axios.delete(getApiPath(`user/transaction/${id}`), getAxiosHeaderConfig());
         props.onUpdate();
     };
 

@@ -11,11 +11,11 @@ const app = express();
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(compression());
-app.use(process.env.BASE, express.static(join(__dirname, "..", "..", "client", "dist")));
+app.use(express.static(join(__dirname, "..", "..", "client", "dist")));
 
 app.use("/api", routes);
 
-app.get(process.env.BASE + "*", (req, res) => {
+app.get("*", (req, res) => {
     res.sendFile(join(__dirname, "..", "..", "client", "dist", "index.html"));
 });
 

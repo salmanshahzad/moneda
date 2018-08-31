@@ -1,7 +1,7 @@
 import React from "react";
 import { Category, Income, Expense, Transaction } from "../../user";
 import axios from "axios";
-import getAxiosHeaderConfig from "../../axiosHeaderConfig";
+import { getApiPath, getAxiosHeaderConfig } from "../../api";
 import { Grid, Header, Segment } from "semantic-ui-react";
 import ProgressBar from "../General/ProgressBar";
 import TransactionHistoryChart from "./TransactionHistoryChart";
@@ -23,12 +23,12 @@ export default (props: CategoryDetailProps): JSX.Element => {
     const isExpense = props.categoryDetail.category.type === "expense";
 
     const onPayTransaction = async (id: string) => {
-        await axios.put(`/api/user/transaction/${id}`, null, getAxiosHeaderConfig());
+        await axios.put(getApiPath(`user/transaction/${id}`), null, getAxiosHeaderConfig());
         props.onUpdate();
     };
 
     const onDeleteTransaction = async (id: string) => {
-        await axios.delete(`/api/user/transaction/${id}`, getAxiosHeaderConfig());
+        await axios.delete(getApiPath(`user/transaction/${id}`), getAxiosHeaderConfig());
         props.onUpdate();
     };
 
@@ -41,8 +41,8 @@ export default (props: CategoryDetailProps): JSX.Element => {
                 <Header as="h2" textAlign="right">
                     {
                         isExpense ?
-                        `$${(props.categoryDetail.category as Expense).spent.toFixed(2)} of $${(props.categoryDetail.category as Expense).budget.toFixed(2)}` :
-                        `$${(props.categoryDetail.category as Income).income.toFixed(2)}`
+                            `$${(props.categoryDetail.category as Expense).spent.toFixed(2)} of $${(props.categoryDetail.category as Expense).budget.toFixed(2)}` :
+                            `$${(props.categoryDetail.category as Income).income.toFixed(2)}`
                     }
                 </Header>
             </Grid.Column>

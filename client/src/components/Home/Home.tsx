@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { getApiPath } from "../../api";
 import { Redirect } from "react-router-dom";
 import { Parallax } from "react-parallax";
 import backgroundImage from "../../assets/home/bg_cropped_compressed.jpg";
@@ -53,7 +54,7 @@ export default class Home extends React.Component<{}, HomeState> {
     onRegister = (username: string, password: string, confirmPassword: string) => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                const response = await axios.post("/api/user", { username, password, confirmPassword });
+                const response = await axios.post(getApiPath("user"), { username, password, confirmPassword });
                 localStorage.setItem("token", response.data.token);
                 // show tour on Dashboard
                 localStorage.setItem("show tour", "true");
@@ -68,7 +69,7 @@ export default class Home extends React.Component<{}, HomeState> {
     onSignIn = (username: string, password: string) => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                const response = await axios.post("/api/session", { username, password });
+                const response = await axios.post(getApiPath("session"), { username, password });
                 localStorage.setItem("token", response.data.token);
                 resolve();
                 this.setState({ signedIn: true });

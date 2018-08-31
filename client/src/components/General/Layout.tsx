@@ -1,7 +1,7 @@
 import React from "react";
 import { User, Category, Transaction } from "../../user";
 import axios from "axios";
-import getAxiosHeaderConfig from "../../axiosHeaderConfig";
+import { getApiPath, getAxiosHeaderConfig } from "../../api";
 import { Loader, Sidebar } from "semantic-ui-react";
 import { Redirect, Route } from "react-router-dom";
 import NavBar from "./NavBar";
@@ -38,7 +38,7 @@ export default class Layout extends React.Component<{}, LayoutState> {
 
     updateUser = async () => {
         try {
-            const user = (await axios.get("/api/user", getAxiosHeaderConfig())).data.user;
+            const user = (await axios.get(getApiPath("user"), getAxiosHeaderConfig())).data.user;
             user.categoryInfo = (id: string) => {
                 const income = user.income.filter(income => income.id === id);
                 if (income.length > 0) {
