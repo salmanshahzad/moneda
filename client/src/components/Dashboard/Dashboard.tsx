@@ -15,42 +15,42 @@ interface DashboardProps {
     onUpdate: () => void;
 }
 
+const joyrideSteps = [
+    {
+        target: ".title",
+        content: "Welcome to Moneda!",
+        disableBeacon: true // start the tour automatically
+    },
+    {
+        target: ".add-transaction",
+        content: "Add expense and income transactions here. If the date you choose is in the future, the transaction will show up in the upcoming transactions below."
+    },
+    {
+        target: ".upcoming-transactions",
+        content: "Here you can set upcoming transactions as paid.",
+    },
+    {
+        target: "a[href='/budget']",
+        content: "See a more detailed view of your budget."
+    },
+    {
+        target: "a[href='/transactions']",
+        content: "Your full log of transactions are available here."
+    },
+    {
+        target: "a[href='/settings']",
+        content: "In the settings, you can change your user information, import and export transactions, and customize your income and expense categories."
+    }
+];
+
+const joyrideCallback = e => {
+    // if the tour is over, remove the "show tour" key from local storage
+    if (e.type === EVENTS.TOUR_END) {
+        localStorage.removeItem("show tour");
+    }
+};
+
 export default (props: DashboardProps): JSX.Element => {
-    const joyrideSteps = [
-        {
-            target: ".title",
-            content: "Welcome to Moneda!",
-            disableBeacon: true // start the tour automatically
-        },
-        {
-            target: ".add-transaction",
-            content: "Add expense and income transactions here. If the date you choose is in the future, the transaction will show up in the upcoming transactions below."
-        },
-        {
-            target: ".upcoming-transactions",
-            content: "Here you can set upcoming transactions as paid.",
-        },
-        {
-            target: "a[href='/budget']",
-            content: "See a more detailed view of your budget."
-        },
-        {
-            target: "a[href='/transactions']",
-            content: "Your full log of transactions are available here."
-        },
-        {
-            target: "a[href='/settings']",
-            content: "In the settings, you can change your user information, import and export transactions, and customize your income and expense categories."
-        }
-    ];
-
-    const joyrideCallback = e => {
-        // if the tour is over, remove the "show tour" key from local storage
-        if (e.type === EVENTS.TOUR_END) {
-            localStorage.removeItem("show tour");
-        }
-    };
-
     const onAddTransaction = (categoryId: string, amount: number, note: string, date: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
