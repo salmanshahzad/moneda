@@ -17,30 +17,30 @@ interface HomeState {
     registerDialogOpen: boolean;
 }
 
+const features = [
+    {
+        image: budgetImage,
+        icon: "credit card outline",
+        content: "Stay on top of your budget"
+    },
+    {
+        image: chartImage,
+        icon: "chart line",
+        content: "Track your monthly spending"
+    },
+    {
+        image: upcomingImage,
+        icon: "calendar alternate",
+        content: "Never miss upcoming payments"
+    }
+];
+
 export default class Home extends React.Component<{}, HomeState> {
     state: HomeState = {
         signedIn: false,
         signInDialogOpen: false,
         registerDialogOpen: false
     };
-
-    features = [
-        {
-            image: budgetImage,
-            icon: "credit card outline",
-            content: "Stay on top of your budget"
-        },
-        {
-            image: chartImage,
-            icon: "chart line",
-            content: "Track your monthly spending"
-        },
-        {
-            image: upcomingImage,
-            icon: "calendar alternate",
-            content: "Never miss upcoming payments"
-        }
-    ];
 
     toggleSignInDialog = () => {
         this.setState({ signInDialogOpen: !this.state.signInDialogOpen });
@@ -97,7 +97,7 @@ export default class Home extends React.Component<{}, HomeState> {
                     </div>
                 </Parallax>
                 {
-                    this.features.map((feature, i) => (
+                    features.map((feature, i) => (
                         <Feature image={feature.image} icon={feature.icon} content={feature.content} alignRight={i % 2 === 1} key={i} />
                     ))
                 }
