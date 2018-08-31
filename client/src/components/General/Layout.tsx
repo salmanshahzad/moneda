@@ -2,8 +2,8 @@ import React from "react";
 import { User, Category, Transaction } from "../../user";
 import axios from "axios";
 import getAxiosHeaderConfig from "../../axiosHeaderConfig";
+import { Loader, Sidebar } from "semantic-ui-react";
 import { Redirect, Route } from "react-router-dom";
-import { Sidebar } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import Dashboard from "../Dashboard/Dashboard";
 import Budget from "../Budget/Budget";
@@ -77,7 +77,7 @@ export default class Layout extends React.Component<{}, LayoutState> {
 
     render(): React.ReactNode {
         if (this.state.auth === "loading") {
-            return <br />;
+            return <Loader active />;
         } else if (this.state.auth === "no") {
             return <Redirect to="/sign_out" />;
         }
