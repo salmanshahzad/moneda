@@ -70,13 +70,13 @@ export default class EditCategory extends React.Component<EditCategoryProps, Edi
         if (this.state.editing) {
             return (
                 <Grid columns={16}>
-                    <Grid.Column mobile={3} tablet={2} computer={2}>
+                    <Grid.Column mobile={4} tablet={2} computer={2}>
                         <Button.Group>
                             <Button primary icon="save" onClick={this.save} />
                             <Button negative icon="undo" onClick={this.cancelEdit} />
                         </Button.Group>
                     </Grid.Column>
-                    <Grid.Column mobile={9} tablet={4} computer={4}>
+                    <Grid.Column mobile={8} tablet={5} computer={5}>
                         <SketchPicker color={this.state.colour} onChangeComplete={this.changeColour} />
                     </Grid.Column>
                     <Grid.Column mobile={6} tablet={5} computer={5}>
@@ -84,7 +84,7 @@ export default class EditCategory extends React.Component<EditCategoryProps, Edi
                     </Grid.Column>
                     {
                         this.props.category.type === "expense" &&
-                        <Grid.Column mobile={6} tablet={5} computer={5}>
+                        <Grid.Column mobile={6} tablet={4} computer={4}>
                             <Input type="number" min="0" step="0.01" label="$" value={this.state.budget} onChange={this.changeBudget} onBlur={this.makeBudgetTwoDecimalPlaces} fluid />
                         </Grid.Column>
                     }
