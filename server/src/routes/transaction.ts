@@ -2,6 +2,7 @@ import { Router } from "express";
 import moment from "moment";
 import verifyToken from "../verifyToken";
 import db from "../../db";
+import { generateRandomColour } from "../userUtils";
 
 const router = Router();
 
@@ -81,11 +82,17 @@ router.post("/transaction/import", verifyToken, async (req, res) => {
         let category_id: string;
         const rows = await db("category").select("id").where({ user_id: req["user"].id, name: t.category });
         if (rows.length === 0) {
-            if (t.type === "income") {
-                category_id = (await db("category").insert({ user_id: req["user"].id, name: t.category, colour: "#FF0000", type: "income" }, "id"))[0];
-            } else {
-                category_id = (await db("category").insert({ user_id: req["user"].id, name: t.category, colour: "#FF0000", type: "expense", budget: 0 }, "id"))[0];
+            const category = {
+                user_id: req["user"].id,
+                name: t.category,
+                colour: generateRandomColour(),
+                type: t.type,
+                budget: null
+            };
+            if (t.type === "expense") {
+                category.budget = 0;
             }
+            category_id = (await db("category").insert(category, "id"))[0];
         } else {
             category_id = rows[0].id;
         }
