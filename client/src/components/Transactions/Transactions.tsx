@@ -1,7 +1,6 @@
 import React from "react";
 import { User } from "../../user";
-import axios from "axios";
-import { getApiPath, getAxiosHeaderConfig } from "../../api";
+import axios, { getAxiosHeaderConfig } from "../../api";
 import { Grid, Header, Table } from "semantic-ui-react";
 import moment from "moment";
 import ConfirmButton from "../General/ConfirmButton";
@@ -13,7 +12,7 @@ interface TransactionsProps {
 
 export default (props: TransactionsProps): JSX.Element => {
     const deleteTransaction = async (id: string) => {
-        await axios.delete(getApiPath(`user/transaction/${id}`), getAxiosHeaderConfig());
+        await axios.delete(`/user/transaction/${id}`, getAxiosHeaderConfig());
         props.onUpdate();
     };
 

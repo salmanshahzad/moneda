@@ -1,7 +1,6 @@
 import React from "react";
 import { User } from "../../user";
-import axios from "axios";
-import { getApiPath, getAxiosHeaderConfig } from "../../api";
+import axios, { getAxiosHeaderConfig } from "../../api";
 import { Grid, Segment, Header, Button } from "semantic-ui-react";
 import UserInformation from "./UserInformation";
 import EditCategory from "./EditCategory";
@@ -29,7 +28,7 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
     onUpdateUserInformation = (username: string, newPassword: string, confirmNewPassword: string, currentPassword: string): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                const response = await axios.put(getApiPath("user"), { username, newPassword, confirmNewPassword, currentPassword }, getAxiosHeaderConfig());
+                const response = await axios.put("/user", { username, newPassword, confirmNewPassword, currentPassword }, getAxiosHeaderConfig());
                 const token = response.data.token;
                 localStorage.setItem("token", token);
                 resolve();
@@ -43,7 +42,7 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
     onUpdateCategory = (id: string, name: string, type: string, colour: string, budget?: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.put(getApiPath(`user/category/${id}`), { name, type, colour, budget }, getAxiosHeaderConfig());
+                await axios.put(`/user/category/${id}`, { name, type, colour, budget }, getAxiosHeaderConfig());
                 resolve();
                 this.props.onUpdate();
             } catch (e) {
@@ -55,7 +54,7 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
     onDeleteCategory = (id: string): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.delete(getApiPath(`user/category/${id}`), getAxiosHeaderConfig());
+                await axios.delete(`/user/category/${id}`, getAxiosHeaderConfig());
                 resolve();
                 this.props.onUpdate();
             } catch (e) {
@@ -75,7 +74,7 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
     onAddCategory = (name: string, type: string, colour: string, budget?: number): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post(getApiPath("user/category"), { name, type, colour, budget }, getAxiosHeaderConfig());
+                await axios.post("/user/category", { name, type, colour, budget }, getAxiosHeaderConfig());
                 resolve();
                 if (type === "income") {
                     this.setState({ addIncome: false });
@@ -92,7 +91,7 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
     onImportTransactions = (transactions: any[]): Promise<{}> => {
         return new Promise<{}>(async (resolve, reject) => {
             try {
-                await axios.post(getApiPath("user/transaction/import"), { transactions }, getAxiosHeaderConfig());
+                await axios.post("/user/transaction/import", { transactions }, getAxiosHeaderConfig());
                 resolve();
                 this.props.onUpdate();
             } catch (e) {
@@ -102,7 +101,7 @@ export default class Settings extends React.Component<SettingsProps, SettingsSta
     };
 
     onDeleteUser = async () => {
-        await axios.delete(getApiPath("user"), getAxiosHeaderConfig());
+        await axios.delete("/user", getAxiosHeaderConfig());
         this.props.onUpdate();
     };
 

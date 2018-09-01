@@ -1,7 +1,6 @@
 import React from "react";
 import { Category, Income, Expense, Transaction } from "../../user";
-import axios from "axios";
-import { getApiPath, getAxiosHeaderConfig } from "../../api";
+import axios, { getAxiosHeaderConfig } from "../../api";
 import { Grid, Header, Segment } from "semantic-ui-react";
 import ProgressBar from "../General/ProgressBar";
 import TransactionHistoryChart from "./TransactionHistoryChart";
@@ -23,12 +22,12 @@ export default (props: CategoryDetailProps): JSX.Element => {
     const isExpense = props.categoryDetail.category.type === "expense";
 
     const onPayTransaction = async (id: string) => {
-        await axios.put(getApiPath(`user/transaction/${id}`), null, getAxiosHeaderConfig());
+        await axios.put(`/user/transaction/${id}`, null, getAxiosHeaderConfig());
         props.onUpdate();
     };
 
     const onDeleteTransaction = async (id: string) => {
-        await axios.delete(getApiPath(`user/transaction/${id}`), getAxiosHeaderConfig());
+        await axios.delete(`/user/transaction/${id}`, getAxiosHeaderConfig());
         props.onUpdate();
     };
 
