@@ -24,13 +24,13 @@ export default (props: TransactionHistoryChartProps): JSX.Element => {
         const amounts = new Array<number>(props.monthsToShow).fill(0);
         let pointerDate = moment().startOf("month");
         let pointer = 0;
-        for (let i = 0; i < props.transactions.length; i++) {
+        for (const transaction of props.transactions) {
             if (pointer > props.monthsToShow - 1) {
                 break;
             }
-            const transactionDate = moment(props.transactions[i].date).startOf("month");
+            const transactionDate = moment(transaction.date).startOf("month");
             pointer += pointerDate.diff(transactionDate, "months");
-            amounts[pointer] += props.transactions[i].amount;
+            amounts[pointer] += transaction.amount;
             pointerDate = transactionDate;
         }
         return amounts.reverse();

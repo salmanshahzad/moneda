@@ -63,9 +63,7 @@ router.post("/transaction/import", verifyToken, async (req, res) => {
 
     const transactions = [];
 
-    for (let i = 0; i < req.body.transactions.length; i++) {
-        const t = req.body.transactions[i];
-
+    for (const t of req.body.transactions) {
         // validate positive amount
         const amount = parseFloat(t.amount);
         if (isNaN(amount) || amount <= 0) {

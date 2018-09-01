@@ -10,13 +10,13 @@ router.get("/category", verifyToken, async (req, res) => {
     const monthEnd = moment().endOf("month").valueOf();
 
     const income = await db("category").select().where({ user_id: req["user"].id, type: "income" }).orderBy("name");
-    for (let i = 0; i < income.length; i++) {
-        income[i].income = (await db("transaction").sum("amount").where({ user_id: req["user"].id, category_id: income[i].id, upcoming: false }).andWhereBetween("date", [monthStart, monthEnd]))[0].sum || 0;
+    for (const i of income) {
+        i.income = (await db("transaction").sum("amount").where({ user_id: req["user"].id, category_id: i.id, upcoming: false }).andWhereBetween("date", [monthStart, monthEnd]))[0].sum || 0;
     }
 
     const expenses = await db("category").select().where({ user_id: req["user"].id, type: "expense" }).orderBy("name");
-    for (let i = 0; i < expenses.length; i++) {
-        expenses[i].spent = (await db("transaction").sum("amount").where({ user_id: req["user"].id, category_id: expenses[i].id, upcoming: false }).andWhereBetween("date", [monthStart, monthEnd]))[0].sum || 0;
+    for (const e of expenses) {
+        e.spent = (await db("transaction").sum("amount").where({ user_id: req["user"].id, category_id: e.id, upcoming: false }).andWhereBetween("date", [monthStart, monthEnd]))[0].sum || 0;
     }
 
     res.send({ income, expenses });

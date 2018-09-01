@@ -14,8 +14,8 @@ export default (props: TransactionsThisMonthProps) => {
         // since props.transactions are in descending order, find the last index where the transaction happened this month and slice the array
         const startOfMonth = moment().startOf("month").valueOf();
         let index = -1;
-        for (let i = 0; i < props.transactions.length; i++) {
-            if (props.transactions[i].date >= startOfMonth) {
+        for (const [i, transaction] of props.transactions.entries()) {
+            if (transaction.date >= startOfMonth) {
                 index = i;
             } else {
                 break;
