@@ -1,0 +1,4 @@
+CREATE EXTENSION pgcrypto;
+CREATE TABLE "user" ("id" uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(), "username" varchar(255) NOT NULL, "password" varchar(255) NOT NULL);
+CREATE TABLE "category" ("id" uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(), "user_id" uuid NOT NULL, "name" varchar(255) NOT NULL, "colour" varchar(255) NOT NULL, "budget" numeric, "type" varchar(255) NOT NULL);
+CREATE TABLE "transaction" ("id" uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(), "user_id" uuid NOT NULL, "category_id" uuid NOT NULL, "amount" numeric, "date" bigint NOT NULL, "note" varchar(255), "upcoming" boolean);
