@@ -1,15 +1,16 @@
 # Moneda
 Budgeting Made Easy
 
-## Requirements
-Moneda requires [Node.js >=7.6](https://nodejs.org/en/) and [PostgreSQL >=9.4](https://www.postgresql.org/) to be installed.
+## Minimum Requirements
+- [Node.js 7.6](https://nodejs.org/en/)
+- [PostgreSQL 9.4](https://www.postgresql.org/)
 
 ## Installation
 Navigate to the folder where Moneda was downloaded.
 
 Create a file named `.env` and insert the following keys:
 - PORT - the port the server will listen on
-- BASE - the base directory where Moneda will be hosted
+- BASE - the base directory where Moneda will be hosted (for deployment on a server, must end with a /)
 - SECRET - a secret passphrase used to sign authorization tokens
 - DB_USER - your PostgreSQL username
 - DB_PASSWORD - your PostgreSQL password
