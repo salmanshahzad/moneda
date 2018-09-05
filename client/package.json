@@ -41,7 +41,6 @@
     "@types/react-datepicker": "^1.1.7",
     "@types/react-dom": "^16.0.5",
     "@types/react-router-dom": "^4.2.7",
-    "@types/react-table": "^6.7.12",
     "axios": "^0.18.0",
     "chart.js": "^2.7.2",
     "moment": "^2.22.2",
@@ -54,7 +53,6 @@
     "react-joyride": "^2.0.0-14",
     "react-parallax": "^1.7.0",
     "react-router-dom": "^4.2.2",
-    "react-table": "^6.8.6",
     "semantic-ui-css": "^2.3.3",
     "semantic-ui-react": "^0.82.3"
   },
