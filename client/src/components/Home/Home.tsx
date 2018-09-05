@@ -102,7 +102,7 @@ export default class Home extends React.Component<{}, HomeState> {
                     ))
                 }
                 <footer style={{ backgroundColor: "gainsboro", padding: "1em" }}>
-                    <p>&copy;2018 Salman</p>
+                    <p>&copy;2018 <a href="https://www.salshahzad.com">Salman Shahzad</a></p>
                 </footer>
                 <SignInDialogModal open={this.state.signInDialogOpen} onClose={this.toggleSignInDialog} onSignIn={this.onSignIn} />
                 <RegisterDialogModal open={this.state.registerDialogOpen} onClose={this.toggleRegisterDialog} onRegister={this.onRegister} />
