@@ -54,7 +54,7 @@ export default class RegisterDialog extends React.Component<RegisterDialogProps,
                     </Message.List>
                 </Message>
                 <Form.Field>
-                    <label>Username (minimum 5 characters)</label>
+                    <label>Username (no spaces)</label>
                     <input type="text" value={this.state.username} onChange={this.changeUsername} autoFocus />
                 </Form.Field>
                 <Form.Field>

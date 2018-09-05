@@ -50,7 +50,7 @@ describe("POST /api/user", () => {
     it("sends 400 if the required parameters are not given", done => {
         request(app).post("/api/user").expect(400, {
             errors: [
-                "Username must contain at least five characters.",
+                "Username cannot be blank or contain spaces.",
                 "Password must contain at least eight characters."
             ]
         }, done);
@@ -113,7 +113,7 @@ describe("PUT /api/user", () => {
     it("sends 400 if the required parameters are not given", done => {
         request(app).put("/api/user").set("Authorization", `Bearer ${token}`).expect(400, {
             errors: [
-                "Username must contain at least five characters.",
+                "Username cannot be blank or contain spaces.",
                 "Current password is required."
             ]
         }, done);

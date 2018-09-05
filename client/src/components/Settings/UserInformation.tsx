@@ -75,7 +75,7 @@ export default class UserInformation extends React.Component<UserInformationProp
                     <Message.Item>{this.state.successMessage}</Message.Item>
                 </Message>
                 <Form.Field>
-                    <label>Username (minimum 5 characters)</label>
+                    <label>Username (no spaces)</label>
                     <input type="text" value={this.state.username} onChange={this.changeUsername} />
                 </Form.Field>
                 <Form.Field>
