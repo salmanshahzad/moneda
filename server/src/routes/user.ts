@@ -83,7 +83,7 @@ router.post("/user", async (req, res) => {
 router.put("/user", verifyToken, async (req, res) => {
     // validate required parameters
     const errors = [];
-    if (typeof req.body.username !== "string" || req.body.username.trim() === "") {
+    if (typeof req.body.username !== "string" || req.body.username.indexOf(" ") > -1) {
         errors.push("Username cannot be blank or contain spaces.");
     }
 
