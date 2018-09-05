@@ -19,6 +19,9 @@
       "jsx",
       "json",
       "node"
+    ],
+    "setupFiles": [
+      "<rootDir>/__tests__/config.tsx"
     ]
   },
   "keywords": [],
